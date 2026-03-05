@@ -12,5 +12,5 @@ public interface SpecialPower {
      * * @param game    the current {@link Game} state, providing access to the table, decks, and other players.
      * @param activator the {@link Player} who discarded the card and triggered the special power.
      */
-    public void activate(Game game, Player activator);
+    //public void activate(Game game, Player activator);
 }
