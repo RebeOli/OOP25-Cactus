@@ -1,4 +1,4 @@
-package it.unibo.cactus.model;
+package it.unibo.cactus.model.Cards;
 
 import java.util.Optional;
 

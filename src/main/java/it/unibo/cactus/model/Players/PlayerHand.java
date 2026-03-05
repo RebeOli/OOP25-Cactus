@@ -1,9 +1,11 @@
-package it.unibo.cactus.model;
+package it.unibo.cactus.model.Players;
+
+import it.unibo.cactus.model.Cards.Card;
 
 /**
  * Represents the set of cards placed on the table in front of a player during the "Cactus!" game.
  * This interface is responsible for managing the physical slots of the hand 
- * and tracking the visibility state (face-up or face-down) of each card.
+ * and tracking the visibility state (face-up or face-down) of each card.git
  */
 public interface PlayerHand {
 
