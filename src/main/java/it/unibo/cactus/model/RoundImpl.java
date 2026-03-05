@@ -3,6 +3,10 @@ package it.unibo.cactus.model;
 import java.util.List;
 import java.util.Optional;
 
+import it.unibo.cactus.model.Cards.Card;
+import it.unibo.cactus.model.Rounds.Round;
+import it.unibo.cactus.model.Rounds.RoundAction;
+
 public class RoundImpl implements Round{
 
     @Override
