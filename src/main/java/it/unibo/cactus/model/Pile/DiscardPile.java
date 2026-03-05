@@ -1,6 +1,8 @@
-package it.unibo.cactus.model;
+package it.unibo.cactus.model.Pile;
 
 import java.util.List;
+
+import it.unibo.cactus.model.Cards.Card;
 
 /**
  * Represents the discard pile in a card game.

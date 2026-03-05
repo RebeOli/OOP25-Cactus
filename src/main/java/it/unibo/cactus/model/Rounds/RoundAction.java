@@ -1,4 +1,4 @@
-package it.unibo.cactus.model;
+package it.unibo.cactus.model.Rounds;
 
 /**
  * Represents an action that can be performed during a round of the game.
