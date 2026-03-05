@@ -1,6 +1,9 @@
-package it.unibo.cactus.model;
+package it.unibo.cactus.model.Cards;
 
 import java.util.Optional;
+
+import it.unibo.cactus.model.SpecialPower;
+import it.unibo.cactus.model.Suit;
 
 /**
  * Represents a single playing card in the "Cactus!" game.
