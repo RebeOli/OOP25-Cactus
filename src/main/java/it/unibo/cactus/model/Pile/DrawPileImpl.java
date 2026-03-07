@@ -12,8 +12,8 @@ public class DrawPileImpl implements DrawPile {
 
     private final Deque<Card> drawPile;
 
-    public DrawPileImpl(final Deque<Card> drawPile) {
-        this.drawPile = new ArrayDeque<>(drawPile);
+    public DrawPileImpl(final List<Card> cards) {
+        this.drawPile = new ArrayDeque<>(cards);
     }
 
     @Override
