@@ -1,9 +1,7 @@
 package it.unibo.cactus.model.Rounds;
 
 import java.util.List;
-import java.util.Optional;
 
-import it.unibo.cactus.model.Cards.Card;
 /**
  * Represents a round of the game.
  * A round manages the available actions for the current player,
@@ -11,6 +9,7 @@ import it.unibo.cactus.model.Cards.Card;
  * and whether the round is the last one.
  */
 public interface Round {
+    //public Player getCurrentPlayer();
     /**
      * Returns the list of actions that can currently be performed
      * during this round.
@@ -25,14 +24,6 @@ public interface Round {
      * @return true if it is the last round, false otherwise.
      */
     public boolean isLastRound();
-
-    /**
-     * Returns the card drawn during this round, if a card has been drawn.
-     *
-     * @return an {@link Optional} containing the drawn {@link Card},
-     *         or an empty Optional if no card has been drawn.
-     */
-    public Optional<Card> getDrawnCard();
 
     /**
      * Executes the specified action within the round.
