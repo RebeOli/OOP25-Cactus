@@ -1,5 +1,6 @@
 package it.unibo.cactus.model.Rounds;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +36,17 @@ public class RoundImpl implements Round, RoundInternalState {
     public List<RoundAction> getAvailableActions() {
         return switch (phase) {
             case DRAW -> List.of(new DrawAction(), new CallCactusAction());
-            case DECISION -> List.of(new SwapAction(), new DiscardAction());
+            case DECISION -> {
+                                // TODO: decommentare quando Player è pronta
+                                // final int handSize = currentPlayer.getHand().size();
+                                // final List<RoundAction> actions = new ArrayList<>();
+                                // for (int i = 0; i < handSize; i++) {
+                                //     actions.add(new SwapAction(i, handSize));
+                                // }
+                                // actions.add(new DiscardAction());
+                                // yield actions;
+                                yield List.of(new DiscardAction());
+                            }
             case SPECIAL_POWER -> List.of(new ActivatePowerAction(), new SkipPowerAction());
             case ENDED -> List.of();
         };
@@ -65,6 +76,11 @@ public class RoundImpl implements Round, RoundInternalState {
     public DiscardPile getDiscardPile() {
         return discardPile;
     }
+    /* 
+    @Override
+    public Player getCurrentPlayer(){
+        return currentPlayer;
+    }*/
 
     @Override
     public void execute(RoundAction action) {
@@ -73,19 +89,22 @@ public class RoundImpl implements Round, RoundInternalState {
 
     @Override
     public void setDrawnCard(Optional<Card> card) {
-        drawCard=card;
+        this.drawCard=card;
     }
 
     @Override
     public void setLastRound(boolean value) {
-        isLastRound=value;
+        this.isLastRound=value;
     }
 
     @Override
     public void advancePhase() {
         switch (phase) {
             case DRAW -> phase = TurnPhase.DECISION;
-            case DECISION -> phase = TurnPhase.SPECIAL_POWER;
+            case DECISION -> phase = drawCard
+                                                .flatMap(Card::getSpecialPower)
+                                                .map(p -> TurnPhase.SPECIAL_POWER)
+                                                .orElse(TurnPhase.ENDED);
             case SPECIAL_POWER -> phase = TurnPhase.ENDED;
             case ENDED -> throw new IllegalStateException("Il turno è già terminato");
         }

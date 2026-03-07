@@ -11,5 +11,5 @@ public interface RoundAction {
      *
      * @param round the {@link Round} in which the action is executed
      */
-    public void execute(Round round);
+    public void execute(RoundInternalState round);
 }
