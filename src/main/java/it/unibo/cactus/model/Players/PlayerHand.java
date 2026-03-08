@@ -32,4 +32,13 @@ public interface PlayerHand {
      */
     public Card replace(int index, Card card);
     
+    /**
+     * Returns the number of cards currently present in the player's hand.
+     * This is useful to determine the bounds for iterating over the hand 
+     * or to check if the player has any cards left.
+     *
+     * @return the total number of cards in the hand as an integer.
+     */
+    public int size();
+
 }
