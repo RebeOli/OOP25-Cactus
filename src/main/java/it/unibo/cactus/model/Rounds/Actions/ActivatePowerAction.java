@@ -5,12 +5,7 @@ import it.unibo.cactus.model.Cards.Card;
 import it.unibo.cactus.model.Rounds.RoundAction;
 import it.unibo.cactus.model.Rounds.RoundInternalState;
 
-public class ActivatePowerAction implements RoundAction{
-    private final Game game;
-
-    public ActivatePowerAction(final Game game) {
-        this.game = game;
-    }
+public record ActivatePowerAction(Game game) implements RoundAction{
 
     @Override
     public void execute(final RoundInternalState round) {

@@ -20,8 +20,8 @@ import it.unibo.cactus.model.Rounds.Actions.SwapAction;
 public class RoundImpl implements Round, RoundInternalState {
     private final Game game;
     private TurnPhase phase;
-    private Optional<Card> drawCard;
-    private Player currentPlayer;
+    private Optional<Card> drawnCard;
+    private final Player currentPlayer;
     private final DiscardPile discardPile;
     private final DrawPile drawPile;
     private boolean isLastRound;  
@@ -29,7 +29,7 @@ public class RoundImpl implements Round, RoundInternalState {
     public RoundImpl(final Game game, final DiscardPile discardPile, final DrawPile drawPile, final Player currentPlayer) {
         this.game = game;
         this.phase = TurnPhase.DRAW;
-        this.drawCard = Optional.empty();
+        this.drawnCard = Optional.empty();
         this.discardPile = discardPile;
         this.drawPile = drawPile;
         this.isLastRound = false;
@@ -44,7 +44,7 @@ public class RoundImpl implements Round, RoundInternalState {
                                 final int handSize = currentPlayer.getHand().size();
                                 final List<RoundAction> actions = new ArrayList<>();
                                 for (int i = 0; i < handSize; i++) {
-                                    actions.add(new SwapAction(i, handSize));
+                                    actions.add(new SwapAction(i));
                                 }
                                 actions.add(new DiscardAction());
                                 yield actions;
@@ -62,7 +62,7 @@ public class RoundImpl implements Round, RoundInternalState {
 
     @Override
     public Optional<Card> getDrawnCard() {
-        return drawCard;
+        return drawnCard;
     }
 
     @Override
@@ -86,17 +86,17 @@ public class RoundImpl implements Round, RoundInternalState {
     }
 
     @Override
-    public void execute(RoundAction action) {
+    public void execute(final RoundAction action) {
         action.execute(this);
     }
 
     @Override
-    public void setDrawnCard(Optional<Card> card) {
-        this.drawCard=card;
+    public void setDrawnCard(final Optional<Card> card) {
+        this.drawnCard=card;
     }
 
     @Override
-    public void setLastRound(boolean value) {
+    public void setLastRound(final boolean value) {
         this.isLastRound=value;
     }
 
@@ -104,7 +104,7 @@ public class RoundImpl implements Round, RoundInternalState {
     public void advancePhase() {
         switch (phase) {
             case DRAW -> phase = TurnPhase.DECISION;
-            case DECISION -> phase = drawCard
+            case DECISION -> phase = drawnCard
                                             .flatMap(Card::getSpecialPower)
                                             .map(p -> TurnPhase.SPECIAL_POWER)
                                             .orElse(TurnPhase.END_TURN);
