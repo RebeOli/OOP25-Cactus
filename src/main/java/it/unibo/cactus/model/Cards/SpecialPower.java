@@ -1,5 +1,8 @@
 package it.unibo.cactus.model.Cards;
 
+import it.unibo.cactus.model.Game;
+import it.unibo.cactus.model.Players.Player;
+
 /**
  * Represents a special ability associated with specific cards (e.g., 6, 7, or Jack) in the "Cactus!" game.
  * This interface implements the Strategy design pattern, allowing different powers to be executed 
@@ -12,5 +15,5 @@ public interface SpecialPower {
      * * @param game    the current {@link Game} state, providing access to the table, decks, and other players.
      * @param activator the {@link Player} who discarded the card and triggered the special power.
      */
-    //public void activate(Game game, Player activator);
+    public void activate(Game game, Player activator);
 }
