@@ -1,6 +1,7 @@
 package it.unibo.cactus.model.Pile;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.cactus.model.Cards.Card;
 
@@ -21,7 +22,7 @@ public interface DiscardPile {
      * Retrieves, but does not remove, the card currently at the top of the pile.
      * * @return The {@link Card} at the top of the pile, or {@code null} if the pile is empty.
      */
-    public Card getTopCard();
+    public Optional<Card> getTopCard();
 
     public List<Card> drainAll();
 
