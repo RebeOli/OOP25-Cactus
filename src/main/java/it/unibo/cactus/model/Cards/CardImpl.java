@@ -4,28 +4,34 @@ import java.util.Optional;
 
 public class CardImpl implements Card{
 
+    private final Suit suit;
+    private final int value;
+    private final int score;
+    private final Optional<SpecialPower> specialPower;
+
+    public CardImpl(Suit suit, int value, int score, SpecialPower power) {
+        this.suit = suit;
+        this.value = value;
+        this.score = score;
+        this.specialPower = Optional.ofNullable(power);  // se 'power' è null, crea un Optional vuoto,  altrimenti crea un Optional con dentro il potere. 
+    }
     @Override
     public int getValue() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getValue'");
+        return this.value;
     }
 
     @Override
     public Suit getSuit() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSuit'");
+        return this.suit;
     }
 
     @Override
     public int getScore() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getScore'");
+        return this.score;
     }
 
     @Override
     public Optional<SpecialPower> getSpecialPower() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSpecialPower'");
+        return this.specialPower;
     }
-
 }
