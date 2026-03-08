@@ -10,8 +10,8 @@ public class DrawAction implements RoundAction {
 
     @Override
     public void execute(final RoundInternalState round) {
-        final Card card = round.getDrawPile().draw(); //da cambiare in oprional<Card> quando la chia pubblica l'interfaccia
-        round.setDrawnCard(Optional.of(card));
+        final Optional<Card> card = round.getDrawPile().draw();
+        round.setDrawnCard(card);
         round.advancePhase();
     }
 }
