@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import it.unibo.cactus.model.Game;
 import it.unibo.cactus.model.Cards.Card;
 import it.unibo.cactus.model.Pile.DiscardPile;
 import it.unibo.cactus.model.Pile.DrawPile;
@@ -15,6 +16,7 @@ import it.unibo.cactus.model.Rounds.Actions.SkipPowerAction;
 import it.unibo.cactus.model.Rounds.Actions.SwapAction;
 
 public class RoundImpl implements Round, RoundInternalState {
+    private final Game game;
     private TurnPhase phase;
     private Optional<Card> drawCard;
     //public final Player currentPlayer;
@@ -23,7 +25,8 @@ public class RoundImpl implements Round, RoundInternalState {
     private boolean isLastRound;  
 
 
-    public RoundImpl(final DiscardPile discardPile, final DrawPile drawPile) {
+    public RoundImpl(final Game game, final DiscardPile discardPile, final DrawPile drawPile) {
+        this.game = game;
         this.phase = TurnPhase.DRAW;
         this.drawCard = Optional.empty();
         this.discardPile = discardPile;
@@ -47,7 +50,7 @@ public class RoundImpl implements Round, RoundInternalState {
                                 // yield actions;
                                 yield List.of(new DiscardAction());
                             }
-            case SPECIAL_POWER -> List.of(new ActivatePowerAction(), new SkipPowerAction());
+            case SPECIAL_POWER -> List.of(new ActivatePowerAction(game), new SkipPowerAction());
             case ENDED -> List.of();
         };
     }
