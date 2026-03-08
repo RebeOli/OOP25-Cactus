@@ -1,6 +1,7 @@
 package it.unibo.cactus.model.Pile;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.cactus.model.Cards.Card;
 
@@ -10,7 +11,7 @@ public interface DrawPile {
     /**
      * @return
      */
-    public Card draw();
+    public Optional<Card> draw();
 
     /**
      * @param cards
@@ -25,6 +26,6 @@ public interface DrawPile {
     /**
      * @return
      */
-    public int size();
+    public int size(); //da togliere, non usare!!
 
 }
