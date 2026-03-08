@@ -12,6 +12,7 @@ import it.unibo.cactus.model.Rounds.Actions.ActivatePowerAction;
 import it.unibo.cactus.model.Rounds.Actions.CallCactusAction;
 import it.unibo.cactus.model.Rounds.Actions.DiscardAction;
 import it.unibo.cactus.model.Rounds.Actions.DrawAction;
+import it.unibo.cactus.model.Rounds.Actions.EndTurnAction;
 import it.unibo.cactus.model.Rounds.Actions.SkipPowerAction;
 import it.unibo.cactus.model.Rounds.Actions.SwapAction;
 
@@ -38,7 +39,7 @@ public class RoundImpl implements Round, RoundInternalState {
     @Override
     public List<RoundAction> getAvailableActions() {
         return switch (phase) {
-            case DRAW -> List.of(new DrawAction(), new CallCactusAction());
+            case DRAW -> List.of(new DrawAction());
             case DECISION -> {
                                 // TODO: decommentare quando Player è pronta
                                 // final int handSize = currentPlayer.getHand().size();
@@ -51,6 +52,7 @@ public class RoundImpl implements Round, RoundInternalState {
                                 yield List.of(new DiscardAction());
                             }
             case SPECIAL_POWER -> List.of(new ActivatePowerAction(game), new SkipPowerAction());
+            case END_TURN -> List.of(new CallCactusAction(), new EndTurnAction());
             case ENDED -> List.of();
         };
     }
@@ -107,8 +109,9 @@ public class RoundImpl implements Round, RoundInternalState {
             case DECISION -> phase = drawCard
                                                 .flatMap(Card::getSpecialPower)
                                                 .map(p -> TurnPhase.SPECIAL_POWER)
-                                                .orElse(TurnPhase.ENDED);
-            case SPECIAL_POWER -> phase = TurnPhase.ENDED;
+                                                .orElse(TurnPhase.END_TURN);
+            case SPECIAL_POWER -> phase = TurnPhase.END_TURN;
+            case END_TURN -> phase = TurnPhase.ENDED;
             case ENDED -> throw new IllegalStateException("Il turno è già terminato");
         }
     }
