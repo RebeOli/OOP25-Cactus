@@ -13,12 +13,11 @@ public class ActivatePowerAction implements RoundAction{
     }
 
     @Override
-    public void execute(RoundInternalState round) {
-        // TODO: allinearsi con ari sul metodo di SpecialPower, activate()
-        // round.getDrawnCard()
-        //      .flatMap(Card::getSpecialPower)
-        //      .ifPresent(power -> power.activate(???));
+    public void execute(final RoundInternalState round) {
+        round.getDrawnCard()
+                .flatMap(Card::getSpecialPower)
+                .ifPresent(power -> power.activate(this.game, round.getCurrentPlayer()));
         round.advancePhase();
     }
-    
+
 }

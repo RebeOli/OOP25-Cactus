@@ -7,7 +7,7 @@ import it.unibo.cactus.model.Rounds.RoundInternalState;
 public class SkipPowerAction implements RoundAction{
 
     @Override
-    public void execute(RoundInternalState round) {
+    public void execute(final RoundInternalState round) {
         round.advancePhase();
     }
     
