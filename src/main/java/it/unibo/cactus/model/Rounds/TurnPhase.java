@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.Rounds;
+package it.unibo.cactus.model.rounds;
 
 public enum TurnPhase {
     DRAW,

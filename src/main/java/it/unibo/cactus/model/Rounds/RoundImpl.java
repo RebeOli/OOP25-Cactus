@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.Rounds;
+package it.unibo.cactus.model.rounds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,13 +9,13 @@ import it.unibo.cactus.model.Cards.Card;
 import it.unibo.cactus.model.Pile.DiscardPile;
 import it.unibo.cactus.model.Pile.DrawPile;
 import it.unibo.cactus.model.Players.Player;
-import it.unibo.cactus.model.Rounds.Actions.ActivatePowerAction;
-import it.unibo.cactus.model.Rounds.Actions.CallCactusAction;
-import it.unibo.cactus.model.Rounds.Actions.DiscardAction;
-import it.unibo.cactus.model.Rounds.Actions.DrawAction;
-import it.unibo.cactus.model.Rounds.Actions.EndTurnAction;
-import it.unibo.cactus.model.Rounds.Actions.SkipPowerAction;
-import it.unibo.cactus.model.Rounds.Actions.SwapAction;
+import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
+import it.unibo.cactus.model.rounds.actions.CallCactusAction;
+import it.unibo.cactus.model.rounds.actions.DiscardAction;
+import it.unibo.cactus.model.rounds.actions.DrawAction;
+import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
+import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 public class RoundImpl implements Round, RoundInternalState {
     private final Game game;

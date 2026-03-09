@@ -1,5 +1,8 @@
 package it.unibo.cactus;
 
-public class main {
-    
+/**
+ * Entry point of the Cactus application.
+ */
+
+public class Main {
 }

@@ -1,7 +1,7 @@
-package it.unibo.cactus.model.Rounds.Actions;
+package it.unibo.cactus.model.rounds.actions;
 
-import it.unibo.cactus.model.Rounds.RoundAction;
-import it.unibo.cactus.model.Rounds.RoundInternalState;
+import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.RoundInternalState;
 
 public class EndTurnAction implements RoundAction{
     @Override
