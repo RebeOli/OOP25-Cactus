@@ -2,8 +2,8 @@ package it.unibo.cactus.model.rounds.actions;
 
 import java.util.Optional;
 
-import it.unibo.cactus.model.Cards.Card;
-import it.unibo.cactus.model.Players.PlayerHand;
+import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.RoundInternalState;
 

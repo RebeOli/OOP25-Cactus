@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.Pile;
+package it.unibo.cactus.model.pile;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.cactus.model.Cards.Card;
+import it.unibo.cactus.model.cards.Card;
 
 public class DrawPileImpl implements DrawPile {
 
