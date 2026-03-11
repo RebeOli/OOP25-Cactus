@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.Players;
+package it.unibo.cactus.model.players;
 
 /**
  * Abstract base implementation of {@link Player}.
