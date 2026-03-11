@@ -1,8 +1,9 @@
-package it.unibo.cactus.model.Pile;
+package it.unibo.cactus.model.pile;
 
 import java.util.List;
+import java.util.Optional;
 
-import it.unibo.cactus.model.Cards.Card;
+import it.unibo.cactus.model.cards.Card;
 
 /**
  * Represents the discard pile in a card game.
@@ -21,7 +22,7 @@ public interface DiscardPile {
      * Retrieves, but does not remove, the card currently at the top of the pile.
      * * @return The {@link Card} at the top of the pile, or {@code null} if the pile is empty.
      */
-    public Card getTopCard();
+    public Optional<Card> getTopCard();
 
     public List<Card> drainAll();
 
