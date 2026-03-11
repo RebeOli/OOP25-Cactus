@@ -1,11 +1,11 @@
-package it.unibo.cactus.model.Score;
+package it.unibo.cactus.model.score;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import it.unibo.cactus.model.Players.Player;
+import it.unibo.cactus.model.players.Player;
 
 public class ScoreCalculator { //no interfaccia perchè sarebbe over-engineering
 

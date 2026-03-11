@@ -1,8 +1,8 @@
-package it.unibo.cactus.model.Score;
+package it.unibo.cactus.model.score;
 
 import java.util.Map;
 
-import it.unibo.cactus.model.Players.Player;
+import it.unibo.cactus.model.players.Player;
 
 public record GameResult(Map<Player, Integer> scores) {
 
