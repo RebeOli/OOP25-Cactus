@@ -2,7 +2,8 @@ package it.unibo.cactus.model.rounds;
 
 import java.util.List;
 import java.util.Optional;
-import it.unibo.cactus.model.Cards.Card;
+import it.unibo.cactus.model.cards.Card;
+
 /**
  * Represents a round of the game.
  * A round manages the available actions for the current player,

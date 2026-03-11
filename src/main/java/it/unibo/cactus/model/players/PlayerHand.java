@@ -1,6 +1,6 @@
-package it.unibo.cactus.model.Players;
+package it.unibo.cactus.model.players;
 
-import it.unibo.cactus.model.Cards.Card;
+import it.unibo.cactus.model.cards.Card;
 
 /**
  * Represents the set of cards placed on the table in front of a player during the "Cactus!" game.
