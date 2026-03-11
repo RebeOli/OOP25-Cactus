@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.Players;
+package it.unibo.cactus.model.players;
 
 /**
  * Represents a player in the "Cactus!" game.

@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 import it.unibo.cactus.model.Game;
-import it.unibo.cactus.model.Cards.Card;
-import it.unibo.cactus.model.Pile.DiscardPile;
-import it.unibo.cactus.model.Pile.DrawPile;
-import it.unibo.cactus.model.Players.Player;
+import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.pile.DiscardPile;
+import it.unibo.cactus.model.pile.DrawPile;
+import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;

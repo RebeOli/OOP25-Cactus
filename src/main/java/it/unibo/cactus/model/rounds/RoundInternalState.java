@@ -2,10 +2,10 @@ package it.unibo.cactus.model.rounds;
 
 import java.util.Optional;
 
-import it.unibo.cactus.model.Cards.Card;
-import it.unibo.cactus.model.Pile.DiscardPile;
-import it.unibo.cactus.model.Pile.DrawPile;
-import it.unibo.cactus.model.Players.Player;
+import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.pile.DiscardPile;
+import it.unibo.cactus.model.pile.DrawPile;
+import it.unibo.cactus.model.players.Player;
 
 /**
  * Internal interface for accessing and modifying the state of a round.
