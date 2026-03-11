@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.Cards;
+package it.unibo.cactus.model.cards;
 
 import java.util.*;
 

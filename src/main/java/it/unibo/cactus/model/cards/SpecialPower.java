@@ -1,7 +1,7 @@
-package it.unibo.cactus.model.Cards;
+package it.unibo.cactus.model.cards;
 
 import it.unibo.cactus.model.Game;
-import it.unibo.cactus.model.Players.Player;
+import it.unibo.cactus.model.players.Player;
 
 /**
  * Represents a special ability associated with specific cards (e.g., 6, 7, or Jack) in the "Cactus!" game.

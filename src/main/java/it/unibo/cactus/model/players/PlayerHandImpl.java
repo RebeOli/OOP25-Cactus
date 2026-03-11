@@ -1,6 +1,6 @@
-package it.unibo.cactus.model.Players;
+package it.unibo.cactus.model.players;
 
-import it.unibo.cactus.model.Cards.Card;
+import it.unibo.cactus.model.cards.Card;
 import java.util.*;
 
 public class PlayerHandImpl implements PlayerHand {
