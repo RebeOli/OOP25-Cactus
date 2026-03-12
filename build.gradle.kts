@@ -63,6 +63,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("com.google.guava:guava:33.5.0-jre")
 }
 
 val main: String by project
