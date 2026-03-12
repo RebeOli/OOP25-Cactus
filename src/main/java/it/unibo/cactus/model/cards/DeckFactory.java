@@ -22,22 +22,19 @@ public class DeckFactory {
             for (int value = 1; value <= 10; value ++) {
                 int score = value;
                 SpecialPower power = null;
-
                 if (value == 10) {
                     score = 0;
                 }
                 if (value == 6) {
-                    //power = new PeekPower();
+                    power = new PeekPower();
                 } else if (value == 7) {
-                    //power = new RevealPower();
+                    power = new RevealPower();
                 } else if (value == 8) {
-                    //power = new SwapPower();
+                    power = new SwapPower();
                 }
-
                 deck.add(new CardImpl(suit, value, score, power));
             }
         }
-
         return deck;
     }
 }
