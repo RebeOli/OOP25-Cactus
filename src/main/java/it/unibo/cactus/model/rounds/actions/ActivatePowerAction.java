@@ -1,7 +1,7 @@
 package it.unibo.cactus.model.rounds.actions;
 
-import it.unibo.cactus.model.Game;
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.RoundInternalState;
 

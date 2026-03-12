@@ -1,6 +1,6 @@
 package it.unibo.cactus.model.cards;
 
-import it.unibo.cactus.model.Game;
+import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.players.Player;
 
 /**
