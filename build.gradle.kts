@@ -64,6 +64,7 @@ dependencies {
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
+    //Google Guava library
     implementation("com.google.guava:guava:33.5.0-jre")
 }
 
