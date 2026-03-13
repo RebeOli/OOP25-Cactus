@@ -1,5 +1,8 @@
 package it.unibo.cactus.model.game;
 
-public class GameObserver {
-    
+import it.unibo.cactus.model.rounds.Round;
+
+public interface GameObserver {
+    void onRoundAdvanced(Round round);
+    void onGameFinished();
 }

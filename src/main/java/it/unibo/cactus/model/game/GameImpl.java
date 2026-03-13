@@ -10,6 +10,7 @@ import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
+import it.unibo.cactus.model.rounds.RoundImpl;
 
 public class GameImpl implements Game {
     //gli attributi vengono passati dal controller quando configura game 
@@ -75,8 +76,18 @@ public class GameImpl implements Game {
         if (isFinished()) {
             throw new IllegalStateException("the game is already finished");
         }
+        totalTurns++;
+        if (currentRound.isLastRound()) {
+            cactusCalledBy = Optional.of(getCurrentPlayer());
+        }
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        //finisci
+        if (isFinished()) {
+            notifyGameFinished();
+            return;
+        }
+        currentRound = new RoundImpl(this, discardPile, drawPile, getCurrentPlayer());
+        notifyRoundAdvanced();
+        //rivedi
     }
 
     @Override
@@ -106,5 +117,12 @@ public class GameImpl implements Game {
     public int getCompletedRounds() {
         return totalTurns / players.size();
     }
-     //aggiungi metodi privati
+
+    private void notifyGameFinished() {
+        observers.forEach(o -> o.onRoundAdvanced(currentRound));
+    }
+    private void notifyRoundAdvanced() {
+        observers.forEach(o -> o.onGameFinished());
+    }
+    
 }
