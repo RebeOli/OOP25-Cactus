@@ -16,8 +16,14 @@ public class PlayerHandImpl implements PlayerHand {
     private final List<Slot> slots;
 
     public PlayerHandImpl(List<Card> initialCards) {
+        if (initialCards == null) {
+            throw new IllegalArgumentException("Initial cards list cannot be null!");
+        }
         this.slots = new ArrayList<>();
         for (Card c : initialCards) {
+            if (c == null) {
+                throw new IllegalArgumentException("Cannot add a null card to the player's hand!");
+            }
             this.slots.add(new Slot(c, true)); 
         }
     }
@@ -34,6 +40,9 @@ public class PlayerHandImpl implements PlayerHand {
 
     @Override
     public Card replace(int index, Card newCard) {
+        if (newCard == null) {
+            throw new IllegalArgumentException("The new card cannot be null!");
+        }
         Slot slot = slots.get(index);
         Card oldCard = slot.card;
         slot.card = newCard;

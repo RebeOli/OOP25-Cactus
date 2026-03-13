@@ -10,6 +10,15 @@ public class CardImpl implements Card{
     private final Optional<SpecialPower> specialPower;
 
     public CardImpl(Suit suit, int value, int score, SpecialPower power) {
+        if (suit == null) {
+            throw new IllegalArgumentException("Suit cannot be null!");
+        }
+        if (value < 1 || value > 10) {
+            throw new IllegalArgumentException("Card value must be between 1 and 10! Provided: " + value);
+        }
+        if (score < 0) {
+            throw new IllegalArgumentException("Card score cannot be negative! Provided: " + score);
+        }
         this.suit = suit;
         this.value = value;
         this.score = score;
