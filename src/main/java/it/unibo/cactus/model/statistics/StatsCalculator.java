@@ -3,7 +3,7 @@ package it.unibo.cactus.model.statistics;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-//import com.google.common.math.Stats;
+import com.google.common.math.Stats;
 import it.unibo.cactus.model.score.GameResult;
 
 public class StatsCalculator {
@@ -23,7 +23,10 @@ public class StatsCalculator {
     }
 
     public double averageRounds(List<GameResult> results) {
-        //return Stats.meanOf(results.)
-        return 0.1;
+        return Stats.of(results.stream()
+            .map(r -> r.completedRounds())
+            .iterator()
+        )
+        .mean();
     }
 }
