@@ -4,7 +4,7 @@ import java.util.Map;
 
 import it.unibo.cactus.model.players.Player;
 
-public record GameResult(Map<Player, Integer> scores) {
+public record GameResult(Map<Player, Integer> scores, int completedRounds) {
 
     public Player getWinner() {
         return scores.entrySet().stream()
