@@ -24,8 +24,8 @@ public class JSonHistoryRepository implements HistoryRepository {
     @Override
     public void save(final GameResult result) throws IOException{
         try (
-            final BufferedWriter w = new BufferedWriter(new FileWriter(history, true))) {
-            w.write(gson.toJson(result));
+            final BufferedWriter w = new BufferedWriter(new FileWriter(this.history, true))) {
+            w.write(this.gson.toJson(result));
             w.newLine();
         }
     }
@@ -34,11 +34,11 @@ public class JSonHistoryRepository implements HistoryRepository {
     public List<GameResult> loadAll() throws IOException {
         final List<GameResult> results = new ArrayList<>();
         try (
-            final BufferedReader r = new BufferedReader(new FileReader(history))
+            final BufferedReader r = new BufferedReader(new FileReader(this.history))
         ) {
             String line;
             while ((line = r.readLine()) != null) {
-                results.add(gson.fromJson(line, GameResult.class));
+                results.add(this.gson.fromJson(line, GameResult.class));
             }
         }
         return results;
