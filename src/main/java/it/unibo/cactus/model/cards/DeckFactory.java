@@ -28,9 +28,9 @@ public class DeckFactory {
                 if (value == 6) {
                     power = new PeekPower();
                 } else if (value == 7) {
-                    power = new RevealPower();
-                } else if (value == 8) {
                     power = new SwapPower();
+                } else if (value == 8) {
+                    power = new RevealPower();
                 }
                 deck.add(new CardImpl(suit, value, score, power));
             }
