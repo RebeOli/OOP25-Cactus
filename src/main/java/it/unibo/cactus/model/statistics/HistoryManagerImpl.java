@@ -16,13 +16,16 @@ public class HistoryManagerImpl implements HistoryManager {
 
     @Override
     public void save(final GameResult result) throws IOException {
-        
+        this.repository.save(result);
     }
 
     @Override
     public PlayerStats getStats(final String playerName) throws IOException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStats'");
+        final var results = this.repository.loadAll();
+        final var wins = this.calculator.countWins(results, playerName);
+        final var generalRanking = this.calculator.generalRanking(results);
+        final var averageRounds = this.calculator.averageRounds(results);
+        return new PlayerStats(wins, generalRanking, averageRounds);
     }
     
 }
