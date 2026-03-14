@@ -11,6 +11,7 @@ import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundImpl;
+import it.unibo.cactus.model.cards.Card;
 
 public class GameImpl implements Game {
     //gli attributi vengono passati dal controller quando configura game 
@@ -69,6 +70,29 @@ public class GameImpl implements Game {
     }
 
     @Override
+    public void initialize() {
+        if (currentRound != null) {
+            throw new IllegalStateException("Game has already been initialized");
+        }
+        //drawPile.refill(DeckFactory.createBaseDeck());
+        for (Player player : players) {
+            List<Card> initialCards = new ArrayList<>();
+            for (int i=0 ; i<4 ; i++) {
+                initialCards.add(drawPile.draw().get());
+            }
+            //player.setHand(new PlayerHandImpl(cards));
+        }
+        /*players.forEach(player -> {
+            List<Card> initialCards = IntStream.range(0, 4)
+                .mapToObj(i -> drawPile.draw().get())
+                .collect(Collectors.toList());
+            player.setHand(new PlayerHandImpl(initialCards));
+        }); */
+        currentRound = new RoundImpl(this, discardPile, drawPile, players.get(0));
+        currentPlayerIndex = 0;
+    }
+
+    @Override
     public void advancePlayer() {
         if (currentRound == null) {
             throw new IllegalStateException("initialize() has not been called");
@@ -87,19 +111,12 @@ public class GameImpl implements Game {
         }
         currentRound = new RoundImpl(this, discardPile, drawPile, getCurrentPlayer());
         notifyRoundAdvanced();
-        //rivedi
     }
 
     @Override
     public boolean isFinished() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'isFinished'");
-    }
-
-    @Override
-    public void initialize() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initialize'");
+        return cactusCalledBy.isPresent() && getCurrentPlayer().equals(cactusCalledBy.get()) 
+        || players.stream().anyMatch(p -> p.getHand().size() == 0);
     }
 
     @Override
