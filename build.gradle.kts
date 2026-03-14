@@ -45,8 +45,10 @@ dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
 
-    // Example library: Guava. Add what you need (and use the latest version where appropriate).
-    // implementation("com.google.guava:guava:28.1-jre")
+    // Source: https://mvnrepository.com/artifact/com.google.guava/guava
+    implementation("com.google.guava:guava:33.5.0-jre") 
+    // Source: https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation("com.google.code.gson:gson:2.13.2")
 
     // YAML parser
     implementation("org.yaml:snakeyaml:2.2")
@@ -63,6 +65,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 }
 
 val main: String by project
