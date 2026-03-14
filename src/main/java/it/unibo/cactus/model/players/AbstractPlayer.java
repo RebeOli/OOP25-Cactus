@@ -1,27 +1,26 @@
 package it.unibo.cactus.model.players;
 
+import java.util.Objects;
+
 /**
  * Abstract base implementation of {@link Player}.
- * <p>
- * Provides the common state and behaviour shared by all player types
- * (human and bot). Subclasses must implement {@link #isHuman()}
- * to declare their control type.
- * </p>
+ * Provides the common state and behaviour shared by all player types (human and bot). 
+ * Subclasses must implement {@link #isHuman()} to declare their control type.
+ * The player is constructed with only a name; the hand must be assigned separately via {@link #setHand(PlayerHand)} 
+ * once cards have been dealt.
  */
 public abstract class AbstractPlayer implements Player {
 
     private final String name;
-    private final PlayerHand hand;
+    private PlayerHand hand;
 
     /**
-     * Constructs a new player with the given name and hand.
-     *
-     * @param name the display name of the player
-     * @param hand the player's initial hand of cards
+     * Constructs a new player with the given name.
+     * The hand must be set later via {@link #setHand(PlayerHand)}.
+     * @param name the display name of the player; must not be null
      */
-    protected AbstractPlayer(final String name, final PlayerHand hand) {
-        this.name = name;
-        this.hand = hand;
+    protected AbstractPlayer(final String name) {
+        this.name = Objects.requireNonNull(name, "Player name must not be null!");
     }
 
     /** {@inheritDoc} */
@@ -33,12 +32,22 @@ public abstract class AbstractPlayer implements Player {
     /** {@inheritDoc} */
     @Override
     public PlayerHand getHand() {
+        if (hand == null) {
+            throw new IllegalStateException("Hand has not been set for player: " + name);
+        }
         return hand;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setHand(final PlayerHand hand) {
+        Objects.requireNonNull(hand, "PlayerHand must not be null!");
+        this.hand = hand;
     }
 
     /**
      * {@inheritDoc}
-     * <p>Subclasses must implement this to declare whether the player is human.</p>
+     * Subclasses must implement this to declare whether the player is human.
      */
     @Override
     public abstract boolean isHuman();
