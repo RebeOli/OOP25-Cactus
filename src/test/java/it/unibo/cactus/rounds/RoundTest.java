@@ -9,10 +9,13 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
+import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DiscardPileImpl;
+import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.pile.DrawPileImpl;
 import it.unibo.cactus.model.players.AbstractPlayer;
 import it.unibo.cactus.model.players.PlayerHandImpl;
+import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundImpl;
 import it.unibo.cactus.model.rounds.TurnPhase;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -32,8 +35,8 @@ final class RoundTest {
  
     // Carta con potere speciale (power che non fa nulla, solo per testare il routing delle fasi)
     private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (game, player, target) -> { });
-    private DrawPileImpl drawPile;
-    private DiscardPileImpl discardPile;
+    private DrawPile drawPile;
+    private DiscardPile discardPile;
     private Player player;
     private RoundImpl round;
 
