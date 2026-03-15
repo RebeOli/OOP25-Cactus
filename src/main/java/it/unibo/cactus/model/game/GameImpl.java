@@ -5,13 +5,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.players.PlayerHandImpl;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundImpl;
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.DeckFactory;
 
 public class GameImpl implements Game {
     //gli attributi vengono passati dal controller quando configura game 
@@ -74,20 +78,21 @@ public class GameImpl implements Game {
         if (currentRound != null) {
             throw new IllegalStateException("Game has already been initialized");
         }
-        //drawPile.refill(DeckFactory.createBaseDeck());
-        for (Player player : players) {
-            List<Card> initialCards = new ArrayList<>();
-            for (int i=0 ; i<4 ; i++) {
-                initialCards.add(drawPile.draw().get());
-            }
-            //player.setHand(new PlayerHandImpl(cards));
-        }
-        /*players.forEach(player -> {
+        drawPile.refill(DeckFactory.createBaseDeck());
+        players.forEach(player -> {
             List<Card> initialCards = IntStream.range(0, 4)
                 .mapToObj(i -> drawPile.draw().get())
                 .collect(Collectors.toList());
             player.setHand(new PlayerHandImpl(initialCards));
-        }); */
+        });
+        /*for (Player player : players) {
+            List<Card> initialCards = new ArrayList<>();
+            for (int i=0 ; i<4 ; i++) {
+                initialCards.add(drawPile.draw().get());
+            }
+            player.setHand(new PlayerHandImpl(initialCards));
+        }*/
+        
         currentRound = new RoundImpl(this, discardPile, drawPile, players.get(0));
         currentPlayerIndex = 0;
     }
@@ -136,10 +141,10 @@ public class GameImpl implements Game {
     }
 
     private void notifyGameFinished() {
-        observers.forEach(o -> o.onRoundAdvanced(currentRound));
+        observers.forEach(o -> o.onGameFinished());
     }
     private void notifyRoundAdvanced() {
-        observers.forEach(o -> o.onGameFinished());
+        observers.forEach(o -> o.onRoundAdvanced(currentRound));
     }
     
 }
