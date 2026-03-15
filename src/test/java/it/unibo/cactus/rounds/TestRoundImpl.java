@@ -42,15 +42,18 @@ final class TestRoundImpl {
     void setUp() {
         discardPile = new DiscardPileImpl();
         drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD));
-        player = new AbstractPlayer("TestPlayer", new PlayerHandImpl(List.of(
-                                    new CardImpl(Suit.COPPE, 1, 1, null),
-                                    new CardImpl(Suit.BASTONI, 2, 2, null),
-                                    new CardImpl(Suit.DENARI, 3, 3, null),
-                                    new CardImpl(Suit.SPADE, 4, 4, null)
-        ))) {
+        player = new AbstractPlayer("TestPlayer") {
             @Override
-            public boolean isHuman() { return true; }
+            public boolean isHuman() { 
+                return true; 
+            }
         };
+        player.setHand(new PlayerHandImpl(List.of(
+            new CardImpl(Suit.COPPE, 1, 1, null),
+            new CardImpl(Suit.BASTONI, 2, 2, null),
+            new CardImpl(Suit.DENARI, 3, 3, null),
+            new CardImpl(Suit.SPADE, 4, 4, null)
+        )));
         round = new RoundImpl(null, discardPile, drawPile, player);
     }
     @Test
