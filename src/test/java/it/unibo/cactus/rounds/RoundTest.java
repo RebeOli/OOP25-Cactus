@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.cards.CardImpl;
-import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.Suit;
 import it.unibo.cactus.model.pile.DiscardPileImpl;
 import it.unibo.cactus.model.pile.DrawPileImpl;
@@ -16,15 +15,15 @@ import it.unibo.cactus.model.players.AbstractPlayer;
 import it.unibo.cactus.model.players.PlayerHandImpl;
 import it.unibo.cactus.model.rounds.RoundImpl;
 import it.unibo.cactus.model.rounds.TurnPhase;
-import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.players.Player;
 
-final class TestRoundImpl {
+final class RoundTest {
     private static final int HAND_SIZE = 4;
     private static final int SWAP_INDEX = 1;
  
@@ -116,6 +115,71 @@ final class TestRoundImpl {
         round.execute(new EndTurnAction()); // END_TURN -> ENDED
         assertEquals(TurnPhase.ENDED, round.getPhase());
         assertTrue(round.getAvailableActions().isEmpty());
+    }
+
+    //test Actions
+
+    @Test
+    void testDrawAction() {
+	    round.execute(new DrawAction());
+	    assertTrue(round.getDrawnCard().isPresent());
+	    assertEquals(TurnPhase.DECISION, round.getPhase());
+    }
+
+    @Test
+    void testDiscardAction() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        assertTrue(round.getDrawnCard().isEmpty());
+        assertEquals(TurnPhase.END_TURN, round.getPhase());
+        assertTrue(discardPile.getTopCard().isPresent());
+    }
+    @Test
+    void testDiscardActionWithSpecialPower() {
+        final var powerRound = new RoundImpl(null, discardPile, 
+                            new DrawPileImpl(List.of(POWER_CARD)), player);
+        powerRound.execute(new DrawAction());
+        powerRound.execute(new DiscardAction());
+        assertEquals(TurnPhase.SPECIAL_POWER, powerRound.getPhase());
+    }
+
+
+    @Test
+    void testSwapAction(){
+        final var oldCard = player.getHand().getCard(SWAP_INDEX);
+        round.execute(new DrawAction());
+        round.execute(new SwapAction(SWAP_INDEX));
+        assertTrue(round.getDrawnCard().isEmpty());
+        assertEquals(TurnPhase.END_TURN, round.getPhase());
+        assertEquals(oldCard, discardPile.getTopCard().get());
+    }
+
+    @Test 
+    void testCallCactusAction() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new CallCactusAction());
+        assertTrue(round.isLastRound());
+        assertEquals(TurnPhase.ENDED, round.getPhase());
+    }
+
+    @Test 
+    void testEndTurnAction() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new EndTurnAction());
+        assertFalse(round.isLastRound());
+        assertEquals(TurnPhase.ENDED, round.getPhase());
+    }
+
+    @Test 
+    void testSkipPowerAction() {
+        final var powerRound = new RoundImpl(null, discardPile,
+                            new DrawPileImpl(List.of(POWER_CARD)), player);
+        powerRound.execute(new DrawAction());
+        powerRound.execute(new DiscardAction());
+        powerRound.execute(new SkipPowerAction());
+        assertEquals(TurnPhase.END_TURN, powerRound.getPhase());
     }
 
 }
