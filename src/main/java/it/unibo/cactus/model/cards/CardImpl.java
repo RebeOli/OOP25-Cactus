@@ -22,7 +22,7 @@ public class CardImpl implements Card{
         this.suit = suit;
         this.value = value;
         this.score = score;
-        this.specialPower = Optional.ofNullable(power);  // se 'power' è null, crea un Optional vuoto,  altrimenti crea un Optional con dentro il potere. 
+        this.specialPower = Optional.ofNullable(power);
     }
     @Override
     public int getValue() {
