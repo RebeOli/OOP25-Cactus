@@ -55,6 +55,7 @@ public class PlayerHandImpl implements PlayerHand {
         return slots.size();
     }
 
+    @Override
     public void revealCard(int index) {
         slots.get(index).hidden = false;
     }
