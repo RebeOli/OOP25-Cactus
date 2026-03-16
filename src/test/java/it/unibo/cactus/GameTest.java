@@ -1,8 +1,8 @@
 package it.unibo.cactus;
 
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.*;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
@@ -15,7 +15,6 @@ import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.pile.DrawPileImpl;
 import it.unibo.cactus.model.players.AbstractPlayer;
 import it.unibo.cactus.model.players.Player;
-import it.unibo.cactus.model.players.PlayerHandImpl;
 
 public class GameTest {
 
@@ -34,33 +33,62 @@ public class GameTest {
     @BeforeEach
     void setUp() {
         discardPile = new DiscardPileImpl();
-        final List<Card> handCards = List.of(
-            new CardImpl(Suit.BASTONI, 1, 1, null),
-            new CardImpl(Suit.SPADE, 2, 2, null),
-            new CardImpl(Suit.COPPE, 3, 3, null),
-            new CardImpl(Suit.DENARI, 4, 4, null)
-        );
         final Player player1 = new AbstractPlayer("Player1") {
             @Override
             public boolean isHuman() { 
                 return true; 
             }
         };
-        player1.setHand(new PlayerHandImpl(handCards));
         final Player player2 = new AbstractPlayer("Player2") {
                 @Override
                 public boolean isHuman() { return true; }
         };
-        player2.setHand(new PlayerHandImpl(handCards));
         players = List.of(player1, player2);
         drawPile = new DrawPileImpl(List.of());
         game = new GameImpl(players, drawPile, discardPile);
+        game.initialize();
     }
-// Test GameImpl
-// 1. testInitialize - dopo initialize() i player hanno la mano
-// 2. testCurrentPlayer - getCurrentPlayer() restituisce il primo player
-// 3. testIsFinished - isFinished() è false dopo initialize()
-// 4. testAdvancePlayer - cambia il player corrente
-// 5. testGetCurrentRoundThrows - lancia eccezione se initialize() non chiamata
-// 6. testInitializeTwiceThrows - lancia eccezione se chiamata due volte
+
+    @Test
+    void testInitialize() {
+        assertEquals(players.get(0), game.getCurrentPlayer());
+        assertNotNull(game.getCurrentRound());
+        players.forEach(p -> assertEquals(4, p.getHand().size()));
+    }
+
+    @Test
+    void testIsFinished() {
+        assertFalse(game.isFinished());
+    }
+
+    @Test
+    void testAdvancePlayer() {
+        game.advancePlayer();
+        assertEquals(players.get(1), game.getCurrentPlayer());
+    }
+
+    @Test
+    void testGetCurrentRoundThrows() {
+        final Game newGame = new GameImpl(players, drawPile, discardPile);
+        assertThrows(IllegalStateException.class, () -> newGame.getCurrentRound());
+    }
+
+    @Test
+    void testInitializeTwiceThrows() {
+        assertThrows(IllegalStateException.class, () -> game.initialize());
+    }
+
+    @Test
+    void testAdvancePlayerRotation() {
+        game.advancePlayer();
+        game.advancePlayer();
+        assertEquals(players.get(0), game.getCurrentPlayer());
+    }
+
+    @Test
+    void testGetCompletedRounds() {
+        game.advancePlayer();
+        game.advancePlayer();
+        assertEquals(1, game.getCompletedRounds());
+    }
 }
