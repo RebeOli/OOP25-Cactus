@@ -9,27 +9,31 @@ public interface Card {
 
     /**
      * Gets the face value of the card (e.g., 1 for Ace, 10 for King).
-     * * @return the integer face value of the card.
+     * 
+     * @return the integer face value of the card.
      */
     int getValue();
 
     /**
      * Gets the suit of the card.
-     * * @return the {@link Suit} of the card.
+     * 
+     * @return the {@link Suit} of the card.
      */
     Suit getSuit();
 
     /**
      * Gets the penalty score of the card calculated at the end of the game.
      * Note that this may differ from the face value (e.g., a King has a face value of 10 but a score of 0).
-     * * @return the penalty points associated with this card.
+     * 
+     * @return the penalty points associated with this card.
      */
     int getScore();
 
     /**
      * Retrieves the special power associated with this card (6, 7, 8).
      * Returning an {@link Optional} ensures that cards without special powers are handled safely.
-     * * @return an {@link Optional} containing the {@link SpecialPower} if present, or an empty Optional otherwise.
+     * 
+     * @return an {@link Optional} containing the {@link SpecialPower} if present, or an empty Optional otherwise.
      */
     Optional<SpecialPower> getSpecialPower();
 
