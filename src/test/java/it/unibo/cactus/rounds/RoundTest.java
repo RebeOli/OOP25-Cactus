@@ -1,6 +1,8 @@
 package it.unibo.cactus.rounds;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -25,16 +27,14 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.players.Player;
 
+/**
+ * Test suite for {@link RoundImpl}.
+ */
 final class RoundTest {
     private static final int HAND_SIZE = 4;
     private static final int SWAP_INDEX = 1;
- 
-    // Carta senza potere speciale
     private static final CardImpl PLAIN_CARD = new CardImpl(Suit.BASTONI, 5, 5, null);
- 
-    // Carta con potere speciale (power che non fa nulla, solo per testare il routing delle fasi)
     private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (game, player, target) -> { });
-    private DrawPile drawPile;
     private DiscardPile discardPile;
     private Player player;
     private RoundImpl round;
@@ -42,7 +42,7 @@ final class RoundTest {
     @BeforeEach
     void setUp() {
         discardPile = new DiscardPileImpl();
-        drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD));
+        final DrawPile drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD));
         player = new AbstractPlayer("TestPlayer") {
             @Override
             public boolean isHuman() { 
@@ -57,6 +57,7 @@ final class RoundTest {
         )));
         round = new RoundImpl(null, discardPile, drawPile, player);
     }
+
     @Test
     void testInitialPhaseIsDraw() {
         assertEquals(TurnPhase.DRAW, round.getPhase());
@@ -123,9 +124,9 @@ final class RoundTest {
 
     @Test
     void testDrawAction() {
-	    round.execute(new DrawAction());
-	    assertTrue(round.getDrawnCard().isPresent());
-	    assertEquals(TurnPhase.DECISION, round.getPhase());
+        round.execute(new DrawAction());
+        assertTrue(round.getDrawnCard().isPresent());
+        assertEquals(TurnPhase.DECISION, round.getPhase());
     }
 
     @Test
@@ -136,6 +137,7 @@ final class RoundTest {
         assertEquals(TurnPhase.END_TURN, round.getPhase());
         assertTrue(discardPile.getTopCard().isPresent());
     }
+
     @Test
     void testDiscardActionWithSpecialPower() {
         final var powerRound = new RoundImpl(null, discardPile, 
@@ -145,9 +147,8 @@ final class RoundTest {
         assertEquals(TurnPhase.SPECIAL_POWER, powerRound.getPhase());
     }
 
-
     @Test
-    void testSwapAction(){
+    void testSwapAction() {
         final var oldCard = player.getHand().getCard(SWAP_INDEX);
         round.execute(new DrawAction());
         round.execute(new SwapAction(SWAP_INDEX));
