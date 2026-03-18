@@ -37,7 +37,7 @@ public class PlayerHandTest {
 
     /**
      * Tests the logic for revealing a card in the hand.
-     * Verifies that invoking {@link PlayerHand#revealCard(int)} successfully
+     * Verifies that invoking {@link PlayerHand revealCard(int)} successfully
      * changes a specific card's state from hidden to visible.
      */
     @Test
@@ -51,7 +51,7 @@ public class PlayerHandTest {
 
     /**
      * Tests the replacement of a card within the hand.
-     * Verifies that the {@link PlayerHand#replace(int, Card)} method returns the
+     * Verifies that the {@link PlayerHand replace(int, Card)} method returns the
      * correct discarded card, inserts the new card at the specified index,
      * and ensures the newly placed card is in a hidden state.
      */
@@ -82,5 +82,4 @@ public class PlayerHandTest {
         Card dummyCard = new CardImpl(Suit.SPADE, 2, 2, null);
         assertThrows(IndexOutOfBoundsException.class, () -> hand.replace(2, dummyCard), "Should throw exception for invalid index when replacing");
     }
-
 }
