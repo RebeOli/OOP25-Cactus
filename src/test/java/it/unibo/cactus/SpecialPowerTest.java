@@ -22,7 +22,21 @@ import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.players.PlayerHandImpl; 
 
+/**
+ * Test suite for the special powers in the game.
+ * This class verifies the correct behavior and game state alterations of 
+ * {@link RevealPower}, {@link PeekPower}, and {@link SwapPower}.
+ */
 class SpecialPowerTest {
+
+    /**
+     * Helper method to create a mock {@link Player} for testing purposes.
+     * This isolates the power logic from the actual HumanPlayer or BotPlayer implementations.
+     *
+     * @param dummyName the display name for the dummy player
+     * @param cards the initial card to be placed in the player's hand
+     * @return a newly created dummy Player instance holding the specified card
+     */
     private Player createDummyPlayer(String dummyName, Card cards) {
         PlayerHand hand = new PlayerHandImpl(Arrays.asList(cards));
         return new Player() {
@@ -34,6 +48,10 @@ class SpecialPowerTest {
         };
     }
 
+    /**
+     * Tests that special powers throw an {@link IllegalArgumentException} 
+     * when provided with an incorrect {@link PowerTarget} type.
+     */
     @Test
     void testWrongTargetExceptions() {
         SpecialPower swap = new SwapPower();
@@ -49,6 +67,11 @@ class SpecialPowerTest {
         );
     }
 
+    /**
+     * Tests the execution of {@link RevealPower}.
+     * Verifies that activating the power successfully changes the targeted
+     * opponent's card state from hidden to visible.
+     */
     @Test
     void testRevealPowerLogic() {
         Card hiddenCard = new CardImpl(Suit.COPPE, 5, 5, null);
@@ -60,6 +83,11 @@ class SpecialPowerTest {
         assertFalse(targetPlayer.getHand().isHidden(0), "RevealPower should make the card visible");
     }
 
+    /**
+     * Tests the execution of {@link PeekPower}.
+     * Verifies that the activator can secretly look at their own card 
+     * without altering its public hidden state (the card must remain face-down).
+     */
     @Test
     void testPeekPowerLogic() {
         Card myCard = new CardImpl(Suit.SPADE, 6, 6, new PeekPower());
@@ -71,6 +99,11 @@ class SpecialPowerTest {
         assertTrue(activator.getHand().isHidden(0), "PeekPower should NOT change the hidden state of the card");
     }
 
+    /**
+     * Tests the execution of {@link SwapPower}.
+     * Verifies that activating the power successfully and physically swaps 
+     * the targeted cards between the hands of two players.
+     */
     @Test
     void testSwapPowerLogic() {
         Card cardA = new CardImpl(Suit.DENARI, 1, 1, null);
