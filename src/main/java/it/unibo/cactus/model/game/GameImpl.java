@@ -17,23 +17,35 @@ import it.unibo.cactus.model.rounds.RoundImpl;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.DeckFactory;
 
-public class GameImpl implements Game {
+/**
+ * Implementation of {@link Game}.
+ */
+public final class GameImpl implements Game {
     //gli attributi vengono passati dal controller quando configura game 
     private final List<Player> players;
     private final DrawPile drawPile;
     private final DiscardPile discardPile;
     private Round currentRound;
     private int currentPlayerIndex;
-    private  Optional<Player> cactusCalledBy;
+    private Optional<Player> cactusCalledBy;
     private final List<GameObserver> observers; 
     private int totalTurns;
 
-    public GameImpl (final List<Player> players, final DrawPile drawPile, final DiscardPile discardPile) {
+    /**
+     * Constructs a new game with the given players and piles.
+     *
+     * @param players     the list of players, must contain exactly 4 players
+     * @param drawPile    the draw pile of the game
+     * @param discardPile the discard pile of the game
+     * @throws NullPointerException     if any argument is null
+     * @throws IllegalArgumentException if the number of players is not exactly 4
+     */
+    public GameImpl(final List<Player> players, final DrawPile drawPile, final DiscardPile discardPile) {
         Objects.requireNonNull(players, "players cannot be null");
         Objects.requireNonNull(drawPile, "drawPile cannot be null");
         Objects.requireNonNull(discardPile, "discardPile cannot be null");
-        if (players.isEmpty()) {
-            throw new IllegalArgumentException("there must be at least 2 players");
+        if (players.size() != 4) {
+            throw new IllegalArgumentException("there must be exactly 4 players");
         }
         this.players = players;
         this.drawPile = drawPile;
@@ -85,14 +97,6 @@ public class GameImpl implements Game {
                 .collect(Collectors.toList());
             player.setHand(new PlayerHandImpl(initialCards));
         });
-        /*for (Player player : players) {
-            List<Card> initialCards = new ArrayList<>();
-            for (int i=0 ; i<4 ; i++) {
-                initialCards.add(drawPile.draw().get());
-            }
-            player.setHand(new PlayerHandImpl(initialCards));
-        }*/
-        
         currentRound = new RoundImpl(this, discardPile, drawPile, players.get(0));
         currentPlayerIndex = 0;
     }
@@ -143,8 +147,9 @@ public class GameImpl implements Game {
     private void notifyGameFinished() {
         observers.forEach(GameObserver::onGameFinished);
     }
+
     private void notifyRoundAdvanced() {
         observers.forEach(o -> o.onRoundAdvanced(currentRound));
     }
-    
+
 }

@@ -12,11 +12,12 @@ import it.unibo.cactus.model.players.Player;
  * Factory class for creating an initialized {@link Game} instance.
  */
 public final class GameFactory {
-    private GameFactory() { 
+    private GameFactory() {
     }
 
     /**
      * Creates a new game with one human player.
+     * 
      * @param humanPlayerName the name of the human player
      * @return an initialized {@link Game}
      */
