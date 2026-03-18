@@ -21,6 +21,11 @@ import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 
 public class ScoreTest {
+    private static final Card CARD_1 = new CardImpl(Suit.BASTONI, 1, 1, null);
+    private static final Card CARD_2 = new CardImpl(Suit.SPADE, 10, 0, null);
+    private static final Card CARD_3 = new CardImpl(Suit.COPPE, 5, 5, null);
+    private static final Card CARD_4 = new CardImpl(Suit.DENARI, 4, 4, null);
+
     private Player player1;
     private Player player2;
     private ScoreCalculator calculator;
@@ -28,13 +33,9 @@ public class ScoreTest {
 
     @BeforeEach
     void setUp() {
-        final Card card1 = new CardImpl(Suit.BASTONI, 1, 1, null);
-        final Card card2 = new CardImpl(Suit.SPADE, 10, 0, null);
-        final Card card3 = new CardImpl(Suit.COPPE, 5, 5, null);
-        final Card card4 = new CardImpl(Suit.DENARI, 4, 4, null);
 
-        final PlayerHand hand1 = new PlayerHandImpl(List.of(card1, card3));
-        final PlayerHand hand2 = new PlayerHandImpl(List.of(card2, card4));
+        final PlayerHand hand1 = new PlayerHandImpl(List.of(CARD_1, CARD_3));
+        final PlayerHand hand2 = new PlayerHandImpl(List.of(CARD_2, CARD_4));
 
         player1 = new BotPlayer("Mario");
         player1.setHand(hand1);
