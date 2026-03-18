@@ -6,7 +6,10 @@ import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.RoundInternalState;
 
-public class DiscardAction implements RoundAction{
+/**
+ * Action that discards the drawn card to the discard pile.
+ */
+public final class DiscardAction implements RoundAction {
 
     @Override
     public void execute(final RoundInternalState round) {

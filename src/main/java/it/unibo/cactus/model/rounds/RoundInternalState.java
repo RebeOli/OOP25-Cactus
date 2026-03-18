@@ -1,7 +1,6 @@
 package it.unibo.cactus.model.rounds;
 
 import java.util.Optional;
-
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
@@ -13,26 +12,31 @@ import it.unibo.cactus.model.players.Player;
  * It exposes mutable state that should not be visible to external components such as the Controller.
  */
 public interface RoundInternalState {
+
     /**
      * Returns the player whose turn it currently is.
+     * 
      * @return the current {@link Player}.
      */
     Player getCurrentPlayer();
 
     /**
      * Returns the card drawn from the draw pile during the current turn, if present.
+     * 
      * @return an {@link Optional} containing the drawn {@link Card}, or empty if no card has been drawn yet.
      */
     Optional<Card> getDrawnCard();
 
     /**
      * Sets the card drawn during the current turn.
+     * 
      * @param card an {@link Optional} containing the drawn {@link Card}, or empty to clear it.
      */
     void setDrawnCard(Optional<Card> card);
 
     /**
      * Returns the current phase of the turn.
+     * 
      * @return the current {@link TurnPhase}.
      */
     TurnPhase getPhase();
@@ -45,12 +49,14 @@ public interface RoundInternalState {
 
     /**
      * Returns the draw pile of the current game.
+     * 
      * @return the {@link DrawPile}.
      */
     DrawPile getDrawPile();
 
     /**
      * Returns the discard pile of the current game.
+     * 
      * @return the {@link DiscardPile}.
      */
     DiscardPile getDiscardPile();
@@ -58,7 +64,8 @@ public interface RoundInternalState {
     /**
      * Sets whether this is the last round of the game.
      * Called when a player declares "Cactus!".
-     * @param value {@code true} if this is the last round, {@code false} otherwise.
+     * 
+     * @param value true if this is the last round, false otherwise.
      */
     void setLastRound(boolean value);
 
