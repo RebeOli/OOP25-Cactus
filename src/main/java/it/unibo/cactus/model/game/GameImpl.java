@@ -28,7 +28,7 @@ public class GameImpl implements Game {
     private final List<GameObserver> observers; 
     private int totalTurns;
 
-    public GameImpl (List<Player> players, DrawPile drawPile, DiscardPile discardPile) {
+    public GameImpl (final List<Player> players, final DrawPile drawPile, final DiscardPile discardPile) {
         Objects.requireNonNull(players, "players cannot be null");
         Objects.requireNonNull(drawPile, "drawPile cannot be null");
         Objects.requireNonNull(discardPile, "discardPile cannot be null");
@@ -80,7 +80,7 @@ public class GameImpl implements Game {
         }
         drawPile.refill(DeckFactory.createBaseDeck());
         players.forEach(player -> {
-            List<Card> initialCards = IntStream.range(0, 4)
+            final List<Card> initialCards = IntStream.range(0, 4)
                 .mapToObj(i -> drawPile.draw().get())
                 .collect(Collectors.toList());
             player.setHand(new PlayerHandImpl(initialCards));
@@ -125,13 +125,13 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void addObserver(GameObserver observer) {
+    public void addObserver(final GameObserver observer) {
         Objects.requireNonNull(observer, "observer cannot be null");
         observers.add(observer);
     }
 
     @Override
-    public void removeObserver(GameObserver observer) {
+    public void removeObserver(final GameObserver observer) {
         observers.remove(observer);
     }
 
@@ -141,7 +141,7 @@ public class GameImpl implements Game {
     }
 
     private void notifyGameFinished() {
-        observers.forEach(o -> o.onGameFinished());
+        observers.forEach(GameObserver::onGameFinished);
     }
     private void notifyRoundAdvanced() {
         observers.forEach(o -> o.onRoundAdvanced(currentRound));
