@@ -1,8 +1,13 @@
 package it.unibo.cactus;
 
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameImpl;
@@ -17,7 +22,7 @@ import it.unibo.cactus.model.players.Player;
  * Test suite for {@link GameImpl}.
  */
 
-public class GameTest {
+final class GameTest {
 
     private DrawPile drawPile;
     private DiscardPile discardPile;
@@ -35,7 +40,9 @@ public class GameTest {
         };
         final Player player2 = new AbstractPlayer("Player2") {
                 @Override
-                public boolean isHuman() { return true; }
+                public boolean isHuman() { 
+                    return true; 
+                }
         };
         players = List.of(player1, player2);
         drawPile = new DrawPileImpl(List.of());
@@ -64,12 +71,12 @@ public class GameTest {
     @Test
     void testGetCurrentRoundThrows() {
         final Game newGame = new GameImpl(players, drawPile, discardPile);
-        assertThrows(IllegalStateException.class, () -> newGame.getCurrentRound());
+        assertThrows(IllegalStateException.class, newGame::getCurrentRound);
     }
 
     @Test
     void testInitializeTwiceThrows() {
-        assertThrows(IllegalStateException.class, () -> game.initialize());
+        assertThrows(IllegalStateException.class, game::initialize);
     }
 
     @Test
