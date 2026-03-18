@@ -17,7 +17,6 @@ public final class PeekPower implements SpecialPower {
         if (!(target instanceof PeekTarget t)) {
             throw new IllegalArgumentException("PeekPower requires a target of type PeekTarget!");
         }
-        final Card myCard = activator.getHand().getCard(t.index());
-        System.out.println("PeekPower: Player " + activator + " is looking at their card: " + myCard);
+        activator.getHand().getCard(t.index());
     }
 }

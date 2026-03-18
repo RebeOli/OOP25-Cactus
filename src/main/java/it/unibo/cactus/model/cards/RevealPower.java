@@ -18,7 +18,6 @@ public final class RevealPower implements SpecialPower {
             throw new IllegalArgumentException("RevealPower requires a target of type RevealTarget!");
         }
         t.player().getHand().revealCard(t.index());
-        final Card targetCard = t.player().getHand().getCard(t.index());
-        System.out.println("RevealPower: Player " + activator + " revealed " + t.player() + "'s card: " + targetCard);
+        t.player().getHand().getCard(t.index());
     }
 }

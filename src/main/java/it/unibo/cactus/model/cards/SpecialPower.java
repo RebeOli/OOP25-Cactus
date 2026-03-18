@@ -7,6 +7,7 @@ import it.unibo.cactus.model.players.Player;
 /**
  * Represents a special power that can be activated when a specific card is played.
  */
+@FunctionalInterface
 public interface SpecialPower {
 
     /**

@@ -21,6 +21,5 @@ public final class SwapPower implements SpecialPower {
         final Card cardB = t.playerB().getHand().getCard(t.indexB());
         t.playerA().getHand().replace(t.indexA(), cardB);
         t.playerB().getHand().replace(t.indexB(), cardA);
-        System.out.println("SwapPower: Swap completed between " + t.playerA() + " and " + t.playerB());
     }
 }
