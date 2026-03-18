@@ -4,9 +4,6 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
-import it.unibo.cactus.model.cards.Card;
-import it.unibo.cactus.model.cards.CardImpl;
-import it.unibo.cactus.model.cards.Suit;
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameImpl;
 import it.unibo.cactus.model.pile.DiscardPile;
@@ -16,14 +13,11 @@ import it.unibo.cactus.model.pile.DrawPileImpl;
 import it.unibo.cactus.model.players.AbstractPlayer;
 import it.unibo.cactus.model.players.Player;
 
-public class GameTest {
+/**
+ * Test suite for {@link GameImpl}.
+ */
 
-    private static final int HAND_SIZE = 4;
-    private static final int SWAP_INDEX = 1;
-    private static final Card PLAIN_CARD =
-            new CardImpl(Suit.BASTONI, 5, 5, null);
-    private static final Card POWER_CARD =
-            new CardImpl(Suit.SPADE, 7, 7, (game, player, target) -> { });
+public class GameTest {
 
     private DrawPile drawPile;
     private DiscardPile discardPile;
