@@ -23,7 +23,7 @@ import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.players.PlayerHandImpl; 
 
 class SpecialPowerTest {
-    private Player createDummyPlayer(String dummyName, Card... cards) {
+    private Player createDummyPlayer(String dummyName, Card cards) {
         PlayerHand hand = new PlayerHandImpl(Arrays.asList(cards));
         return new Player() {
             private PlayerHand myHand = hand; 
