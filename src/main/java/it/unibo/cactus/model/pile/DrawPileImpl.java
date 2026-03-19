@@ -1,6 +1,7 @@
 package it.unibo.cactus.model.pile;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
@@ -35,9 +36,10 @@ public final class DrawPileImpl implements DrawPile {
     }
 
     @Override
-    public void refill(final List<Card> cards) {
-        Collections.shuffle(cards);
-        this.drawPile.addAll(cards);
+    public void refill(List<Card> cards) {
+        final var cardsList = new ArrayList<>(cards);
+        Collections.shuffle(cardsList);
+        this.drawPile.addAll(cardsList);
     }
 
     @Override
