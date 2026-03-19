@@ -39,12 +39,24 @@ final class GameTest {
             }
         };
         final Player player2 = new AbstractPlayer("Player2") {
-                @Override
-                public boolean isHuman() { 
-                    return true; 
-                }
+            @Override
+            public boolean isHuman() { 
+                return true; 
+            }
         };
-        players = List.of(player1, player2);
+        final Player player3 = new AbstractPlayer("Player3") {
+            @Override
+            public boolean isHuman() {
+                return true;
+            }
+        };
+        final Player player4 = new AbstractPlayer("Player4") {
+            @Override
+            public boolean isHuman() {
+                return true;
+            }
+        };
+        players = List.of(player1, player2, player3, player4);
         drawPile = new DrawPileImpl(List.of());
         game = new GameImpl(players, drawPile, discardPile);
         game.initialize();
@@ -83,11 +95,15 @@ final class GameTest {
     void testAdvancePlayerRotation() {
         game.advancePlayer();
         game.advancePlayer();
+        game.advancePlayer();
+        game.advancePlayer();
         assertEquals(players.get(0), game.getCurrentPlayer());
     }
 
     @Test
     void testGetCompletedRounds() {
+        game.advancePlayer();
+        game.advancePlayer();
         game.advancePlayer();
         game.advancePlayer();
         assertEquals(1, game.getCompletedRounds());
