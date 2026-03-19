@@ -16,10 +16,10 @@ import it.unibo.cactus.model.pile.DiscardPileImpl;
 /**
  * Test suite for {@link DiscardPileImpl}.
  * Verifies the correct behaviour of the discard pile in the "Cactus!" card game,
- * including discarding cards, checking the top card, emptying the pile
+ * including discarding cards, checking the top card, checking if the pile is empty
  * and draining all cards for refilling the draw pile.
  */
-public final class DiscardPileTest {
+final class DiscardPileTest {
     private static final Card CARD_1 = new CardImpl(Suit.BASTONI, 1, 1, null);
     private static final Card CARD_2 = new CardImpl(Suit.SPADE, 3, 3, null);
     private static final Card CARD_3 = new CardImpl(Suit.COPPE, 10, 0, null);

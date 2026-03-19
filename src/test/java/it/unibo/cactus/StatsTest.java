@@ -14,9 +14,25 @@ import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.HumanPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.score.GameResult;
+import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.model.statistics.StatsCalculator;
 
-public class StatsTest {
+/**
+ * Test suite for {@link StatsCalculator} and {@link PlayerStats}.
+ * Verifies the correct behaviour of statistics calculator in the "Cactus!" card game,
+ * including counting wins for each player, generating the general ranking
+ * and counting the average number of rounds.
+ */
+final class StatsTest {
+    private static final double PRECISION = 0.001;
+    private static final int SCORE_1 = 2;
+    private static final int SCORE_2 = 5;
+    private static final int SCORE_3 = 7;
+    private static final int SCORE_4 = 8;
+    private static final int ROUNDS_1 = 3;
+    private static final int ROUNDS_2 = 4;
+    private static final int ROUNDS_3 = 6;
+
     private List<GameResult> result;
     private StatsCalculator calculator;
 
@@ -32,18 +48,18 @@ public class StatsTest {
         final Map<Player, Integer> scores2 = new HashMap<>();
         final Map<Player, Integer> scores3 = new HashMap<>();
 
-        scores1.put(player1, 8);
-        scores1.put(player2, 2);
+        scores1.put(player1, SCORE_4);
+        scores1.put(player2, SCORE_1);
 
-        scores2.put(player1, 7);
-        scores2.put(player2, 8);
+        scores2.put(player1, SCORE_3);
+        scores2.put(player2, SCORE_4);
 
-        scores3.put(player1, 5);
-        scores3.put(player2, 2);
+        scores3.put(player1, SCORE_2);
+        scores3.put(player2, SCORE_1);
 
-        this.result.add(new GameResult(scores1, 6));
-        this.result.add(new GameResult(scores2, 5));
-        this.result.add(new GameResult(scores3, 3));
+        this.result.add(new GameResult(scores1, ROUNDS_3));
+        this.result.add(new GameResult(scores2, ROUNDS_2));
+        this.result.add(new GameResult(scores3, ROUNDS_1));
 
         this.calculator = new StatsCalculator();
     }
@@ -64,9 +80,10 @@ public class StatsTest {
 
     @Test
     void testAverageRounds() {
-        final var averageRounds = this.result.stream()
+        final var totalRounds = this.result.stream()
             .mapToInt(GameResult::completedRounds)
-            .sum()/3.0;
-        assertEquals(averageRounds, this.calculator.averageRounds(result), 0.001);
+            .sum();
+        final var averageRounds = totalRounds / (double) this.result.size();
+        assertEquals(averageRounds, this.calculator.averageRounds(result), PRECISION);
     }
 }

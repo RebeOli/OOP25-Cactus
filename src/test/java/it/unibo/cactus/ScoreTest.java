@@ -20,20 +20,28 @@ import it.unibo.cactus.model.players.PlayerHandImpl;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 
-public class ScoreTest {
+/**
+ * Test suite for {@link ScoreCalculator} and {@link GameResult}.
+ * Verifies the correct behaviour of score calculator in the "Cactus!" card game,
+ * including calculating scores and determining the winner.
+ */
+final class ScoreTest {
     private static final Card CARD_1 = new CardImpl(Suit.BASTONI, 1, 1, null);
     private static final Card CARD_2 = new CardImpl(Suit.SPADE, 10, 0, null);
     private static final Card CARD_3 = new CardImpl(Suit.COPPE, 5, 5, null);
     private static final Card CARD_4 = new CardImpl(Suit.DENARI, 4, 4, null);
+    private static final int SCORE_1 = 6;
+    private static final int SCORE_2 = 4;
+    private static final int ROUNDS = 1;
 
     private Player player1;
     private Player player2;
-    private ScoreCalculator calculator;
     private Map<Player, Integer> scores;
 
     @BeforeEach
     void setUp() {
 
+        final ScoreCalculator calculator;
         final PlayerHand hand1 = new PlayerHandImpl(List.of(CARD_1, CARD_3));
         final PlayerHand hand2 = new PlayerHandImpl(List.of(CARD_2, CARD_4));
 
@@ -49,14 +57,14 @@ public class ScoreTest {
     @Test
     void testCalculateScores() {
         final Map<Player, Integer> calculateScore = new HashMap<>();
-        calculateScore.put(player1, 6);
-        calculateScore.put(player2, 4);
+        calculateScore.put(player1, SCORE_1);
+        calculateScore.put(player2, SCORE_2);
         assertEquals(calculateScore, scores);
     }
 
     @Test
     void testGetWinner() {
-        final GameResult result = new GameResult(scores, 0);
+        final GameResult result = new GameResult(scores, ROUNDS);
         assertEquals(player2, result.getWinner());
     }
 }

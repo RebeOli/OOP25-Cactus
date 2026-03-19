@@ -16,9 +16,12 @@ import org.junit.jupiter.api.Test;
 import it.unibo.cactus.model.cards.Card;
 
 /**
- * 
+ * Test suite for {@link DrawPileImpl}.
+ * Verifies the correct behaviour of the draw pile in the "Cactus!" card game,
+ * including drawing cards, checking if the pile is empty
+ * and refilling the pile with a new set of cards.
  */
-public final class DrawPileTest {
+final class DrawPileTest {
 
     private static final Card CARD_1 = new CardImpl(Suit.BASTONI, 1, 1, null);
     private static final Card CARD_2 = new CardImpl(Suit.SPADE, 3, 3, null);
