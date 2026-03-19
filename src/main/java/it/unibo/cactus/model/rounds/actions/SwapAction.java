@@ -7,7 +7,14 @@ import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.RoundInternalState;
 
-public record SwapAction (int cardIndex) implements RoundAction{
+/**
+ * Action that swaps the drawn card with a card in the player's hand.
+ * The replaced card is discarded and temporarily set as the drawn card
+ * so that the phase advance can check for a special power.
+ *
+ * @param cardIndex the index of the card in the player's hand to swap
+ */
+public record SwapAction(int cardIndex) implements RoundAction {
 
     @Override
     public void execute(final RoundInternalState round) {
