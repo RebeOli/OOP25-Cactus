@@ -8,11 +8,19 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
 
-public class DiscardPileImpl implements DiscardPile{
+/**
+ * Implementation of the {@link DiscardPile} interface for the "Cactus!" card game.
+ * Cards are stored in a {@link Deque} where the top of the pile
+ * corresponds to the first element of the deque.
+ * The discard pile starts empty at the beginning of each game.
+ */
+public final class DiscardPileImpl implements DiscardPile {
 
     private final Deque<Card> discardPile;
 
-    //a inizio partita il mazzo degli scarti è vuoto
+    /**
+     * Constructs a new empty discard pile.
+     */
     public DiscardPileImpl() {
         this.discardPile = new ArrayDeque<>();
     }
@@ -38,5 +46,5 @@ public class DiscardPileImpl implements DiscardPile{
     public boolean isEmpty() {
         return this.discardPile.isEmpty();
     }
-    
+
 }

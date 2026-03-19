@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.*;
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
@@ -37,14 +38,30 @@ class SpecialPowerTest {
      * @param cards the initial card to be placed in the player's hand
      * @return a newly created dummy Player instance holding the specified card
      */
-    private Player createDummyPlayer(String dummyName, Card cards) {
-        PlayerHand hand = new PlayerHandImpl(Arrays.asList(cards));
+    private Player createDummyPlayer(final String dummyName, final Card cards) {
+        final PlayerHand hand = new PlayerHandImpl(Arrays.asList(cards));
         return new Player() {
-            private PlayerHand myHand = hand; 
-            public String getName() { return dummyName; }
-            public boolean isHuman() { return true; }
-            public PlayerHand getHand() { return myHand; }
-            public void setHand(PlayerHand h) { this.myHand = h; }
+            private PlayerHand myHand = hand;
+
+            @Override
+            public String getName() {
+                return dummyName; 
+            }
+
+            @Override
+            public boolean isHuman() {
+                return true; 
+            }
+
+            @Override
+            public PlayerHand getHand() {
+                return myHand;
+            }
+
+            @Override
+            public void setHand(final PlayerHand h) {
+                this.myHand = h;
+            }
         };
     }
 
@@ -54,9 +71,9 @@ class SpecialPowerTest {
      */
     @Test
     void testWrongTargetExceptions() {
-        SpecialPower swap = new SwapPower();
-        SpecialPower reveal = new RevealPower();
-        PowerTarget wrongTarget = new PeekTarget(0);
+        final SpecialPower swap = new SwapPower();
+        final SpecialPower reveal = new RevealPower();
+        final PowerTarget wrongTarget = new PeekTarget(0);
         assertThrows(IllegalArgumentException.class, () -> 
             swap.activate(null, null, wrongTarget),
             "SwapPower should throw an exception if given a PeekTarget"
@@ -74,11 +91,11 @@ class SpecialPowerTest {
      */
     @Test
     void testRevealPowerLogic() {
-        Card hiddenCard = new CardImpl(Suit.COPPE, 5, 5, null);
-        Player targetPlayer = createDummyPlayer("Avversario", hiddenCard);
+        final Card hiddenCard = new CardImpl(Suit.COPPE, 5, 5, null);
+        final Player targetPlayer = createDummyPlayer("Avversario", hiddenCard);
         assertTrue(targetPlayer.getHand().isHidden(0), "Card should be hidden initially");
-        SpecialPower reveal = new RevealPower();
-        PowerTarget target = new RevealTarget(targetPlayer, 0);
+        final SpecialPower reveal = new RevealPower();
+        final PowerTarget target = new RevealTarget(targetPlayer, 0);
         reveal.activate(null, null, target);
         assertFalse(targetPlayer.getHand().isHidden(0), "RevealPower should make the card visible");
     }
@@ -90,11 +107,11 @@ class SpecialPowerTest {
      */
     @Test
     void testPeekPowerLogic() {
-        Card myCard = new CardImpl(Suit.SPADE, 6, 6, new PeekPower());
-        Player activator = createDummyPlayer("Io", myCard);
+        final Card myCard = new CardImpl(Suit.SPADE, 6, 6, new PeekPower());
+        final Player activator = createDummyPlayer("Io", myCard);
         assertTrue(activator.getHand().isHidden(0), "Card should be hidden initially");
-        SpecialPower peek = new PeekPower();
-        PowerTarget target = new PeekTarget(0);
+        final SpecialPower peek = new PeekPower();
+        final PowerTarget target = new PeekTarget(0);
         peek.activate(null, activator, target);
         assertTrue(activator.getHand().isHidden(0), "PeekPower should NOT change the hidden state of the card");
     }
@@ -106,12 +123,12 @@ class SpecialPowerTest {
      */
     @Test
     void testSwapPowerLogic() {
-        Card cardA = new CardImpl(Suit.DENARI, 1, 1, null);
-        Card cardB = new CardImpl(Suit.BASTONI, 10, 0, null);
-        Player playerA = createDummyPlayer("Chiara", cardA);
-        Player playerB = createDummyPlayer("Rebecca", cardB);
-        SpecialPower swap = new SwapPower();
-        PowerTarget target = new SwapTarget(playerA, 0, playerB, 0);
+        final Card cardA = new CardImpl(Suit.DENARI, 1, 1, null);
+        final Card cardB = new CardImpl(Suit.BASTONI, 10, 0, null);
+        final Player playerA = createDummyPlayer("Chiara", cardA);
+        final Player playerB = createDummyPlayer("Rebecca", cardB);
+        final SpecialPower swap = new SwapPower();
+        final PowerTarget target = new SwapTarget(playerA, 0, playerB, 0);
         swap.activate(null, playerA, target);
         assertEquals(cardB, playerA.getHand().getCard(0), "Player A should now have Player B's card");
         assertEquals(cardA, playerB.getHand().getCard(0), "Player B should now have Player A's card");
