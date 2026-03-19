@@ -54,7 +54,7 @@ public final class StatsCalculator {
      */
     public double averageRounds(final List<GameResult> results) {
         return Stats.of(results.stream()
-            .map(r -> r.completedRounds())
+            .map(GameResult::completedRounds)
             .iterator()
         )
         .mean();

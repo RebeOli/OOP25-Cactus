@@ -3,9 +3,12 @@ package it.unibo.cactus.model.statistics;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +35,9 @@ public final class JSonHistoryRepository implements HistoryRepository {
     @Override
     public void save(final GameResult result) throws IOException {
         try (
-            BufferedWriter w = new BufferedWriter(new FileWriter(this.history, true))) {
+            BufferedWriter w = new BufferedWriter(
+                new OutputStreamWriter(
+                    new FileOutputStream(this.history, true), StandardCharsets.UTF_8))) {
             w.write(this.gson.toJson(result));
             w.newLine();
         }
@@ -42,11 +47,14 @@ public final class JSonHistoryRepository implements HistoryRepository {
     public List<GameResult> loadAll() throws IOException {
         final List<GameResult> results = new ArrayList<>();
         try (
-            BufferedReader r = new BufferedReader(new FileReader(this.history))
+            BufferedReader r = new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream(this.history), StandardCharsets.UTF_8));
         ) {
-            String line;
-            while ((line = r.readLine()) != null) {
+            String line = r.readLine();
+            while (line != null) {
                 results.add(this.gson.fromJson(line, GameResult.class));
+                line = r.readLine();
             }
         }
         return results;
