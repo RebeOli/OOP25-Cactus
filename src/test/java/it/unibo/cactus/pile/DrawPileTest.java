@@ -15,7 +15,10 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.cards.Card;
 
-public class DrawPileTest {
+/**
+ * 
+ */
+public final class DrawPileTest {
 
     private static final Card CARD_1 = new CardImpl(Suit.BASTONI, 1, 1, null);
     private static final Card CARD_2 = new CardImpl(Suit.SPADE, 3, 3, null);

@@ -41,7 +41,7 @@ public class ScoreTest {
         player1.setHand(hand1);
         player2 = new HumanPlayer("Marta");
         player2.setHand(hand2);
-        
+
         calculator = new ScoreCalculator();
         scores = calculator.calculateScores(List.of(player1, player2));
     }
