@@ -9,12 +9,16 @@ import it.unibo.cactus.model.rounds.RoundAction;
  */
 public final class BotPlayer extends AbstractPlayer {
 
+    private final BotStrategy strategy;
+
     /**
      * Constructs a new bot player with the given name.
      * @param name the display name of the player; must not be null
+     * @param difficulty the difficulty level that determines the strategy
      */
-    public BotPlayer(final String name) {
+    public BotPlayer(final String name, final BotDifficulty difficulty) {
         super(name);
+        strategy = BotStrategyFactory.createStrategy(difficulty);
     }
 
     /** {@inheritDoc} */
@@ -27,8 +31,6 @@ public final class BotPlayer extends AbstractPlayer {
      * Selects the next action for this bot's turn.
      */
     public RoundAction chooseAction(final Round round) {
-        //TO-DO
-        //final List<RoundAction> actions = round.getAvailableActions();
-        return null;       
+        return strategy.chooseAction(round);       
     }
 }
