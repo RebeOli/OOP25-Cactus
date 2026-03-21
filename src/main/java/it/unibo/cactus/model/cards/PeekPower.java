@@ -1,18 +1,22 @@
 package it.unibo.cactus.model.cards;
 
-import it.unibo.cactus.model.Game;
+import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.cards.target.PowerTarget;
-import it.unibo.cactus.model.cards.target.RevealTarget;
 import it.unibo.cactus.model.players.Player;
 
-public class PeekPower implements SpecialPower {
+/**
+ * Represents the "Peek" special power in the game.
+ * This power allows a player to secretly look at one of their own face-down cards
+ * without revealing it to the other players.
+ */
+public final class PeekPower implements SpecialPower {
 
     @Override
-    public void activate(Game game, Player activator, PowerTarget target) {
-        if (!(target instanceof RevealTarget t)) {
-            throw new IllegalArgumentException("RevealPower requires a target of type RevealTarget!");
+    public void activate(final Game game, final Player activator, final PowerTarget target) {
+        if (!(target instanceof PeekTarget t)) {
+            throw new IllegalArgumentException("PeekPower requires a target of type PeekTarget!");
         }
-        Card targetCard = t.player().getHand().getCard(t.index());
-        System.out.println("RevealPower: Player " + activator + " revealed " + t.player() + "'s card: " + targetCard);
+        activator.getHand().getCard(t.index());
     }
 }

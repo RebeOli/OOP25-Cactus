@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.cactus.model.Game;
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
@@ -17,15 +17,27 @@ import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
-public class RoundImpl implements Round, RoundInternalState {
+/**
+ * Implementation of {@link Round} and {@link RoundInternalState}.
+ * Manages the phases of a single player's turn and the available actions for each phase.
+ */
+public final class RoundImpl implements Round, RoundInternalState {
     private final Game game;
     private TurnPhase phase;
     private Optional<Card> drawnCard;
     private final Player currentPlayer;
     private final DiscardPile discardPile;
     private final DrawPile drawPile;
-    private boolean isLastRound;  
+    private boolean isLastRound;
 
+    /**
+     * Constructs a new round for the given player.
+     *
+     * @param game          the current {@link Game} instance
+     * @param discardPile   the discard pile of the game
+     * @param drawPile      the draw pile of the game
+     * @param currentPlayer the player whose turn it is
+     */
     public RoundImpl(final Game game, final DiscardPile discardPile, final DrawPile drawPile, final Player currentPlayer) {
         this.game = game;
         this.phase = TurnPhase.DRAW;
@@ -81,7 +93,7 @@ public class RoundImpl implements Round, RoundInternalState {
     }
 
     @Override
-    public Player getCurrentPlayer(){
+    public Player getCurrentPlayer() {
         return currentPlayer;
     }
 
@@ -92,12 +104,12 @@ public class RoundImpl implements Round, RoundInternalState {
 
     @Override
     public void setDrawnCard(final Optional<Card> card) {
-        this.drawnCard=card;
+        this.drawnCard = card;
     }
 
     @Override
     public void setLastRound(final boolean value) {
-        this.isLastRound=value;
+        this.isLastRound = value;
     }
 
     @Override
