@@ -11,6 +11,13 @@ public final class BotPlayer extends AbstractPlayer {
 
     private final BotStrategy strategy;
 
+     /**
+     * Constructs a new bot player with easy difficulty.
+     * @param name the display name of the player; must not be null
+     */
+    public BotPlayer(final String name) {
+        this(name, BotDifficulty.EASY);
+    }
     /**
      * Constructs a new bot player with the given name.
      * @param name the display name of the player; must not be null
