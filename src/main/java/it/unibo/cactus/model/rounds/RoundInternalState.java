@@ -4,21 +4,13 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
-import it.unibo.cactus.model.players.Player;
 
 /**
  * Internal interface for accessing and modifying the state of a round.
  * This interface is intended for use by {@link RoundAction} implementations only.
  * It exposes mutable state that should not be visible to external components such as the Controller.
  */
-public interface RoundInternalState {
-
-    /**
-     * Returns the player whose turn it currently is.
-     * 
-     * @return the current {@link Player}.
-     */
-    Player getCurrentPlayer();
+public interface RoundInternalState extends Round {
 
     /**
      * Returns the card drawn from the draw pile during the current turn, if present.
@@ -33,13 +25,6 @@ public interface RoundInternalState {
      * @param card an {@link Optional} containing the drawn {@link Card}, or empty to clear it.
      */
     void setDrawnCard(Optional<Card> card);
-
-    /**
-     * Returns the current phase of the turn.
-     * 
-     * @return the current {@link TurnPhase}.
-     */
-    TurnPhase getPhase();
 
     /**
      * Advances the turn to the next phase.
