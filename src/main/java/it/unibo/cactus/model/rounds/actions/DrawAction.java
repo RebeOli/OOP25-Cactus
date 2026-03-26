@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
+import it.unibo.cactus.model.rounds.MutableRound;
 
 /**
  * Action that draws a card from the draw pile.
@@ -12,7 +12,7 @@ import it.unibo.cactus.model.rounds.RoundInternalState;
 public final class DrawAction implements RoundAction {
 
     @Override
-    public void execute(final RoundInternalState round) {
+    public void execute(final MutableRound round) {
         final Optional<Card> card = round.getDrawPile().draw();
         if (card.isEmpty()) {
             throw new IllegalStateException("Cannot draw a card: draw pile is empty");

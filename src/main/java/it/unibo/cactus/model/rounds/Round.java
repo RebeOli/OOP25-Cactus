@@ -3,6 +3,7 @@ package it.unibo.cactus.model.rounds;
 import java.util.List;
 import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.players.Player;
 
 /**
  * Represents a round of the game.
@@ -42,5 +43,19 @@ public interface Round {
      * @param action the {@link RoundAction} to be executed.
      */
     void execute(RoundAction action);
+
+     /**
+     * Returns the current phase of the turn.
+     * 
+     * @return the current {@link TurnPhase}.
+     */
+    TurnPhase getPhase();
+
+        /**
+     * Returns the player whose turn it currently is.
+     * 
+     * @return the current {@link Player}.
+     */
+    Player getCurrentPlayer();
 
 }
