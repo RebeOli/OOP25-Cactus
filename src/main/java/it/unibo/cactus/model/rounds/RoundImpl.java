@@ -18,10 +18,10 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 /**
- * Implementation of {@link Round} and {@link RoundInternalState}.
+ * Implementation of {@link Round} and {@link MutableRound}.
  * Manages the phases of a single player's turn and the available actions for each phase.
  */
-public final class RoundImpl implements RoundInternalState {
+public final class RoundImpl implements MutableRound {
     private final Game game;
     private TurnPhase phase;
     private Optional<Card> drawnCard;

@@ -5,7 +5,7 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
+import it.unibo.cactus.model.rounds.MutableRound;
 
 /**
  * Action that swaps the drawn card with a card in the player's hand.
@@ -17,7 +17,7 @@ import it.unibo.cactus.model.rounds.RoundInternalState;
 public record SwapAction(int cardIndex) implements RoundAction {
 
     @Override
-    public void execute(final RoundInternalState round) {
+    public void execute(final MutableRound round) {
         final Card card = round.getDrawnCard().orElseThrow();
         final PlayerHand hand = round.getCurrentPlayer().getHand();
         if (cardIndex < 0 || cardIndex >= hand.size()) {

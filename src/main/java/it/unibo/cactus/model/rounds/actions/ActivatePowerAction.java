@@ -4,7 +4,7 @@ import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.cards.target.PowerTarget;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
+import it.unibo.cactus.model.rounds.MutableRound;
 
 /**
  * Action that activates the special power of the discarded card.
@@ -24,7 +24,7 @@ public record ActivatePowerAction(Game game, PowerTarget target) implements Roun
     }
 
     @Override
-    public void execute(final RoundInternalState round) {
+    public void execute(final MutableRound round) {
         if (this.target == null) {
             throw new IllegalStateException("Missing target for ActivatePowerAction");
         }
