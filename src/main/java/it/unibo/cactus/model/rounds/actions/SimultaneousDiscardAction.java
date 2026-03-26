@@ -13,12 +13,12 @@ import it.unibo.cactus.model.rounds.RoundAction;
 public record SimultaneousDiscardAction(Game game, Player player, int cardIndex) implements RoundAction {
 
     @Override
-    public void execute() {
+    public void execute(MutableRound round) {
         /*final List<Player> availablePlayers = game.getPlayers().stream()
             .filter(p -> p.getHand().size() < 6)
             .toList();*/
         Card discardCard = player.getHand().getCard(cardIndex);
-        if(discardCard.equals(game.getDiscardPile().getTopCard())) {
+        if(discardCard.equals(game.getDiscardPile().getTopCard().get())) {
             this.discard(player, discardCard);
             //player.getHand().removeCard(cardIndex); metodo ari
         } else {
