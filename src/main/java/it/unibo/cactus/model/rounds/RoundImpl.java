@@ -61,7 +61,7 @@ public final class RoundImpl implements MutableRound {
                                 actions.add(new DiscardAction());
                                 yield actions;
                             }
-            case SPECIAL_POWER -> List.of(new ActivatePowerAction(game), new SkipPowerAction());
+            case SPECIAL_POWER -> List.of(new ActivatePowerAction(), new SkipPowerAction());
             case END_TURN -> List.of(new CallCactusAction(), new EndTurnAction());
             case ENDED -> List.of();
         };
