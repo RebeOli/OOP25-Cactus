@@ -34,7 +34,7 @@ final class RoundTest {
     private static final int HAND_SIZE = 4;
     private static final int SWAP_INDEX = 1;
     private static final CardImpl PLAIN_CARD = new CardImpl(Suit.BASTONI, 5, 5, null);
-    private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (game, player, target) -> { });
+    private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (player, target) -> { });
     private DiscardPile discardPile;
     private Player player;
     private RoundImpl round;
