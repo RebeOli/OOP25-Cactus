@@ -14,6 +14,7 @@ import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
@@ -53,16 +54,27 @@ public final class RoundImpl implements MutableRound {
         return switch (phase) {
             case DRAW -> List.of(new DrawAction());
             case DECISION -> {
-                                final int handSize = currentPlayer.getHand().size();
-                                final List<RoundAction> actions = new ArrayList<>();
-                                for (int i = 0; i < handSize; i++) {
-                                    actions.add(new SwapAction(i));
-                                }
-                                actions.add(new DiscardAction());
-                                yield actions;
-                            }
+                final int handSize = currentPlayer.getHand().size();
+                final List<RoundAction> actions = new ArrayList<>();
+                for (int i = 0; i < handSize; i++) {
+                    actions.add(new SwapAction(i));
+                }
+                actions.add(new DiscardAction());
+                yield actions;
+            }
             case SPECIAL_POWER -> List.of(new ActivatePowerAction(), new SkipPowerAction());
             case END_TURN -> List.of(new CallCactusAction(), new EndTurnAction());
+            case SIMULTANEOUS_DISCARD -> {
+                final List<RoundAction> actions = new ArrayList<>();
+                game.getPlayers().stream()
+                    .filter(p -> p.getHand().size() < 6)
+                    .forEach(p -> {
+                        for (int i = 0 ; i < p.getHand().size() ; i++) {
+                            actions.add(new SimultaneousDiscardAction(p, i));
+                        }
+                });
+                yield actions;
+            }
             case ENDED -> List.of();
         };
     }
@@ -117,12 +129,13 @@ public final class RoundImpl implements MutableRound {
         switch (phase) {
             case DRAW -> phase = TurnPhase.DECISION;
             case DECISION -> phase = drawnCard
-                                            .flatMap(Card::getSpecialPower)
-                                            .map(p -> TurnPhase.SPECIAL_POWER)
-                                            .orElse(TurnPhase.END_TURN);
+                .flatMap(Card::getSpecialPower)
+                .map(p -> TurnPhase.SPECIAL_POWER)
+                .orElse(TurnPhase.END_TURN);
             case SPECIAL_POWER -> phase = TurnPhase.END_TURN;
-            case END_TURN -> phase = TurnPhase.ENDED;
-            case ENDED -> throw new IllegalStateException("Il turno è già terminato");
+            case END_TURN -> phase = TurnPhase.SIMULTANEOUS_DISCARD;
+            case SIMULTANEOUS_DISCARD -> phase = TurnPhase.ENDED;
+            case ENDED -> throw new IllegalStateException("the turn is already over");
         }
     }
 
