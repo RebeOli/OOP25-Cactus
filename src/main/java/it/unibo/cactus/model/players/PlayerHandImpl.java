@@ -6,11 +6,10 @@ import it.unibo.cactus.model.cards.Card;
 
 /**
  * Implementation of the {@link PlayerHand} interface.
- * Manages the collection of cards held by a player, keeping track
- * of each card's state (hidden or revealed).
  */
 public final class PlayerHandImpl implements PlayerHand {
 
+    private static final int MAX_CARDS = 6;
     private final List<Slot> slots;
 
     /**
@@ -65,6 +64,25 @@ public final class PlayerHandImpl implements PlayerHand {
         slots.get(index).hidden = false;
     }
 
+    @Override
+    public void addCard(Card newCard) {
+        if (newCard == null) {
+            throw new IllegalArgumentException("A new card cannot be null");
+        }
+        if (this.slots.size() >= MAX_CARDS) {
+            throw new IllegalStateException("Hand is full! Cannot exceed " + MAX_CARDS + " cards.");
+        }
+        this.slots.add(new Slot(newCard, true));
+    }
+
+    @Override
+    public Card removeCard(int index) {
+        if (this.slots.isEmpty()) {
+            throw new IllegalStateException("Cannot remove a card: the hand is completely empty!");
+        }
+        final Slot removedSlot = this.slots.remove(index);
+        return removedSlot.card;
+    }
     private static class Slot {
         private Card card;
         private boolean hidden;

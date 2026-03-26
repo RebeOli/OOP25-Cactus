@@ -4,8 +4,6 @@ import it.unibo.cactus.model.cards.Card;
 
 /**
  * Represents the set of cards placed on the table in front of a player during the "Cactus!" game.
- * This interface is responsible for managing the physical slots of the hand 
- * and tracking the visibility state (face-up or face-down) of each card.git
  */
 public interface PlayerHand {
 
@@ -29,7 +27,6 @@ public interface PlayerHand {
 
     /**
      * Replaces the card at the specified position with a new card.
-     * According to the game rules, the newly placed card becomes hidden.
      * 
      * @param index the position where the new card will be placed.
      * @param card the new {@link Card} to insert into the player's hand.
@@ -40,8 +37,6 @@ public interface PlayerHand {
 
     /**
      * Returns the number of cards currently present in the player's hand.
-     * This is useful to determine the bounds for iterating over the hand 
-     * or to check if the player has any cards left.
      *
      * @return the total number of cards in the hand as an integer.
      */
@@ -55,4 +50,19 @@ public interface PlayerHand {
      * @param index the 0-based position of the card to be revealed.
      */
     void revealCard(int index);
+
+    /**
+     * Adds a new card to the player's hand.
+     *
+     * @param newCard the {@link Card} to be added to the hand
+     */
+    void addCard(Card newCard);
+
+    /**
+     * Removes and returns the card at the specified index from the hand.
+     *
+     * @param index the position of the card to remove
+     * @return the card that was removed
+     */
+    Card removeCard(int index);
 }
