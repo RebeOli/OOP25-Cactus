@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.unibo.cactus.model.pile.DiscardPileImpl;
 import it.unibo.cactus.model.pile.DrawPileImpl;
+import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.HumanPlayer;
 import it.unibo.cactus.model.players.Player;
 
@@ -24,11 +25,9 @@ public final class GameFactory {
     public static Game createGame(final String humanPlayerName) {
         final List<Player> players = new ArrayList<>();
         players.add(new HumanPlayer(humanPlayerName));
-        /* 
-        players.add(new BotPlayerImpl("Bot1"));
-        players.add(new BotPlayerImpl("Bot2"));
-        players.add(new BotPlayerImpl("Bot3"));
-        */
+        players.add(new BotPlayer("Bot1"));
+        players.add(new BotPlayer("Bot2"));
+        players.add(new BotPlayer("Bot3"));
         final Game game = new GameImpl(players, new DrawPileImpl(new ArrayList<>()), new DiscardPileImpl());
         game.initialize();
         return game;
