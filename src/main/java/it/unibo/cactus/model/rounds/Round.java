@@ -64,4 +64,12 @@ public interface Round {
      * @return true if the current phase is SimultaneousDiscardPhase, false otherwise.
      */
     boolean isSimultaneousDiscardPhase();
+
+    /**
+     * Ends the simultaneous discard phase and advances to the next phase.
+     * 
+     * @throws IllegalStateException if the current phase is not {@link TurnPhase#SIMULTANEOUS_DISCARD}
+     */
+    void endSimultaneousDiscard();
+
 }
