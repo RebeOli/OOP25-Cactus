@@ -94,7 +94,7 @@ public interface Game {
     void performAction(RoundAction action);
 
     /**
-     * 
+     * Ends the simultaneous discard phase and advances to the next player.
      */
     void endSimultaneousDiscard();
 }

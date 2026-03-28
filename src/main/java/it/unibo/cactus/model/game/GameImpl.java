@@ -169,7 +169,7 @@ public final class GameImpl implements Game {
 
     @Override
     public void endSimultaneousDiscard() {
-        //((MutableRound) getCurrentRound).endSimultaneousDiscard(); // SIMULTANEOUS_DISCARD -> ENDED
+        ((MutableRound) currentRound).endSimultaneousDiscard(); // SIMULTANEOUS_DISCARD -> ENDED
         advancePlayer();
     }
 
