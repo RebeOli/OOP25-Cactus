@@ -51,11 +51,18 @@ public interface Round {
      */
     TurnPhase getPhase();
 
-        /**
+    /**
      * Returns the player whose turn it currently is.
      * 
      * @return the current {@link Player}.
      */
     Player getCurrentPlayer();
+
+    /**
+     * Returns a boolean about SimultaneousDiscardPhase.
+     * 
+     * @return true if the current phase is SimultaneousDiscardPhase, false otherwise.
+     */
+    boolean isSimultaneousDiscardPhase();
 
 }

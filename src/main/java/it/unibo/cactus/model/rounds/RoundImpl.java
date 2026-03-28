@@ -139,4 +139,17 @@ public final class RoundImpl implements MutableRound {
         }
     }
 
+    @Override
+    public boolean isSimultaneousDiscardPhase() {
+        return this.phase.equals(TurnPhase.SIMULTANEOUS_DISCARD);
+    }
+
+    @Override
+    public void endSimultaneousDiscard() {
+        if (phase != TurnPhase.SIMULTANEOUS_DISCARD) {
+            throw new IllegalStateException("Not in simultaneous discard phase");
+        }
+        advancePhase();
+    }
+
 }
