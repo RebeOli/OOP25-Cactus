@@ -44,18 +44,23 @@ public interface Round {
      */
     void execute(RoundAction action);
 
-     /**
+    /**
      * Returns the current phase of the turn.
      * 
      * @return the current {@link TurnPhase}.
      */
     TurnPhase getPhase();
 
-        /**
+    /**
      * Returns the player whose turn it currently is.
      * 
      * @return the current {@link Player}.
      */
     Player getCurrentPlayer();
 
+    /**
+     * Returns whether the turn has ended.
+     * @return true if the current phase is {@link TurnPhase#ENDED}
+     */
+    boolean isEnded();
 }

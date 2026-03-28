@@ -6,6 +6,7 @@ import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
+import it.unibo.cactus.model.rounds.RoundAction;
 
 /**
  * Represents the main game session of "Cactus!".
@@ -50,14 +51,6 @@ public interface Game {
     Player getCurrentPlayer();
 
     /**
-     * Advances the turn to the next player.
-     *
-     * @throws IllegalStateException if {@link #initialize()} has not been called
-     * @throws IllegalStateException if the game is already finished
-     */
-    void advancePlayer();
-
-    /**
      * Returns whether the game is finished.
      *
      * @return true if the game is over, false otherwise
@@ -93,4 +86,15 @@ public interface Game {
      */
     int getCompletedRounds();
 
+    /**
+     * Executes the given action on the current round and advances to the next player if the turn has ended.
+     *
+     * @param action the {@link RoundAction} to execute
+     */
+    void performAction(RoundAction action);
+
+    /**
+     * 
+     */
+    void endSimultaneousDiscard();
 }

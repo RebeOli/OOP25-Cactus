@@ -139,4 +139,9 @@ public final class RoundImpl implements MutableRound {
         }
     }
 
+    @Override
+    public boolean isEnded() {
+        return phase == TurnPhase.ENDED;
+    }
+
 }
