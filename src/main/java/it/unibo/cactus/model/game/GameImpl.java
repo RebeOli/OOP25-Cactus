@@ -12,6 +12,7 @@ import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHandImpl;
+import it.unibo.cactus.model.rounds.MutableRound;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.RoundImpl;
@@ -151,11 +152,7 @@ public final class GameImpl implements Game {
             throw new IllegalStateException("the game is already finished");
         }
         getCurrentRound().execute(action);
-        if (currentRound.isEnded()) {
-            advancePlayer();
-        } else {
-            notifyGameStateChanged();
-        }
+        notifyGameStateChanged();
     }
 
     private void notifyGameFinished() {
@@ -172,10 +169,8 @@ public final class GameImpl implements Game {
 
     @Override
     public void endSimultaneousDiscard() {
-        //getCurrentRound().endSimultaneousDiscard(); // SIMULTANEOUS_DISCARD -> ENDED
-        if (getCurrentRound().isEnded()) {
-            advancePlayer();
-        }
+        //((MutableRound) getCurrentRound).endSimultaneousDiscard(); // SIMULTANEOUS_DISCARD -> ENDED
+        advancePlayer();
     }
 
 }

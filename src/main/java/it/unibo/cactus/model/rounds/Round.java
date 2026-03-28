@@ -58,9 +58,4 @@ public interface Round {
      */
     Player getCurrentPlayer();
 
-    /**
-     * Returns whether the turn has ended.
-     * @return true if the current phase is {@link TurnPhase#ENDED}
-     */
-    boolean isEnded();
 }
