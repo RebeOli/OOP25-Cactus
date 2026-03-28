@@ -10,5 +10,6 @@ public enum TurnPhase {
     DECISION,
     SPECIAL_POWER,
     END_TURN,
+    SIMULTANEOUS_DISCARD,
     ENDED
 }

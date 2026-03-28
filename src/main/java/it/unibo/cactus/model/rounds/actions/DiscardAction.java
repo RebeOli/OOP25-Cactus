@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
+import it.unibo.cactus.model.rounds.MutableRound;
 
 /**
  * Action that discards the drawn card to the discard pile.
@@ -12,7 +12,7 @@ import it.unibo.cactus.model.rounds.RoundInternalState;
 public final class DiscardAction implements RoundAction {
 
     @Override
-    public void execute(final RoundInternalState round) {
+    public void execute(final MutableRound round) {
         final Card card = round.getDrawnCard().orElseThrow(); //lancia eccezione se empty
         round.getDiscardPile().discard(card);
         //La carta resta temporaneamente disponibile per advancePhase(),

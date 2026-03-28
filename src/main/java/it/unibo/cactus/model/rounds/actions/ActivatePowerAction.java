@@ -4,7 +4,7 @@ import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.cards.target.PowerTarget;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
+import it.unibo.cactus.model.rounds.MutableRound;
 
 /**
  * Action that activates the special power of the discarded card.
@@ -12,25 +12,23 @@ import it.unibo.cactus.model.rounds.RoundInternalState;
  * @param game   the current {@link Game} instance
  * @param target the target of the special power
  */
-public record ActivatePowerAction(Game game, PowerTarget target) implements RoundAction {
+public record ActivatePowerAction(PowerTarget target) implements RoundAction {
 
     /**
      * Constructs an {@link ActivatePowerAction} without a target.
-     *
-     * @param game the current {@link Game} instance
      */
-    public ActivatePowerAction(final Game game) {
-        this(game, null);
+    public ActivatePowerAction() {
+        this(null);
     }
 
     @Override
-    public void execute(final RoundInternalState round) {
+    public void execute(final MutableRound round) {
         if (this.target == null) {
             throw new IllegalStateException("Missing target for ActivatePowerAction");
         }
         round.getDrawnCard()
                 .flatMap(Card::getSpecialPower)
-                .ifPresent(power -> power.activate(this.game, round.getCurrentPlayer(), target));
+                .ifPresent(power -> power.activate(round.getCurrentPlayer(), target));
         round.advancePhase();
     }
 

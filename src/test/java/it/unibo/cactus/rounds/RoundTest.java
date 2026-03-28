@@ -2,15 +2,20 @@ package it.unibo.cactus.rounds;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
+import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.game.GameFactory;
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DiscardPileImpl;
 import it.unibo.cactus.model.pile.DrawPile;
@@ -23,6 +28,7 @@ import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.players.Player;
@@ -34,15 +40,17 @@ final class RoundTest {
     private static final int HAND_SIZE = 4;
     private static final int SWAP_INDEX = 1;
     private static final CardImpl PLAIN_CARD = new CardImpl(Suit.BASTONI, 5, 5, null);
-    private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (game, player, target) -> { });
+    private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (player, target) -> { });
     private DiscardPile discardPile;
     private Player player;
     private RoundImpl round;
+    private DrawPile drawPile;
+    private Game game;
 
     @BeforeEach
     void setUp() {
         discardPile = new DiscardPileImpl();
-        final DrawPile drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD));
+        drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD, PLAIN_CARD));
         player = new AbstractPlayer("TestPlayer") {
             @Override
             public boolean isHuman() { 
@@ -55,7 +63,9 @@ final class RoundTest {
             new CardImpl(Suit.DENARI, 3, 3, null),
             new CardImpl(Suit.SPADE, 4, 4, null)
         )));
-        round = new RoundImpl(null, discardPile, drawPile, player);
+        game = GameFactory.createGame("Pippo");
+        round = new RoundImpl(game, discardPile, drawPile, player);
+
     }
 
     @Test
@@ -93,8 +103,7 @@ final class RoundTest {
 
     @Test
     void testAvailableActionsInSpecialPowerPhase() {
-        final var powerRound = new RoundImpl(null, discardPile, 
-                            new DrawPileImpl(List.of(POWER_CARD)), player);
+        final var powerRound = new RoundImpl(null, discardPile, new DrawPileImpl(List.of(POWER_CARD)), player);
         powerRound.execute(new DrawAction());    // DRAW -> DECISION
         powerRound.execute(new DiscardAction()); // DECISION -> SPECIAL_POWER
         assertEquals(TurnPhase.SPECIAL_POWER, powerRound.getPhase());
@@ -116,6 +125,8 @@ final class RoundTest {
         round.execute(new DrawAction());    // DRAW -> DECISION
         round.execute(new DiscardAction()); // DECISION -> END_TURN
         round.execute(new EndTurnAction()); // END_TURN -> ENDED
+        round.execute(new SimultaneousDiscardAction(player, 0));
+        round.advancePhase();
         assertEquals(TurnPhase.ENDED, round.getPhase());
         assertTrue(round.getAvailableActions().isEmpty());
     }
@@ -140,8 +151,7 @@ final class RoundTest {
 
     @Test
     void testDiscardActionWithSpecialPower() {
-        final var powerRound = new RoundImpl(null, discardPile, 
-                            new DrawPileImpl(List.of(POWER_CARD)), player);
+        final var powerRound = new RoundImpl(null, discardPile, new DrawPileImpl(List.of(POWER_CARD)), player);
         powerRound.execute(new DrawAction());
         powerRound.execute(new DiscardAction());
         assertEquals(TurnPhase.SPECIAL_POWER, powerRound.getPhase());
@@ -163,7 +173,7 @@ final class RoundTest {
         round.execute(new DiscardAction());
         round.execute(new CallCactusAction());
         assertTrue(round.isLastRound());
-        assertEquals(TurnPhase.ENDED, round.getPhase());
+        assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
     }
 
     @Test 
@@ -172,17 +182,74 @@ final class RoundTest {
         round.execute(new DiscardAction());
         round.execute(new EndTurnAction());
         assertFalse(round.isLastRound());
+        round.advancePhase();
         assertEquals(TurnPhase.ENDED, round.getPhase());
     }
 
     @Test 
     void testSkipPowerAction() {
-        final var powerRound = new RoundImpl(null, discardPile,
-                            new DrawPileImpl(List.of(POWER_CARD)), player);
+        final var powerRound = new RoundImpl(null, discardPile, new DrawPileImpl(List.of(POWER_CARD)), player);
         powerRound.execute(new DrawAction());
         powerRound.execute(new DiscardAction());
         powerRound.execute(new SkipPowerAction());
         assertEquals(TurnPhase.END_TURN, powerRound.getPhase());
+    }
+
+    @Test
+    void testSimultaneousDiscardAction() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new EndTurnAction());
+        assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
+        assertFalse(round.getAvailableActions().isEmpty());
+    }
+
+    /*@Test 
+    void testRemoveCard() {
+        player.setHand(new PlayerHandImpl(List.of(
+            new CardImpl(Suit.COPPE, 1, 1, null),
+            new CardImpl(Suit.BASTONI, 2, 2, null),
+            new CardImpl(Suit.DENARI, 3, 3, null),
+            new CardImpl(Suit.SPADE, 4, 4, null)
+        )));
+        player.getHand().removeCard(0);
+        assertEquals(3, player.getHand().size());
+    }*/
+
+    @Test 
+    void testSimultaneousDiscardSuccess() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new EndTurnAction());
+        assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
+        discardPile.discard(new CardImpl(Suit.BASTONI, 4, 4, null));
+        assertEquals(discardPile.getTopCard().orElseThrow().getValue(), player.getHand().getCard(3).getValue());
+        round.execute(new SimultaneousDiscardAction(player, 3));
+        assertEquals(3, player.getHand().size());
+    }
+
+    @Test 
+    void testSimultaneousDiscardFail() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new EndTurnAction());
+        assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
+        assertNotEquals(discardPile.getTopCard().orElseThrow().getValue(), player.getHand().getCard(3).getValue());
+        round.execute(new SimultaneousDiscardAction(player, 3));
+        assertEquals(5, player.getHand().size());
+    }
+
+    @Test 
+    void testSimultaneousDiscardSixCard() {
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new EndTurnAction());
+        assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
+        assertNotEquals(discardPile.getTopCard().orElseThrow().getValue(), player.getHand().getCard(3).getValue());
+        round.execute(new SimultaneousDiscardAction(player, 3));
+        round.execute(new SimultaneousDiscardAction(player, 3));
+        assertEquals(6, player.getHand().size());
+        assertThrows(NoSuchElementException.class, ()->round.execute(new SimultaneousDiscardAction(player, 3)));
     }
 
 }

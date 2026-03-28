@@ -75,11 +75,11 @@ class SpecialPowerTest {
         final SpecialPower reveal = new RevealPower();
         final PowerTarget wrongTarget = new PeekTarget(0);
         assertThrows(IllegalArgumentException.class, () -> 
-            swap.activate(null, null, wrongTarget),
+            swap.activate(null, wrongTarget),
             "SwapPower should throw an exception if given a PeekTarget"
         );
         assertThrows(IllegalArgumentException.class, () -> 
-            reveal.activate(null, null, wrongTarget),
+            reveal.activate(null, wrongTarget),
             "RevealPower should throw an exception if given a PeekTarget"
         );
     }
@@ -96,7 +96,7 @@ class SpecialPowerTest {
         assertTrue(targetPlayer.getHand().isHidden(0), "Card should be hidden initially");
         final SpecialPower reveal = new RevealPower();
         final PowerTarget target = new RevealTarget(targetPlayer, 0);
-        reveal.activate(null, null, target);
+        reveal.activate(null, target);
         assertFalse(targetPlayer.getHand().isHidden(0), "RevealPower should make the card visible");
     }
 
@@ -112,7 +112,7 @@ class SpecialPowerTest {
         assertTrue(activator.getHand().isHidden(0), "Card should be hidden initially");
         final SpecialPower peek = new PeekPower();
         final PowerTarget target = new PeekTarget(0);
-        peek.activate(null, activator, target);
+        peek.activate(activator, target);
         assertTrue(activator.getHand().isHidden(0), "PeekPower should NOT change the hidden state of the card");
     }
 
@@ -129,7 +129,7 @@ class SpecialPowerTest {
         final Player playerB = createDummyPlayer("Rebecca", cardB);
         final SpecialPower swap = new SwapPower();
         final PowerTarget target = new SwapTarget(playerA, 0, playerB, 0);
-        swap.activate(null, playerA, target);
+        swap.activate(playerA, target);
         assertEquals(cardB, playerA.getHand().getCard(0), "Player A should now have Player B's card");
         assertEquals(cardA, playerB.getHand().getCard(0), "Player B should now have Player A's card");
     }

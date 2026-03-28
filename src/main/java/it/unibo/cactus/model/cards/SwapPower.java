@@ -1,6 +1,5 @@
 package it.unibo.cactus.model.cards;
 
-import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.cards.target.PowerTarget;
 import it.unibo.cactus.model.cards.target.SwapTarget;
 import it.unibo.cactus.model.players.Player;
@@ -13,7 +12,7 @@ import it.unibo.cactus.model.players.Player;
 public final class SwapPower implements SpecialPower {
 
    @Override
-    public void activate(final Game game, final Player activator, final PowerTarget target) {
+    public void activate(final Player activator, final PowerTarget target) {
         if (!(target instanceof SwapTarget t)) {
             throw new IllegalArgumentException("SwapPower requires a target of type SwapTarget!");
         }
