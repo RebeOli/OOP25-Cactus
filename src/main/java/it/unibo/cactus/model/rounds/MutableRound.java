@@ -53,4 +53,11 @@ public interface MutableRound extends Round {
      */
     void setLastRound(boolean value);
 
+    /**
+     * Ends the simultaneous discard phase and advances to the next phase.
+     * 
+     * @throws IllegalStateException if the current phase is not {@link TurnPhase#SIMULTANEOUS_DISCARD}
+     */
+    void endSimultaneousDiscard();
+
 }
