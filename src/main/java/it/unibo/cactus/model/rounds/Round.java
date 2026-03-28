@@ -58,4 +58,11 @@ public interface Round {
      */
     Player getCurrentPlayer();
 
+    /**
+     * Returns a boolean about SimultaneousDiscardPhase.
+     * 
+     * @return true if the current phase is SimultaneousDiscardPhase, false otherwise.
+     */
+    boolean isSimultaneousDiscardPhase();
+
 }
