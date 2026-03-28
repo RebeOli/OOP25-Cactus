@@ -18,7 +18,7 @@ import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
-import it.unibo.view.GameView;
+import it.unibo.cactus.view.GameView;
 
 public class ControllerImpl implements Controller, GameObserver {
     private static final int BOT_DELAY = 1500;
