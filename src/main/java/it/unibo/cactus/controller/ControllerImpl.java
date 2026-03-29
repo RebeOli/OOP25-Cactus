@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameFactory;
-import it.unibo.cactus.model.game.GameObserver;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.RoundAction;
@@ -19,7 +18,7 @@ import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.view.GameView;
 
-public class ControllerImpl implements Controller, GameObserver {
+public class ControllerImpl implements Controller {
     private static final int BOT_DELAY = 1500;
     private static final int SIMULTANEOUS_DISCARD_TIME = 4000;
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class.getName());
@@ -46,7 +45,7 @@ public class ControllerImpl implements Controller, GameObserver {
     @Override
     public void handleAction(final RoundAction action) {
         game.performAction(action);
-        upgrade();
+        //upgrade();
     }
 
     @Override
@@ -78,13 +77,14 @@ public class ControllerImpl implements Controller, GameObserver {
                 final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
                 botStartTime = 0;
                 game.performAction(action);
-                upgrade();
+                //upgrade();
             }
         } else {
             botStartTime = 0;
         }
     }
 
+    @Override
     public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
         int oldSize = action.player().getHand().size();
         game.performAction(action);
@@ -92,7 +92,7 @@ public class ControllerImpl implements Controller, GameObserver {
             simultaneousDiscardStartTime = 0;
             game.endSimultaneousDiscard();
         }
-        view.updateGame(game);
+        //view.updateGame(game);
     }
 
     @Override

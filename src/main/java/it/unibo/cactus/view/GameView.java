@@ -15,7 +15,7 @@ public interface GameView {
 
     int showCompletedRounds(GameResult result);
 
-    void showRank(GameResult result);
+    Map<Player,Integer> showRank(GameResult result);
 
     Map<Player,PlayerStats> showStats(Map<Player,PlayerStats> stats);
 
