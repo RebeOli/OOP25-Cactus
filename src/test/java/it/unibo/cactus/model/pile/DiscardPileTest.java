@@ -1,4 +1,4 @@
-package it.unibo.cactus.pile;
+package it.unibo.cactus.model.pile;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -10,8 +10,7 @@ import org.junit.jupiter.api.Test;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
-import it.unibo.cactus.model.pile.DiscardPile;
-import it.unibo.cactus.model.pile.DiscardPileImpl;
+
 
 /**
  * Test suite for {@link DiscardPileImpl}.

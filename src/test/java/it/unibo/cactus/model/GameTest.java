@@ -1,4 +1,4 @@
-package it.unibo.cactus;
+package it.unibo.cactus.model;
 
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
