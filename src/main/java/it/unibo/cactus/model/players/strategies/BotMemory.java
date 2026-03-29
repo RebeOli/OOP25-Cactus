@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.players;
+package it.unibo.cactus.model.players.strategies;
 
 import java.util.Map;
 import java.util.Optional;

@@ -1,4 +1,6 @@
-package it.unibo.cactus.model.players;
+package it.unibo.cactus.model.players.strategies;
+
+import it.unibo.cactus.model.players.BotDifficulty;
 
 /**
  * Static factory for creating a {@link BotStrategy} based on a given {@link BotDifficulty}.

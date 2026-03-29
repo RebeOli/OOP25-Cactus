@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.players;
+package it.unibo.cactus.model.players.strategies;
 
 import java.util.Map;
 import java.util.Optional;
@@ -6,6 +6,7 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
+import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.TurnPhase;

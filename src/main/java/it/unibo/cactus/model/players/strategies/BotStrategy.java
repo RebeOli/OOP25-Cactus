@@ -1,4 +1,4 @@
-package it.unibo.cactus.model.players;
+package it.unibo.cactus.model.players.strategies;
 
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;

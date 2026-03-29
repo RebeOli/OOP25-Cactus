@@ -1,5 +1,7 @@
 package it.unibo.cactus.model.players;
 
+import it.unibo.cactus.model.players.strategies.BotStrategy;
+import it.unibo.cactus.model.players.strategies.BotStrategyFactory;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 
