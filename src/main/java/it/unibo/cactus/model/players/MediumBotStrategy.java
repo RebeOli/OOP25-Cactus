@@ -3,7 +3,6 @@ package it.unibo.cactus.model.players;
 import java.util.Optional;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.rounds.TurnPhase;
@@ -27,16 +26,15 @@ public class MediumBotStrategy implements BotStrategy {
     /** {@inheritDoc} */
     @Override
     public RoundAction chooseAction(final Round round) {
-        //final TurnPhase phase = round.getPhase();
-        final TurnPhase phase = ((RoundInternalState) round).getPhase();
-        //final PlayerHand hand = round.getCurrentPlayer().getHand();
-        final PlayerHand hand = ((RoundInternalState) round).getCurrentPlayer().getHand();
+        final TurnPhase phase = round.getPhase();
+        final PlayerHand hand = round.getCurrentPlayer().getHand();
 
         return switch (phase) {
             case DRAW -> new DrawAction();
             case DECISION -> chooseDecision(round, hand);
             case SPECIAL_POWER -> chooseSpecialPower(round, hand);
             case END_TURN -> chooseEndTurn(round, hand);
+            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round, hand);
             case ENDED -> throw new IllegalStateException("chooseAction called on ENDED round");
         };
     }
@@ -83,8 +81,7 @@ public class MediumBotStrategy implements BotStrategy {
             && drawn.get().getSpecialPower().isPresent()
             && drawn.get().getSpecialPower().get() instanceof PeekPower;
         if (hiddenCount > 2 && isPeek) {
-            return new ActivatePowerAction(null, new PeekTarget(firstHiddenIndex));
-            //return new ActivatePowerAction(new PeekTarget(firstHiddenIndex));
+            return new ActivatePowerAction(new PeekTarget(firstHiddenIndex));
         }
 
         // Salto il potere speciale se non è conveniente usarlo
@@ -107,5 +104,9 @@ public class MediumBotStrategy implements BotStrategy {
         }
 
         return new EndTurnAction();
+    }
+
+    private RoundAction chooseSimultaneousDiscard(final Round round, final PlayerHand hand) {
+        return null;
     }
 }

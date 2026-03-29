@@ -8,7 +8,6 @@ import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.RoundInternalState;
 import it.unibo.cactus.model.rounds.TurnPhase;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -32,16 +31,15 @@ public class HardBotStrategy implements BotStrategy {
     /** {@inheritDoc} */
     @Override
     public RoundAction chooseAction(final Round round) {
-        //final TurnPhase phase = round.getPhase();
-        final TurnPhase phase = ((RoundInternalState) round).getPhase();
-        //final PlayerHand hand = round.getCurrentPlayer().getHand();
-        final PlayerHand hand = ((RoundInternalState) round).getCurrentPlayer().getHand();
+        final TurnPhase phase = round.getPhase();
+        final PlayerHand hand = round.getCurrentPlayer().getHand();
 
         return switch (phase) {
             case DRAW -> new DrawAction();
             case DECISION -> chooseDecision(round);
             case SPECIAL_POWER -> chooseSpecialPower(round, hand);
             case END_TURN -> chooseEndTurn(round, hand);
+            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round, hand);
             case ENDED -> throw new IllegalStateException("chooseAction called on ENDED round");
         };
     }
@@ -91,8 +89,7 @@ public class HardBotStrategy implements BotStrategy {
             if (!memory.isKnownCardAtIndex(i)) {
                 // Memorizzo la carta di quello slot e attivo il potere Peek
                 memory.rememberCard(i, hand.getCard(i));
-                return new ActivatePowerAction(null, new PeekTarget(i));
-                //return new ActivatePowerAction(new PeekTarget(i));
+                return new ActivatePowerAction(new PeekTarget(i));
             }
         }
 
@@ -112,5 +109,9 @@ public class HardBotStrategy implements BotStrategy {
         }
 
         return new EndTurnAction();
+    }
+
+    private RoundAction chooseSimultaneousDiscard(final Round round, final PlayerHand hand) {
+        return null;
     }
 }
