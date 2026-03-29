@@ -11,7 +11,6 @@ import it.unibo.cactus.model.game.GameFactory;
 import it.unibo.cactus.model.game.GameObserver;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
-import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.score.GameResult;
@@ -46,7 +45,7 @@ public class ControllerImpl implements Controller, GameObserver {
 
     @Override
     public void handleAction(final RoundAction action) {
-        //game.performAction(action);
+        game.performAction(action);
         upgrade();
     }
 
@@ -64,7 +63,7 @@ public class ControllerImpl implements Controller, GameObserver {
             }
             if (System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
                 simultaneousDiscardStartTime = 0;
-                //game.endSimultaneousDiscard();
+                game.endSimultaneousDiscard();
                 upgrade();
             }
             return;
@@ -78,7 +77,7 @@ public class ControllerImpl implements Controller, GameObserver {
                 //final BotPlayer currentBotPlayer = (BotPlayer) currentPlayer;
                 final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
                 botStartTime = 0;
-                //game.performAction(action);
+                game.performAction(action);
                 upgrade();
             }
         } else {
@@ -88,17 +87,12 @@ public class ControllerImpl implements Controller, GameObserver {
 
     public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
         int oldSize = action.player().getHand().size();
-        //game.performAction(action);
+        game.performAction(action);
         if (action.player().getHand().size() < oldSize) {
             simultaneousDiscardStartTime = 0;
-            //game.endSimultaneousDiscard();
+            game.endSimultaneousDiscard();
         }
         view.updateGame(game);
-    }
-
-    @Override
-    public void onRoundAdvanced(Round round) {
-        this.view.updateGame(game);
     }
 
     @Override
@@ -131,12 +125,17 @@ public class ControllerImpl implements Controller, GameObserver {
         view.updateGame(game);
     }
 
-    // @Override
-    // public void onGameStageChanged() {
-    //     view.updateGame(game);
-    // }
-
     private void upgrade() {
+        view.updateGame(game);
+    }
+
+    @Override
+    public void onRoundAdvanced() {
+        this.view.updateGame(game);
+    }
+
+    @Override
+    public void onGameStateChanged() {
         view.updateGame(game);
     }
 }

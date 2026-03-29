@@ -17,6 +17,11 @@ import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.pile.DrawPileImpl;
 import it.unibo.cactus.model.players.AbstractPlayer;
 import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.rounds.TurnPhase;
+import it.unibo.cactus.model.rounds.actions.DiscardAction;
+import it.unibo.cactus.model.rounds.actions.DrawAction;
+import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 
 /**
  * Test suite for {@link GameImpl}.
@@ -76,7 +81,13 @@ final class GameTest {
 
     @Test
     void testAdvancePlayer() {
-        game.advancePlayer();
+        game.performAction(new DrawAction());
+        game.performAction(new DiscardAction());
+        if (game.getCurrentRound().getPhase() == TurnPhase.SPECIAL_POWER) {
+            game.performAction(new SkipPowerAction());
+        }
+        game.performAction(new EndTurnAction());
+        game.endSimultaneousDiscard();
         assertEquals(players.get(1), game.getCurrentPlayer());
     }
 
@@ -93,19 +104,33 @@ final class GameTest {
 
     @Test
     void testAdvancePlayerRotation() {
-        game.advancePlayer();
-        game.advancePlayer();
-        game.advancePlayer();
-        game.advancePlayer();
+        for (int i = 0; i < 4; i++) {
+            game.performAction(new DrawAction());
+            System.out.println("dopo draw: " + game.getCurrentRound().getPhase());
+            game.performAction(new DiscardAction());
+            System.out.println("dopo discard: " + game.getCurrentRound().getPhase());
+            if (game.getCurrentRound().getPhase() == TurnPhase.SPECIAL_POWER) {
+                game.performAction(new SkipPowerAction());
+            }
+            game.performAction(new EndTurnAction());
+            System.out.println("dopo endturn: " + game.getCurrentRound().getPhase());
+            game.endSimultaneousDiscard();
+        }
         assertEquals(players.get(0), game.getCurrentPlayer());
     }
 
     @Test
     void testGetCompletedRounds() {
-        game.advancePlayer();
-        game.advancePlayer();
-        game.advancePlayer();
-        game.advancePlayer();
+        for (int i = 0; i < 4; i++) {
+            game.performAction(new DrawAction());
+            game.performAction(new DiscardAction());
+            if (game.getCurrentRound().getPhase() == TurnPhase.SPECIAL_POWER) {
+                game.performAction(new SkipPowerAction());
+            }
+            game.performAction(new EndTurnAction());
+            game.endSimultaneousDiscard();
+        }
         assertEquals(1, game.getCompletedRounds());
     }
+
 }
