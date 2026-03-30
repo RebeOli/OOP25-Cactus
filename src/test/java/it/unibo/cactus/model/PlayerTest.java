@@ -4,12 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
+import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.HumanPlayer;
 import it.unibo.cactus.model.players.PlayerHand;
@@ -30,7 +34,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         human = new HumanPlayer(HUMAN_NAME);
-        bot = new BotPlayer(BOT_NAME);
+        bot = new BotPlayer(BOT_NAME, BotDifficulty.EASY);
         final List<Card> cards = List.of(
             new CardImpl(Suit.BASTONI, 1, 1, null),
             new CardImpl(Suit.COPPE, 2, 2, null),
