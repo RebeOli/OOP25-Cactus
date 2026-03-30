@@ -45,9 +45,9 @@ public class ControllerImpl implements Controller {
     @Override
     public void handleAction(final RoundAction action) {
         game.performAction(action);
-        //upgrade();
     }
 
+    // sistema scarto simultaneo dei bot. 
     @Override
     public void tick() {
         if (game == null || game.isFinished()) { //x evitare crash
@@ -63,7 +63,6 @@ public class ControllerImpl implements Controller {
             if (System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
                 simultaneousDiscardStartTime = 0;
                 game.endSimultaneousDiscard();
-                upgrade();
             }
             return;
         }
@@ -77,7 +76,6 @@ public class ControllerImpl implements Controller {
                 final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
                 botStartTime = 0;
                 game.performAction(action);
-                //upgrade();
             }
         } else {
             botStartTime = 0;
@@ -122,10 +120,6 @@ public class ControllerImpl implements Controller {
         }
 
         view.showStats(stats);
-        view.updateGame(game);
-    }
-
-    private void upgrade() {
         view.updateGame(game);
     }
 

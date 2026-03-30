@@ -15,5 +15,5 @@ public interface Controller extends GameObserver{
     //richiamo i tick degli stati -> currentstate.tick
     void tick(); 
 
-    void handleSimultaneousDiscard(final SimultaneousDiscardAction action);
+    void handleSimultaneousDiscard(SimultaneousDiscardAction action);
 }

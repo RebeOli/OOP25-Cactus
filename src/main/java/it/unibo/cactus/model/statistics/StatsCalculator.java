@@ -53,6 +53,9 @@ public final class StatsCalculator {
      * @return the average number of completed rounds as a {@code double}.
      */
     public double averageRounds(final List<GameResult> results) {
+        if (results.isEmpty()) {
+            return 0.0;
+        }
         return Stats.of(results.stream()
             .map(GameResult::completedRounds)
             .iterator()
