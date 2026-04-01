@@ -55,25 +55,38 @@ public class BotTestMain {
                 if (!scartoControllato) {
                     scartoControllato = true;
                     
-                    // Rebecca sceglie una carta (magari a caso, o la prima che ha)
-                    // per testare cosa fa il Model se sbaglia!
-                    int indexToDiscard = 0; // Prende brutalmente la prima carta
+                    final int topValue = game.getDiscardPile().getTopCard()
+                        .map(c -> c.getValue())
+                        .orElse(-1);
                     
-                    if (rebecca.getHand().size() > 0) {
-                        System.out.println("--- Rebecca tenta lo scarto simultaneo... ---");
-                        
-                        // PROVIAMO L'AZIONE E LASCIAMO CHE SIA IL MODEL A DECIDERE!
+                    // cerca una carta con lo stesso valore
+                    int indexToDiscard = -1;
+                    for (int i = 0; i < rebecca.getHand().size(); i++) {
+                        if (rebecca.getHand().getCard(i).getValue() == topValue) {
+                            indexToDiscard = i;
+                            break;
+                        }
+                    }
+                    
+                    if (indexToDiscard >= 0) {
+                        System.out.println("--- Rebecca ha la carta giusta! Scarta! ---");
                         try {
                             controller.handleSimultaneousDiscard(
                                 new SimultaneousDiscardAction(rebecca, indexToDiscard)
                             );
-                            System.out.println("--- Il Model ha accettato la mossa! ---");
-                            
+                            System.out.println("--- Rebecca scarta con successo! Mano: " 
+                                + rebecca.getHand().size() + " carte ---");
                         } catch (Exception e) {
-                            // IL TUO MODEL FUNZIONA! Ha bloccato la mossa illegale.
-                            System.out.println("--- IL MODEL HA BLOCCATO REBECCA: " + e.getMessage() + " ---");
+                            System.out.println("--- BLOCCATO: " + e.getMessage() + " ---");
                         }
+                    } else {
+                        System.out.println("--- Rebecca non ha la carta giusta, aspetta il timer ---");
                     }
+                    
+                    // mostra lo stato di tutti i giocatori
+                    game.getPlayers().forEach(p -> 
+                        System.out.println("  " + p.getName() + " ha " + p.getHand().size() + " carte")
+                    );
                 }
             } else {
                 scartoControllato = false;
