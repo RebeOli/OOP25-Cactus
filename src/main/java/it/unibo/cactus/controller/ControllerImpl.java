@@ -8,7 +8,6 @@ import java.util.logging.Logger;
 
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameFactory;
-import it.unibo.cactus.model.game.GameObserver;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.RoundAction;
@@ -19,7 +18,7 @@ import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.view.GameView;
 
-public class ControllerImpl implements Controller, GameObserver {
+public class ControllerImpl implements Controller {
     private static final int BOT_DELAY = 1500;
     private static final int SIMULTANEOUS_DISCARD_TIME = 4000;
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class.getName());
@@ -46,9 +45,9 @@ public class ControllerImpl implements Controller, GameObserver {
     @Override
     public void handleAction(final RoundAction action) {
         game.performAction(action);
-        upgrade();
     }
 
+    // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
         if (game == null || game.isFinished()) { //x evitare crash
@@ -61,38 +60,60 @@ public class ControllerImpl implements Controller, GameObserver {
             if (simultaneousDiscardStartTime == 0) {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
             }
-            if (System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
+            if (System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
+                for (var p : game.getPlayers()) {
+                    if(p instanceof BotPlayer bot) {
+                        final RoundAction action = bot.chooseAction(game.getCurrentRound());
+                            if(action instanceof SimultaneousDiscardAction simAction) {
+                                handleSimultaneousDiscard(simAction);
+                                return;
+                            }
+                    }
+                }
+            }
+                /*game.getPlayers().stream()
+                        .filter(p -> !p.isHuman())
+                        .filter(p -> p instanceof BotPlayer )
+                        .forEach(p -> {
+                            final RoundAction action = ((BotPlayer)p).chooseAction(game.getCurrentRound());
+                            if(action instanceof SimultaneousDiscardAction simAction) {
+                                handleSimultaneousDiscard(simAction);
+                            }
+                        });
+            }*/
+            if (game.getCurrentRound().isSimultaneousDiscardPhase() && System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
                 simultaneousDiscardStartTime = 0;
                 game.endSimultaneousDiscard();
-                upgrade();
             }
             return;
         }
 
         if (currentPlayer instanceof BotPlayer currentBotPlayer) {
-            if (botStartTime == 0) {
-                botStartTime = System.currentTimeMillis();
+            if(botStartTime == 0) {
+                botStartTime=System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - botStartTime >= BOT_DELAY) {
-                //final BotPlayer currentBotPlayer = (BotPlayer) currentPlayer;
                 final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
-                botStartTime = 0;
                 game.performAction(action);
-                upgrade();
+                botStartTime = 0;
             }
         } else {
-            botStartTime = 0;
+            botStartTime=0;
         }
     }
 
+
+    @Override
     public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
         int oldSize = action.player().getHand().size();
         game.performAction(action);
         if (action.player().getHand().size() < oldSize) {
             simultaneousDiscardStartTime = 0;
-            game.endSimultaneousDiscard();
+            if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
+                game.endSimultaneousDiscard();
+            }
         }
-        view.updateGame(game);
+        //view.updateGame(game);
     }
 
     @Override
@@ -122,10 +143,6 @@ public class ControllerImpl implements Controller, GameObserver {
         }
 
         view.showStats(stats);
-        view.updateGame(game);
-    }
-
-    private void upgrade() {
         view.updateGame(game);
     }
 
