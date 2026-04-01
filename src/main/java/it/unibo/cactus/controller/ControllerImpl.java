@@ -12,7 +12,6 @@ import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
-import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
@@ -62,7 +61,17 @@ public class ControllerImpl implements Controller {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
-                    game.getPlayers().stream()
+                for (var p : game.getPlayers()) {
+                    if(p instanceof BotPlayer bot) {
+                        final RoundAction action = bot.chooseAction(game.getCurrentRound());
+                            if(action instanceof SimultaneousDiscardAction simAction) {
+                                handleSimultaneousDiscard(simAction);
+                                return;
+                            }
+                    }
+                }
+            }
+                /*game.getPlayers().stream()
                         .filter(p -> !p.isHuman())
                         .filter(p -> p instanceof BotPlayer )
                         .forEach(p -> {
@@ -71,8 +80,8 @@ public class ControllerImpl implements Controller {
                                 handleSimultaneousDiscard(simAction);
                             }
                         });
-            }
-            if (System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
+            }*/
+            if (game.getCurrentRound().isSimultaneousDiscardPhase() && System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
                 simultaneousDiscardStartTime = 0;
                 game.endSimultaneousDiscard();
             }
@@ -88,6 +97,8 @@ public class ControllerImpl implements Controller {
                 game.performAction(action);
                 botStartTime = 0;
             }
+        } else {
+            botStartTime=0;
         }
     }
 
@@ -98,7 +109,9 @@ public class ControllerImpl implements Controller {
         game.performAction(action);
         if (action.player().getHand().size() < oldSize) {
             simultaneousDiscardStartTime = 0;
-            game.endSimultaneousDiscard();
+            if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
+                game.endSimultaneousDiscard();
+            }
         }
         //view.updateGame(game);
     }
