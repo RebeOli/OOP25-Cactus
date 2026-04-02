@@ -1,6 +1,8 @@
 package it.unibo.cactus;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +40,35 @@ public class BotTestMain {
         boolean scartoControllato = false;
 
         while (true) {
+            final Map<String, Integer> maniPrecedenti = new HashMap<>();
+            final Game gameBeforeTick = fakeView.lastGame;
+            if (gameBeforeTick != null) {
+                gameBeforeTick.getPlayers().forEach(p -> 
+                    maniPrecedenti.put(p.getName(), p.getHand().size())
+                );
+            }
+
             controller.tick();
 
             final Game game = fakeView.lastGame;
             if (game == null || game.isFinished()) {
                 System.out.println("Partita terminata!");
                 break;
+            }
+
+            if (game.getCurrentRound().isSimultaneousDiscardPhase() && !maniPrecedenti.isEmpty()) {
+                for (Player p : game.getPlayers()) {
+                    if (!p.getName().equals("Rebecca")) { // Escludiamo Rebecca perché la logghiamo già sotto
+                        int vecchieCarte = maniPrecedenti.getOrDefault(p.getName(), p.getHand().size());
+                        int nuoveCarte = p.getHand().size();
+                        
+                        if (nuoveCarte < vecchieCarte) {
+                            System.out.println("SUCCESSO! " + p.getName() + " ha scartato la carta giusta! (Mano: " + nuoveCarte + ")");
+                        } else if (nuoveCarte > vecchieCarte) {
+                            System.out.println("ERRORE! " + p.getName() + " ha sbagliato carta e preso una PENALITÀ! (Mano: " + nuoveCarte + ")");
+                        }
+                    }
+                }
             }
 
             final Player rebecca = game.getPlayers().get(0);
@@ -145,9 +170,10 @@ public class BotTestMain {
     }
 
     private static final class FakeHistoryRepository implements HistoryRepository {
+        private final List<GameResult> memory = new ArrayList<>();
         @Override
-        public void save(final GameResult result) { }
+        public void save(final GameResult result) { memory.add(result); }
         @Override
-        public List<GameResult> loadAll() { return Collections.emptyList(); }
+        public List<GameResult> loadAll() { return memory; }
     }
 }

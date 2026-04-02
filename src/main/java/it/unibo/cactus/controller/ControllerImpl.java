@@ -28,11 +28,13 @@ public class ControllerImpl implements Controller {
     private long botStartTime;
     private long simultaneousDiscardStartTime;
     private final HistoryManager historyManager;
+    private boolean botHaveDiscarded;
 
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
         this.botStartTime = 0;
         this.historyManager = historyManager;
+        this.botHaveDiscarded = false;
     }
 
     @Override
@@ -59,15 +61,19 @@ public class ControllerImpl implements Controller {
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             if (simultaneousDiscardStartTime == 0) {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
+                botHaveDiscarded = false;
             }
-            if (System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
+            if (!botHaveDiscarded && System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
+                botHaveDiscarded = true;
                 for (var p : game.getPlayers()) {
                     if(p instanceof BotPlayer bot) {
                         final RoundAction action = bot.chooseAction(game.getCurrentRound());
-                            if(action instanceof SimultaneousDiscardAction simAction) {
-                                handleSimultaneousDiscard(simAction);
+                        if(action instanceof SimultaneousDiscardAction simAction) {
+                            handleSimultaneousDiscard(simAction);
+                            if (!game.getCurrentRound().isSimultaneousDiscardPhase()) {
                                 return;
                             }
+                        }
                     }
                 }
             }
