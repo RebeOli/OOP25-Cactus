@@ -1,0 +1,20 @@
+.gameTable {
+    -fx-background-color: #E2DFD2;
+    -fx-border-color: #8C8471, #8C8471;
+    -fx-border-width: 4, 1;
+    -fx-border-insets: 0, 8;
+    -fx-padding: 20px;
+}
+
+.menuButton {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-font-size: 20px;
+    -fx-padding: 5 10 5 10;
+    -fx-cursor: hand;
+}
+
+.menuButton:hover {
+    -fx-background-color: rgba(0,0,0,0.1);
+}
