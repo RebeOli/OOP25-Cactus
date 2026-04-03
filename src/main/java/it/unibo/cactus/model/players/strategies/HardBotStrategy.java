@@ -6,6 +6,7 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
+import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
@@ -15,7 +16,9 @@ import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
+import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 /**
@@ -23,11 +26,17 @@ import it.unibo.cactus.model.rounds.actions.SwapAction;
  * with memory between turns.
  */
 public class HardBotStrategy implements BotStrategy {
-    
+
     private static final int AVERAGE_UNKNOWN_SCORE = 5;
     private static final int CACTUS_SCORE_THRESHOLD = 8;
 
-    private final BotMemory memory = new SelfBotMemory();
+    private final Player self;
+    private final BotMemory memory;
+
+    public HardBotStrategy(final Player self, final BotMemory memory) {
+        this.self = self;
+        this.memory = memory;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -40,7 +49,7 @@ public class HardBotStrategy implements BotStrategy {
             case DECISION -> chooseDecision(round);
             case SPECIAL_POWER -> chooseSpecialPower(round, hand);
             case END_TURN -> chooseEndTurn(round, hand);
-            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round, hand);
+            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round);
             case ENDED -> throw new IllegalStateException("chooseAction called on ENDED round");
         };
     }
@@ -112,7 +121,25 @@ public class HardBotStrategy implements BotStrategy {
         return new EndTurnAction();
     }
 
-    private RoundAction chooseSimultaneousDiscard(final Round round, final PlayerHand hand) {
-        return null;
+    private RoundAction chooseSimultaneousDiscard(final Round round) {
+        //final Optional<Card> topCard = round.getDiscardTopCard();    
+        final Optional<Card> topCard = round.getDrawnCard();
+        if (topCard.isEmpty()) {
+            return new SkipSimultaneousDiscardAction();
+        }
+        final int targetValue = topCard.get().getValue();
+
+        // Cerco in memoria la carta nota con valore corrispondente
+        int bestIndex = -1;
+        for (final Map.Entry<Integer, Card> entry : memory.getAllKnownCards().entrySet()) {
+            if (entry.getValue().getValue() == targetValue) {
+                bestIndex = entry.getKey();
+            }
+        }
+        //Se trovo una carta in mano con valore uguale al valore target la scarto, altrimento salto l'azione
+        if (bestIndex >= 0) {
+            return new SimultaneousDiscardAction(self, bestIndex);
+        }
+        return new SkipSimultaneousDiscardAction();
     }
 }

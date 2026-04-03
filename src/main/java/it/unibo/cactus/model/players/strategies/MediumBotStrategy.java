@@ -1,6 +1,10 @@
 package it.unibo.cactus.model.players.strategies;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.cards.PeekPower;
@@ -12,7 +16,9 @@ import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
+import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.cards.Card;
 
@@ -23,6 +29,13 @@ import it.unibo.cactus.model.cards.Card;
 public class MediumBotStrategy implements BotStrategy {
 
     private static final int CACTUS_SCORE_THRESHOLD = 5;
+
+    private final Random random = new Random();
+    private final Player self;
+
+    public MediumBotStrategy(final Player self) {
+        this.self = self;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -35,7 +48,7 @@ public class MediumBotStrategy implements BotStrategy {
             case DECISION -> chooseDecision(round, hand);
             case SPECIAL_POWER -> chooseSpecialPower(round, hand);
             case END_TURN -> chooseEndTurn(round, hand);
-            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round, hand);
+            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round);
             case ENDED -> throw new IllegalStateException("chooseAction called on ENDED round");
         };
     }
@@ -107,7 +120,40 @@ public class MediumBotStrategy implements BotStrategy {
         return new EndTurnAction();
     }
 
-    private RoundAction chooseSimultaneousDiscard(final Round round, final PlayerHand hand) {
-        return null;
+    private RoundAction chooseSimultaneousDiscard(final Round round) {
+    //final Optional<Card> topCard = round.getDiscardTopCard();    
+    final Optional<Card> topCard = round.getDrawnCard();
+
+    if (topCard.isEmpty()) {
+        return new SkipSimultaneousDiscardAction();
+    }
+    final int targetValue = topCard.get().getValue();
+    final PlayerHand hand = self.getHand();
+
+    // Scarto la prima carta scoperta con valore corrispondente
+    for (int i = 0; i < hand.size(); i++) {
+        if (!hand.isHidden(i) && hand.getCard(i).getValue() == targetValue) {
+            return new SimultaneousDiscardAction(self, i);
+        }
+    }
+
+    // Se nessuna carta visibile è corrisponde, raccolgo gli indici delle carte coperte in una lista
+    final List<Integer> hiddenIndices = new ArrayList<>();
+    for (int i = 0; i < hand.size(); i++) {
+        if (hand.isHidden(i)) {
+            hiddenIndices.add(i);
+        }
+    }
+
+    // Salto lo scarto se tutte le carte sono scoperte o randomicamente
+    if (hiddenIndices.isEmpty() || random.nextBoolean()) {
+        return new SkipSimultaneousDiscardAction();
+    }
+
+    // Se non ho saltato lo scarto, scarto una carta coperta a caso
+    return new SimultaneousDiscardAction(
+        self,
+        hiddenIndices.get(random.nextInt(hiddenIndices.size()))
+    );
     }
 }
