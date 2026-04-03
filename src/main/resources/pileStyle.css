@@ -1,0 +1,31 @@
+.pileLabel {
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-padding: 5 15 5 15;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 24px;
+    -fx-text-fill: black;
+}
+
+.pileLabelActive {
+    -fx-background-color: #FFD700;
+    -fx-border-color: #b89800;
+}
+
+.pileCount {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 10px;
+    -fx-text-fill: #8a7a4a;
+}
+
+.pileDisabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+.discardPilePulsing {
+    -fx-border-color: #FFD700;
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+}

@@ -1,0 +1,79 @@
+.actionPanel {
+    -fx-background-color: #b8b48a;
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 3 0 0 0;
+    -fx-padding: 8 12 8 12;
+    -fx-spacing: 8;
+}
+
+.btnAction {
+    -fx-background-color: #fdf3e3;
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 2;
+    -fx-text-fill: #3d2b10;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.btnAction:hover {
+    -fx-background-color: #FFD700;
+    -fx-border-color: #b89800;
+}
+
+.btnAction:disabled {
+    -fx-opacity: 0.45;
+    -fx-cursor: default;
+}
+
+.btnCactus {
+    -fx-background-color: #3d7a3d;
+    -fx-border-color: #2a5a2a;
+    -fx-border-width: 2;
+    -fx-text-fill: #f0f0e8;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.btnCactus:hover {
+    -fx-background-color: #4e9a4e;
+}
+
+.btnCactus:disabled {
+    -fx-opacity: 0.45;
+    -fx-cursor: default;
+}
+
+.statusLabel {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 11px;
+    -fx-text-fill: #5c4a1e;
+    -fx-font-style: italic;
+}
+
+.overlayBackground {
+    -fx-background-color: rgba(30, 20, 5, 0.72);
+}
+
+.overlayCard {
+    -fx-background-color: #fdf3e3;
+    -fx-border-color: #c9a84c;
+    -fx-border-width: 3;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+    -fx-padding: 20 24 20 24;
+}
+
+.overlayTitle {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2b10;
+}
+
+.overlaySubtitle {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 11px;
+    -fx-text-fill: #8a7a4a;
+}

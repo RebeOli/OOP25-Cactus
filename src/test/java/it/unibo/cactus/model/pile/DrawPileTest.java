@@ -1,9 +1,7 @@
-package it.unibo.cactus.pile;
+package it.unibo.cactus.model.pile;
 
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
-import it.unibo.cactus.model.pile.DrawPile;
-import it.unibo.cactus.model.pile.DrawPileImpl;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -12,7 +12,9 @@ import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHandImpl;
+import it.unibo.cactus.model.rounds.MutableRound;
 import it.unibo.cactus.model.rounds.Round;
+import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.RoundImpl;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.DeckFactory;
@@ -101,8 +103,7 @@ public final class GameImpl implements Game {
         currentPlayerIndex = 0;
     }
 
-    @Override
-    public void advancePlayer() {
+    private void advancePlayer() {
         if (currentRound == null) {
             throw new IllegalStateException("initialize() has not been called");
         }
@@ -144,12 +145,32 @@ public final class GameImpl implements Game {
         return totalTurns / players.size();
     }
 
+    @Override
+    public void performAction(final RoundAction action) {
+        Objects.requireNonNull(action);
+        if (isFinished()) {
+            throw new IllegalStateException("the game is already finished");
+        }
+        getCurrentRound().execute(action);
+        notifyGameStateChanged();
+    }
+
     private void notifyGameFinished() {
         observers.forEach(GameObserver::onGameFinished);
     }
 
     private void notifyRoundAdvanced() {
-        observers.forEach(o -> o.onRoundAdvanced(currentRound));
+        observers.forEach(o -> o.onRoundAdvanced());
+    }
+
+    private void notifyGameStateChanged(){
+        observers.forEach(GameObserver::onGameStateChanged);
+    }
+
+    @Override
+    public void endSimultaneousDiscard() {
+        ((MutableRound) currentRound).endSimultaneousDiscard(); // SIMULTANEOUS_DISCARD -> ENDED
+        advancePlayer();
     }
 
 }

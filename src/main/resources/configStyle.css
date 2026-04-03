@@ -1,0 +1,100 @@
+.configTitle {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2b10;
+}
+
+.configLabel {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 13px;
+    -fx-text-fill: #3d2b10;
+}
+
+.configInput {
+    -fx-background-color: #fdf3e3;
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 2;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 13px;
+}
+
+.configError {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 11px;
+    -fx-text-fill: #a03020;
+}
+
+.btnStart {
+    -fx-background-color: #3d2b10;
+    -fx-border-color: #c9a84c;
+    -fx-border-width: 2;
+    -fx-text-fill: #c9a84c;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 8 24 8 24;
+}
+
+.btnStart:hover {
+    -fx-background-color: #5a3e18;
+}
+
+.scorePanel {
+    -fx-background-color: rgba(253, 243, 227, 0.92);
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 6 10 6 10;
+}
+
+.scoreRow {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 11px;
+    -fx-text-fill: #3d2b10;
+}
+
+.scoreRowActive {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 11px;
+    -fx-text-fill: #8a5a00;
+    -fx-font-weight: bold;
+}
+
+.playerBadge {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 10px;
+    -fx-text-fill: #5c4a1e;
+    -fx-font-weight: bold;
+}
+
+.endTitle {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2b10;
+}
+
+.endScore {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 14px;
+    -fx-text-fill: #3d2b10;
+}
+
+.btnPlayAgain {
+    -fx-background-color: #fdf3e3;
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 2;
+    -fx-text-fill: #3d2b10;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-padding: 6 20 6 20;
+}
+
+.btnPlayAgain:hover {
+    -fx-background-color: #FFD700;
+    -fx-border-color: #b89800;
+}

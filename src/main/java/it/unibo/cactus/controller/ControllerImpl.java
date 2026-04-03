@@ -1,0 +1,164 @@
+package it.unibo.cactus.controller;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.game.GameFactory;
+import it.unibo.cactus.model.players.BotPlayer;
+import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
+import it.unibo.cactus.model.score.GameResult;
+import it.unibo.cactus.model.score.ScoreCalculator;
+import it.unibo.cactus.model.statistics.HistoryManager;
+import it.unibo.cactus.model.statistics.PlayerStats;
+import it.unibo.cactus.view.GameView;
+
+public class ControllerImpl implements Controller {
+    private static final int BOT_DELAY = 1500;
+    private static final int SIMULTANEOUS_DISCARD_TIME = 4000;
+    private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class.getName());
+
+    private Game game;
+    private final GameView view;
+    private long botStartTime;
+    private long simultaneousDiscardStartTime;
+    private final HistoryManager historyManager;
+    private boolean botHaveDiscarded;
+
+    public ControllerImpl(final GameView view, final HistoryManager historyManager) {
+        this.view = view;
+        this.botStartTime = 0;
+        this.historyManager = historyManager;
+        this.botHaveDiscarded = false;
+    }
+
+    @Override
+    public void startGame(final String playerName) {
+        this.game = GameFactory.createGame(playerName);
+        game.addObserver(this); //perchè come observer passiamo il controller
+        view.updateGame(game);
+    }
+
+    @Override
+    public void handleAction(final RoundAction action) {
+        game.performAction(action);
+    }
+
+    // sistema scarto simultaneo dei bot.
+    @Override
+    public void tick() {
+        if (game == null || game.isFinished()) { //x evitare crash
+            return;
+        }
+
+        final Player currentPlayer = game.getCurrentPlayer();
+
+        if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
+            if (simultaneousDiscardStartTime == 0) {
+                simultaneousDiscardStartTime = System.currentTimeMillis();
+                botHaveDiscarded = false;
+            }
+            if (!botHaveDiscarded && System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
+                botHaveDiscarded = true;
+                for (var p : game.getPlayers()) {
+                    if(p instanceof BotPlayer bot) {
+                        final RoundAction action = bot.chooseAction(game.getCurrentRound());
+                        if(action instanceof SimultaneousDiscardAction simAction) {
+                            handleSimultaneousDiscard(simAction);
+                            if (!game.getCurrentRound().isSimultaneousDiscardPhase()) {
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+                /*game.getPlayers().stream()
+                        .filter(p -> !p.isHuman())
+                        .filter(p -> p instanceof BotPlayer )
+                        .forEach(p -> {
+                            final RoundAction action = ((BotPlayer)p).chooseAction(game.getCurrentRound());
+                            if(action instanceof SimultaneousDiscardAction simAction) {
+                                handleSimultaneousDiscard(simAction);
+                            }
+                        });
+            }*/
+            if (game.getCurrentRound().isSimultaneousDiscardPhase() && System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
+                simultaneousDiscardStartTime = 0;
+                game.endSimultaneousDiscard();
+            }
+            return;
+        }
+
+        if (currentPlayer instanceof BotPlayer currentBotPlayer) {
+            if(botStartTime == 0) {
+                botStartTime=System.currentTimeMillis();
+            }
+            if (System.currentTimeMillis() - botStartTime >= BOT_DELAY) {
+                final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
+                game.performAction(action);
+                botStartTime = 0;
+            }
+        } else {
+            botStartTime=0;
+        }
+    }
+
+
+    @Override
+    public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
+        int oldSize = action.player().getHand().size();
+        game.performAction(action);
+        if (action.player().getHand().size() < oldSize) {
+            simultaneousDiscardStartTime = 0;
+            if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
+                game.endSimultaneousDiscard();
+            }
+        }
+        //view.updateGame(game);
+    }
+
+    @Override
+    public void onGameFinished() {
+        final ScoreCalculator calculator = new ScoreCalculator();
+        var scores = calculator.calculateScores(game.getPlayers());
+        final GameResult result = new GameResult(scores, game.getCompletedRounds());
+
+        view.showRank(result);
+        view.showWinner(result);
+        view.showCompletedRounds(result);
+
+        try {
+            historyManager.save(result);
+        } catch (final IOException e) {
+            LOGGER.log(Level.SEVERE, "Impossible saving game result's on JSON", e);
+            //view.showError("Attention: it was not possible to save statistics.");
+        }
+
+        final Map<Player, PlayerStats> stats = new HashMap<>();
+        for (final Player player : game.getPlayers()) {
+            try {
+                stats.put(player, historyManager.getStats(player.getName()));
+            } catch (final IOException e) {
+                LOGGER.log(Level.SEVERE, "Impossible load game results's from JSON", e);
+            }
+        }
+
+        view.showStats(stats);
+        view.updateGame(game);
+    }
+
+    @Override
+    public void onRoundAdvanced() {
+        this.view.updateGame(game);
+    }
+
+    @Override
+    public void onGameStateChanged() {
+        view.updateGame(game);
+    }
+}
