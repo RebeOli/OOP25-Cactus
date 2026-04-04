@@ -1,7 +1,6 @@
 package it.unibo.cactus.view;
 
 import it.unibo.cactus.model.cards.Suit;
-import it.unibo.cactus.model.rounds.Round;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
