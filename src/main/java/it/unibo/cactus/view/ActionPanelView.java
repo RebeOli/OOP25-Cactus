@@ -1,8 +1,10 @@
 package it.unibo.cactus.view;
 
 import java.util.List;
+import java.util.Optional;
 
 import it.unibo.cactus.controller.Controller;
+import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -36,12 +38,12 @@ public class ActionPanelView extends HBox {
         btnEndTurn.setOnAction(e -> controller.handleAction(new EndTurnAction()));
         btnSkipPower.setOnAction(e -> controller.handleAction(new SkipPowerAction()));
         btnActivePower.setOnAction(e -> {
-            // TODO: aprire dialogo per scegliere il target
-            // controller.handleAction(new ActivatePowerAction(target));
+            //TODO
         });
     }
 
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn) {
+
+    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final Optional<SpecialPower> currentPower) {
         if (!isHumanTurn) {
             btnCactus.setDisable(true);
             btnEndTurn.setDisable(true);
