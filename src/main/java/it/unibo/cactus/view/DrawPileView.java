@@ -13,10 +13,10 @@ public class DrawPileView extends StackPane {
 
     public DrawPileView() {
         //this.cardBackView = new ImageView(ImageLoader.getCardBack());
-        this.cardBackView.fitWidthProperty().bind(
-            this.widthProperty().multiply(0.8)
+        this.cardBackView.setPreserveRatio(true);
+        this.cardBackView.fitHeightProperty().bind(
+            this.heightProperty().multiply(0.8)
         );
-
         this.countLabel = new Label("40");
 
         this.countLabel.getStyleClass().add("pileCount");
@@ -27,7 +27,7 @@ public class DrawPileView extends StackPane {
 
     }
 
-    public void update(int remainingCards, boolean isHumanTurn) {
+    public void update(final int remainingCards, final boolean isHumanTurn) {
         this.countLabel.setText(String.valueOf(remainingCards));
 
         if (isHumanTurn) {
