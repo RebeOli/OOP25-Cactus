@@ -152,4 +152,9 @@ public final class RoundImpl implements MutableRound {
         advancePhase();
     }
 
+    @Override
+    public Optional<Card> getDiscardTopCard(){
+        return getDiscardPile().getTopCard();
+    }
+
 }

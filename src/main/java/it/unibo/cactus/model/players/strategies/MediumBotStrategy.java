@@ -121,8 +121,7 @@ public class MediumBotStrategy implements BotStrategy {
     }
 
     private RoundAction chooseSimultaneousDiscard(final Round round) {
-    //final Optional<Card> topCard = round.getDiscardTopCard();    
-    final Optional<Card> topCard = round.getDrawnCard();
+    final Optional<Card> topCard = round.getDiscardTopCard();   
 
     if (topCard.isEmpty()) {
         return new SkipSimultaneousDiscardAction();
