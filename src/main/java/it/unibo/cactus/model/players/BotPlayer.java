@@ -27,7 +27,7 @@ public final class BotPlayer extends AbstractPlayer {
      */
     public BotPlayer(final String name, final BotDifficulty difficulty) {
         super(name);
-        strategy = BotStrategyFactory.createStrategy(difficulty);
+        strategy = BotStrategyFactory.createStrategy(difficulty, this);
     }
 
     /** {@inheritDoc} */
