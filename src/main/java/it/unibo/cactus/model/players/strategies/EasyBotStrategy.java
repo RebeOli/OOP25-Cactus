@@ -6,33 +6,60 @@ import java.util.Random;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.TurnPhase;
+import it.unibo.cactus.model.rounds.actions.CallCactusAction;
+import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 
 /**
  * A bot strategy that selects a random action from those available.
  */
-public final class EasyBotStrategy implements BotStrategy {
+public final class EasyBotStrategy extends AbstractBotStrategy {
+
+    private static final double SIMULTANEOUS_DISCARD_PROBABILITY = 0.15;
+    private static final double CACTUS_PROBABILITY = 0.20;
+    private static final int MIN_ROUNDS_BEFORE_CACTUS = 3;
 
     private final Random random = new Random();
+    private final Player self;
+    private int roundsPlayed;
 
-    /** {@inheritDoc} */
+    public EasyBotStrategy(final Player self) {
+        this.self = self;
+        this.roundsPlayed = 0;
+    }
+
     @Override
-    public RoundAction chooseAction(final Round round) {
-       //Non provo mai lo scarto simultaneo
-        if (round.getPhase() == TurnPhase.SIMULTANEOUS_DISCARD) {
-            return new SkipSimultaneousDiscardAction();
+    protected RoundAction chooseDecision(final Round round) {
+        final List<RoundAction> actions = round.getAvailableActions();
+        return actions.get(random.nextInt(actions.size()));
+    }
+
+    @Override
+    protected RoundAction chooseSpecialPower(final Round round) {
+        return new SkipPowerAction();
+    }
+
+    @Override
+    protected RoundAction chooseEndTurn(final Round round) {
+        roundsPlayed++;
+        if (!round.isLastRound()
+                && roundsPlayed >= MIN_ROUNDS_BEFORE_CACTUS
+                && random.nextDouble() < CACTUS_PROBABILITY) {
+            return new CallCactusAction();
         }
         
-        //Non uso mai poteri speciali
-        if (round.getPhase() == TurnPhase.SPECIAL_POWER) {
-            return new SkipPowerAction();
+        return new EndTurnAction();
+    }
+
+    @Override
+    protected RoundAction chooseSimultaneousDiscard(final Round round) {
+        if (random.nextDouble() >= SIMULTANEOUS_DISCARD_PROBABILITY) {
+            return new SkipSimultaneousDiscardAction();
         }
 
-        final List<RoundAction> actions = round.getAvailableActions();
-        //TO-DO
-        //Valutare se introdurre un controllo per non chiamare subito CACTUS o se lasciare la scelta totalmente randomica
-        return actions.get(random.nextInt(actions.size()));
+        final int handSize = self.getHand().size();
+        return new SimultaneousDiscardAction(self, random.nextInt(handSize));
     }
 }
