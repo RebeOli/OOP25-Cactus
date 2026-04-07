@@ -112,7 +112,10 @@ public class HardBotStrategy extends AbstractBotStrategy {
     protected RoundAction chooseSimultaneousDiscard(final Round round) {
         final Optional<Card> topCard = round.getDiscardTopCard();    
         
-        if (topCard.isEmpty()) {
+        //TO-DO:
+        //Sostituire il magic number con una chiamata più parlante come !hand.isFull()
+        if (topCard.isEmpty()
+            || self.getHand().size() >= 6) {
             return new SkipSimultaneousDiscardAction();
         }
         final int targetValue = topCard.get().getValue();

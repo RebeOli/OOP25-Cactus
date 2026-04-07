@@ -17,7 +17,7 @@ import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
  */
 public final class EasyBotStrategy extends AbstractBotStrategy {
 
-    private static final double SIMULTANEOUS_DISCARD_PROBABILITY = 0.15;
+    private static final double SIMULTANEOUS_DISCARD_PROBABILITY = 0.10;
     private static final double CACTUS_PROBABILITY = 0.20;
     private static final int MIN_ROUNDS_BEFORE_CACTUS = 3;
 
@@ -55,7 +55,10 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
 
     @Override
     protected RoundAction chooseSimultaneousDiscard(final Round round) {
-        if (random.nextDouble() >= SIMULTANEOUS_DISCARD_PROBABILITY) {
+        //TO-DO:
+        //Sostituire il magic number con una chiamata più parlante come !hand.isFull()
+        if (random.nextDouble() >= SIMULTANEOUS_DISCARD_PROBABILITY 
+        || self.getHand().size() >= 6) {
             return new SkipSimultaneousDiscardAction();
         }
 
