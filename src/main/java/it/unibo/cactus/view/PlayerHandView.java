@@ -12,8 +12,8 @@ import javafx.scene.layout.VBox;
 public class PlayerHandView extends VBox {
 
     public enum Position {
-        TOP, 
-        BOTTOM, 
+        TOP,
+        BOTTOM,
         LEFT, 
         RIGHT
     }
@@ -26,7 +26,8 @@ public class PlayerHandView extends VBox {
         this.setSpacing(10); 
         boolean isHumanPlayer = (position == Position.BOTTOM);
         Label nameLabel = new Label(playerName);
-        nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: " + (isHumanPlayer ? "18px" : "12px") + "; text-fill: white;");
+        nameLabel.getStyleClass().add("playerBadge");
+        nameLabel.setStyle("-fx-font-size: " + (isHumanPlayer ? "18px" : "12px") + ";");
         if (position == Position.LEFT || position == Position.RIGHT) {
             this.cardsContainer = new VBox(negativeSpacing()); 
         } else {
@@ -34,6 +35,7 @@ public class PlayerHandView extends VBox {
         }
         if (cardsContainer instanceof HBox hbox) hbox.setAlignment(Pos.CENTER);
         if (cardsContainer instanceof VBox vbox) vbox.setAlignment(Pos.CENTER);
+
         this.slots = new CardView[6];
         for (int i = 0; i < 6; i++) {
             slots[i] = new CardView(); 
