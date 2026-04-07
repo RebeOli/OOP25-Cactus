@@ -10,11 +10,9 @@ import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.players.PlayerHand;
-import it.unibo.cactus.model.rounds.TurnPhase;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
-import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
@@ -26,7 +24,7 @@ import it.unibo.cactus.model.cards.Card;
  * A bot strategy that makes decisions based only on currently visible cards,
  * with no memory between turns.
  */
-public class MediumBotStrategy implements BotStrategy {
+public class MediumBotStrategy extends AbstractBotStrategy {
 
     private static final int CACTUS_SCORE_THRESHOLD = 5;
 
@@ -37,26 +35,12 @@ public class MediumBotStrategy implements BotStrategy {
         this.self = self;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public RoundAction chooseAction(final Round round) {
-        final TurnPhase phase = round.getPhase();
-        final PlayerHand hand = round.getCurrentPlayer().getHand();
-
-        return switch (phase) {
-            case DRAW -> new DrawAction();
-            case DECISION -> chooseDecision(round, hand);
-            case SPECIAL_POWER -> chooseSpecialPower(round, hand);
-            case END_TURN -> chooseEndTurn(round, hand);
-            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round);
-            case ENDED -> throw new IllegalStateException("chooseAction called on ENDED round");
-        };
-    }
-
-    private RoundAction chooseDecision(final Round round, final PlayerHand hand) {
+    protected RoundAction chooseDecision(final Round round) {
         final int drawnScore = round.getDrawnCard().orElseThrow().getScore();
         int maxVisibleScore = -1;
         int maxVisibleIndex = -1;
+        final PlayerHand hand = self.getHand();
         
         // Cerco la carta visibile in mano con il punteggio più alto
         for (int i = 0; i < hand.size(); i++) {
@@ -75,10 +59,12 @@ public class MediumBotStrategy implements BotStrategy {
         return new DiscardAction();
     }
 
-    private RoundAction chooseSpecialPower(final Round round, final PlayerHand hand) {
+    @Override
+    protected RoundAction chooseSpecialPower(final Round round) {
         // Conto le carte coperte e memorizzo l'indice della prima
         int hiddenCount = 0;
         int firstHiddenIndex = -1;
+        final PlayerHand hand = self.getHand();
 
         for (int i = 0; i < hand.size(); i++) {
             if (hand.isHidden(i)) {
@@ -102,7 +88,10 @@ public class MediumBotStrategy implements BotStrategy {
         return new SkipPowerAction();
     }
 
-    private RoundAction chooseEndTurn(final Round round, final PlayerHand hand) {
+    @Override
+    protected RoundAction chooseEndTurn(final Round round) {        
+        final PlayerHand hand = self.getHand();
+
         // Sommo i punteggi delle sole carte visibili
         int visibleScore = 0;
         for (int i = 0; i < hand.size(); i++) {
@@ -120,39 +109,43 @@ public class MediumBotStrategy implements BotStrategy {
         return new EndTurnAction();
     }
 
-    private RoundAction chooseSimultaneousDiscard(final Round round) {
-    final Optional<Card> topCard = round.getDiscardTopCard();   
+    @Override
+    protected RoundAction chooseSimultaneousDiscard(final Round round) {
+        final Optional<Card> topCard = round.getDiscardTopCard();   
 
-    if (topCard.isEmpty()) {
-        return new SkipSimultaneousDiscardAction();
-    }
-    final int targetValue = topCard.get().getValue();
-    final PlayerHand hand = self.getHand();
-
-    // Scarto la prima carta scoperta con valore corrispondente
-    for (int i = 0; i < hand.size(); i++) {
-        if (!hand.isHidden(i) && hand.getCard(i).getValue() == targetValue) {
-            return new SimultaneousDiscardAction(self, i);
+        if (topCard.isEmpty()) {
+            return new SkipSimultaneousDiscardAction();
         }
-    }
+        final int targetValue = topCard.get().getValue();
+        final PlayerHand hand = self.getHand();
 
-    // Se nessuna carta visibile è corrisponde, raccolgo gli indici delle carte coperte in una lista
-    final List<Integer> hiddenIndices = new ArrayList<>();
-    for (int i = 0; i < hand.size(); i++) {
-        if (hand.isHidden(i)) {
-            hiddenIndices.add(i);
+        // Scarto la prima carta scoperta con valore corrispondente
+        for (int i = 0; i < hand.size(); i++) {
+            if (!hand.isHidden(i) && hand.getCard(i).getValue() == targetValue) {
+                return new SimultaneousDiscardAction(self, i);
+            }
         }
-    }
 
-    // Salto lo scarto se tutte le carte sono scoperte o randomicamente
-    if (hiddenIndices.isEmpty() || random.nextBoolean()) {
-        return new SkipSimultaneousDiscardAction();
-    }
+        // Se nessuna carta visibile è corrisponde, raccolgo gli indici delle carte coperte in una lista
+        final List<Integer> hiddenIndices = new ArrayList<>();
+        for (int i = 0; i < hand.size(); i++) {
+            if (hand.isHidden(i)) {
+                hiddenIndices.add(i);
+            }
+        }
 
-    // Se non ho saltato lo scarto, scarto una carta coperta a caso
-    return new SimultaneousDiscardAction(
-        self,
-        hiddenIndices.get(random.nextInt(hiddenIndices.size()))
-    );
+        // Salto lo scarto se tutte le carte sono scoperte o randomicamente o la mano è piena        
+        //TO-DO:
+        //Sostituire il magic number con una chiamata più parlante come !hand.isFull()
+        if (hiddenIndices.isEmpty() || random.nextBoolean()
+        || self.getHand().size() >= 6) {
+            return new SkipSimultaneousDiscardAction();
+        }
+
+        // Se non ho saltato lo scarto, scarto una carta coperta a caso
+        return new SimultaneousDiscardAction(
+            self,
+            hiddenIndices.get(random.nextInt(hiddenIndices.size()))
+        );
     }
 }
