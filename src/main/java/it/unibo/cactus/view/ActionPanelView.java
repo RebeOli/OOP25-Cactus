@@ -12,6 +12,7 @@ import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 public class ActionPanelView extends HBox {
 
@@ -21,11 +22,18 @@ public class ActionPanelView extends HBox {
     private final Button btnSkipPower;
 
     public ActionPanelView(final Controller controller) {
+        //Inizializzo i bottoni
         btnCactus = new Button("Call Cactus!");
         btnEndTurn = new Button("End Turn");
         btnActivePower = new Button("Active Power");
         btnSkipPower = new Button("Skip Power");
-        this.getChildren().addAll(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
+        final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
+        
+        for (final Button btn : allButtons) {
+            HBox.setHgrow(btn, Priority.ALWAYS); // Occupa lo spazio extra nel contenitore
+            btn.setMaxWidth(Double.MAX_VALUE);   // Non mettere limiti alla larghezza del bottone
+            btn.setPrefHeight(60);        // Altezza preferita per renderli cliccabili facilmente
+        }
 
         this.getStyleClass().add("actionPanel");
         btnCactus.getStyleClass().add("btnCactus");
@@ -33,6 +41,7 @@ public class ActionPanelView extends HBox {
         btnActivePower.getStyleClass().add("btnAction");
         btnSkipPower.getStyleClass().add("btnAction");
         this.setSpacing(10);
+        this.getChildren().addAll(allButtons);
 
         btnCactus.setOnAction(e -> controller.handleAction(new CallCactusAction()));
         btnEndTurn.setOnAction(e -> controller.handleAction(new EndTurnAction()));

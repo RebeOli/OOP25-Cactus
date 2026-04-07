@@ -47,7 +47,7 @@
 
 .statusLabel {
     -fx-font-family: "Georgia";
-    -fx-font-size: 11px;
+    -fx-font-size: 22px;
     -fx-text-fill: #5c4a1e;
     -fx-font-style: italic;
 }
