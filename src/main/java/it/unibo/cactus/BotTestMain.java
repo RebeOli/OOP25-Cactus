@@ -49,11 +49,19 @@ public class BotTestMain {
             }
 
             controller.tick();
+            
 
             final Game game = fakeView.lastGame;
             if (game == null || game.isFinished()) {
                 System.out.println("Partita terminata!");
                 break;
+            }
+            boolean cactusCalled = false;
+
+            // nel loop
+            if (game.getCurrentRound().isLastRound() && !cactusCalled) {
+                cactusCalled = true;
+                System.out.println("CACTUS chiamato! L'ultimo round è iniziato!");
             }
 
             if (game.getCurrentRound().isSimultaneousDiscardPhase() && !maniPrecedenti.isEmpty()) {
@@ -159,6 +167,10 @@ public class BotTestMain {
         @Override
         public Player showWinner(final GameResult result) {
             System.out.println("=== VINCITORE: " + result.getWinner().getName() + " ===");
+            System.out.println("=== PUNTEGGI ===");
+            result.scores().forEach((p, s) -> 
+                System.out.println("  " + p.getName() + ": " + s + " punti")
+            );
             return result.getWinner();
         }
         @Override
