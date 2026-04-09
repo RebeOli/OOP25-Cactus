@@ -11,6 +11,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -58,11 +60,11 @@ public class GameScreenView extends BorderPane {
         bottomPanel.setPadding(new Insets(0, 0, 20, 0)); //padding del bordo in basso
         bottomPanel.setAlignment(Pos.CENTER);
         this.setBottom(bottomPanel);
-
+        //final StackPane root = new StackPane(tableViewPlaceholder, overlay);
         final StackPane root = new StackPane(tableViewPlaceholder, overlay, menuOverlay);
         this.setCenter(root);
 
-/* Menu a tendina in alto a destra
+/*Menu a tendina in alto a destra
         final MenuButton menuButton = new MenuButton("MENU");
         final MenuItem continueGame = new MenuItem("Continue Game");
         final MenuItem restart = new MenuItem("Restart Game");
@@ -80,8 +82,8 @@ public class GameScreenView extends BorderPane {
         // Per il menu in alto a destra come nello sketch
         topBar.setPadding(new javafx.geometry.Insets(20, 20, 0, 0));
         this.setTop(topBar);
-*/
 
+*/
     }
 
     public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage, final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous) {
