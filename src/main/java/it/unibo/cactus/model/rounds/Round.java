@@ -65,4 +65,12 @@ public interface Round {
      */
     boolean isSimultaneousDiscardPhase();
 
+    /**
+     * Returns the card on top of the discard pile, if there is one.
+     *
+     * @return an {@link Optional} containing the last discarded {@link Card},
+     *         or an empty Optional if no card has been discarded.
+     */
+    Optional<Card> getDiscardTopCard();
+
 }
