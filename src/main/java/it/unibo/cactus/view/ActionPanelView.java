@@ -40,6 +40,9 @@ public class ActionPanelView extends HBox {
         btnEndTurn.getStyleClass().add("btnAction");
         btnActivePower.getStyleClass().add("btnAction");
         btnSkipPower.getStyleClass().add("btnAction");
+        System.out.println("Classes btnCactus: " + btnCactus.getStyleClass());
+        System.out.println("Classes btnEndTurn: " + btnEndTurn.getStyleClass());
+        System.out.println("Colore fondo attuale: " + btnCactus.getBackground());
         this.setSpacing(10);
         this.getChildren().addAll(allButtons);
 

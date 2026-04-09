@@ -12,10 +12,6 @@ public class MenuOverlay extends StackPane {
     public MenuOverlay(final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
         this.setVisible(false);
         this.getStyleClass().add("menuOverlay");
-        this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-
-        // sfondo semi-trasparente
-        this.setStyle("-fx-background-color: rgba(0,0,0,0.7);");
 
         final Button btnRestart = new Button("Restart Game");
         final Button btnStats = new Button("Statistics");
@@ -27,12 +23,20 @@ public class MenuOverlay extends StackPane {
 
         // box centrale con i pulsanti
         final VBox buttonBox = new VBox(btnContinue, btnRestart, btnStats, btnHome);
+        buttonBox.getStyleClass().add("menuBox");
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(20);
+
         buttonBox.setMaxWidth(300);
-        buttonBox.getStyleClass().add("menuBox");
+        buttonBox.setMaxHeight(350);
+
+        for (Button b : new Button[]{btnContinue, btnRestart, btnStats, btnHome}) {
+            b.getStyleClass().add("menuButton");
+            b.setMaxWidth(Double.MAX_VALUE); // I bottoni occupano tutta la larghezza del menuBox
+        }
 
         this.getChildren().addAll(buttonBox);
+        StackPane.setAlignment(buttonBox, Pos.CENTER);
     }
 
     public void setContinueAction(final Runnable action) {

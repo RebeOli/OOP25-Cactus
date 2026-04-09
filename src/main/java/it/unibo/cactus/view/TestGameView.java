@@ -6,39 +6,49 @@ import javafx.stage.Stage;
 import java.util.List;
 import java.util.Optional;
 
+import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.CardImpl;
+import it.unibo.cactus.model.cards.Suit;
+
 public class TestGameView extends Application {
 
-    @Override
+        @Override
     public void start(Stage primaryStage) {
-        GameScreenView gameView = new GameScreenView(null, () -> {}, () -> {}, () -> {});
-        
-        Scene scene = new Scene(gameView, 1000, 700);
-        var resource = getClass().getResource("/style.css");
-        if (resource == null) {
-            System.out.println("ERRORE: File style.css NON TROVATO! Controlla la cartella resources.");
-        } else {
-            scene.getStylesheets().add(resource.toExternalForm());
+        // 1. Crea la View
+        final GameScreenView gameView = new GameScreenView(null, () -> {}, () -> {}, () -> {});
+        final Scene scene = new Scene(gameView, 1000, 700);
+
+        // 2. CARICA IL CSS (Assicurati che avvenga PRIMA dello show)
+        final java.net.URL cssUrl = getClass().getResource("/style.css");
+        if (cssUrl != null) {
+            scene.getStylesheets().clear(); // Pulisci eventuali residui
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+            System.out.println("✅ CSS caricato con successo!");
         }
-        // QUESTA È LA RIGA FONDAMENTALE:
-        // "style.css" deve trovarsi nella cartella src/main/resources
-        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
 
         primaryStage.setTitle("Cactus Game Test");
         primaryStage.setScene(scene);
+        
+        // 3. MOSTRA UNA VOLTA SOLA
         primaryStage.show();
 
+        // 4. Update dei dati
+        Card cartaTest = new CardImpl(Suit.BASTONI, 2, 2, null);
+        List<Card> handTest = List.of(
+            new CardImpl(Suit.BASTONI, 7, 7, null),
+            new CardImpl(Suit.COPPE, 3, 3, null),
+            new CardImpl(Suit.SPADE, 1, 1, null),
+            new CardImpl(Suit.DENARI, 5, 5, null)
+        );
+
         gameView.update(
-            List.of(
-                new it.unibo.cactus.model.rounds.actions.CallCactusAction(),
-                new it.unibo.cactus.model.rounds.actions.EndTurnAction(),
-                new it.unibo.cactus.model.rounds.actions.ActivatePowerAction(null),
-                new it.unibo.cactus.model.rounds.actions.SkipPowerAction()
-            ), 
-            true,   // isHumanTurn
-            "È il tuo turno! Scegli una mossa...", 
-            Optional.empty(),   // currentPower
-            null,     // topCard (null perché non siamo in fase simultanea)
-            false      // isSimultaneous
+            List.of(),       // Lista vuota (mentre scarti non fai altre azioni)
+            true,            // Turno umano
+            "Qualcuno ha scartato! Hai una carta uguale?", 
+            Optional.empty(),
+            cartaTest,       // Passiamo la carta Bastoni 7
+            true,             // TRUE forza l'apertura dell'overlay
+            handTest
         );
     }
 

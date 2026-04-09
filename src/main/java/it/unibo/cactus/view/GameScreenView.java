@@ -31,6 +31,7 @@ public class GameScreenView extends BorderPane {
     private final MenuOverlay menuOverlay;
 
     public GameScreenView (final Controller controller, final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
+        this.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         // placeholder per la TableView
         final Region tableViewPlaceholder = new Region();
         tableViewPlaceholder.setStyle("-fx-background-color: lightgray;");
@@ -52,7 +53,7 @@ public class GameScreenView extends BorderPane {
 
         actionPanel = new ActionPanelView(controller);
         message = new Label("Draw a card from the pile");
-        message.getStyleClass().add("messageLabel");
+        message.getStyleClass().add("statusLabel");
 
         final VBox bottomPanel = new VBox (message, actionPanel);
         bottomPanel.setFillWidth(true);
@@ -63,34 +64,13 @@ public class GameScreenView extends BorderPane {
         //final StackPane root = new StackPane(tableViewPlaceholder, overlay);
         final StackPane root = new StackPane(tableViewPlaceholder, overlay, menuOverlay);
         this.setCenter(root);
-
-/*Menu a tendina in alto a destra
-        final MenuButton menuButton = new MenuButton("MENU");
-        final MenuItem continueGame = new MenuItem("Continue Game");
-        final MenuItem restart = new MenuItem("Restart Game");
-        final MenuItem stats = new MenuItem("Statistics");
-        final MenuItem home = new MenuItem("Home");
-
-        continueGame.setOnAction(e -> menuButton.hide());
-        restart.setOnAction(e -> onRestart.run());
-        stats.setOnAction(e -> onStats.run());
-        home.setOnAction(e -> onHome.run());
-
-        menuButton.getItems().addAll(continueGame, restart, stats, home);
-        final HBox topBar = new HBox(menuButton);
-        topBar.setAlignment(Pos.TOP_RIGHT);
-        // Per il menu in alto a destra come nello sketch
-        topBar.setPadding(new javafx.geometry.Insets(20, 20, 0, 0));
-        this.setTop(topBar);
-
-*/
     }
 
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage, final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous) {
+    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage, final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous, final List<Card> playerHand) {
         actionPanel.update(availableActions, isHumanTurn, currentPower);
         message.setText(completeMessage);
         if (isSimultaneous) {
-            overlay.show(topCard);
+            overlay.show(topCard, playerHand);
         } else {
             overlay.hide();
         }
