@@ -12,7 +12,7 @@ public class BotStrategyFactory {
 
     public static BotStrategy createStrategy(final BotDifficulty difficulty, final Player owner) {
         return switch (difficulty) {
-            case EASY   -> new EasyBotStrategy();
+            case EASY   -> new EasyBotStrategy(owner);
             case MEDIUM -> new MediumBotStrategy(owner);
             case HARD   -> new HardBotStrategy(owner, new SelfBotMemory());
         };
