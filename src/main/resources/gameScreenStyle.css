@@ -153,3 +153,10 @@
     -fx-background-color: #e0d5b5; /* Fondo barra spento */
     -fx-background-radius: 2;
 }
+
+.titleLabel {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2b10;
+}

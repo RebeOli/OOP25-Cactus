@@ -15,6 +15,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -43,13 +44,30 @@ public class GameScreenView extends StackPane {
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
 
-        // top
-        final Button btnMenu = new Button("Menu");
+        // top, senza titolo in alto
+        /*final Button btnMenu = new Button("Menu");
         btnMenu.getStyleClass().add("btnMenu");
         btnMenu.setOnAction(e -> menuOverlay.show());
         final HBox topBar = new HBox(btnMenu);
         topBar.setAlignment(Pos.TOP_RIGHT);
         topBar.setPadding(new Insets(20, 20, 0, 0));
+        gameLayout.setTop(topBar);*/
+
+        //con titolo in alto. 
+        final Button btnMenu = new Button("Menu");
+        btnMenu.getStyleClass().add("btnMenu");
+        btnMenu.setOnAction(e -> menuOverlay.show());
+
+        final Label titleLabel = new Label("🌵 CACTUS 🌵");
+        titleLabel.getStyleClass().add("titleLabel");
+
+        final HBox rightBox = new HBox(btnMenu);
+        rightBox.setAlignment(Pos.CENTER_RIGHT);
+
+        final StackPane topBar = new StackPane(titleLabel, rightBox);
+        topBar.setPadding(new Insets(10, 20, 10, 20));
+        StackPane.setAlignment(titleLabel, Pos.CENTER);
+        StackPane.setAlignment(rightBox, Pos.CENTER_RIGHT);
         gameLayout.setTop(topBar);
 
         // bottom
