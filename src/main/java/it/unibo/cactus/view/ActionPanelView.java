@@ -49,9 +49,7 @@ public class ActionPanelView extends HBox {
         btnCactus.setOnAction(e -> controller.handleAction(new CallCactusAction()));
         btnEndTurn.setOnAction(e -> controller.handleAction(new EndTurnAction()));
         btnSkipPower.setOnAction(e -> controller.handleAction(new SkipPowerAction()));
-        btnActivePower.setOnAction(e -> {
-            //TODO
-        });
+        btnActivePower.setOnAction(e -> controller.handleAction(new ActivatePowerAction())); // da sistemare il target
     }
 
 

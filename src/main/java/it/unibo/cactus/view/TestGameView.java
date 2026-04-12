@@ -12,42 +12,81 @@ import it.unibo.cactus.model.cards.Suit;
 
 public class TestGameView extends Application {
 
-        @Override
+    @Override
     public void start(Stage primaryStage) {
-        // 1. Crea la View
-        final GameScreenView gameView = new GameScreenView(null, () -> {}, () -> {}, () -> {});
-        final Scene scene = new Scene(gameView, 1000, 700);
+        /* 
+        final TableView tableView = new TableView();
 
-        // 2. CARICA IL CSS (Assicurati che avvenga PRIMA dello show)
+        final GameScreenView gameView = new GameScreenView(
+            null,
+            tableView,
+            () -> {},
+            () -> {},
+            () -> {}
+        );
+        
+        final Scene scene = new Scene(gameView, 1000, 700);
         final java.net.URL cssUrl = getClass().getResource("/style.css");
         if (cssUrl != null) {
-            scene.getStylesheets().clear(); // Pulisci eventuali residui
             scene.getStylesheets().add(cssUrl.toExternalForm());
-            System.out.println("✅ CSS caricato con successo!");
+            System.out.println("✅ CSS caricato!");
         }
-
+        
         primaryStage.setTitle("Cactus Game Test");
         primaryStage.setScene(scene);
-        
-        // 3. MOSTRA UNA VOLTA SOLA
         primaryStage.show();
 
-        // 4. Update dei dati
-        Card cartaTest = new CardImpl(Suit.BASTONI, 2, 2, null);
-        List<Card> handTest = List.of(
+        gameView.update(
+            List.of(
+                new it.unibo.cactus.model.rounds.actions.CallCactusAction(),
+                new it.unibo.cactus.model.rounds.actions.EndTurnAction(),
+                new it.unibo.cactus.model.rounds.actions.ActivatePowerAction(null),
+                new it.unibo.cactus.model.rounds.actions.SkipPowerAction()
+            ),
+            true,
+            "Call Cactus! or end your turn",
+            Optional.empty(),
+            null,
+            false,
+            List.of()
+        );
+    }*/
+        final TableView tableView = new TableView();
+
+        final GameScreenView gameView = new GameScreenView(
+            null,
+            tableView,
+            () -> {},
+            () -> {},
+            () -> {}
+        );
+        
+        final Scene scene = new Scene(gameView, 1000, 700);
+        final java.net.URL cssUrl = getClass().getResource("/style.css");
+        if (cssUrl != null) {
+            scene.getStylesheets().add(cssUrl.toExternalForm());
+            System.out.println("✅ CSS caricato!");
+        }
+        
+        primaryStage.setTitle("Cactus Game Test");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        final Card cartaTest = new CardImpl(Suit.BASTONI, 2, 2, null);
+        final List<Card> handTest = List.of(
             new CardImpl(Suit.BASTONI, 7, 7, null),
             new CardImpl(Suit.COPPE, 3, 3, null),
             new CardImpl(Suit.SPADE, 1, 1, null),
             new CardImpl(Suit.DENARI, 5, 5, null)
         );
-
+        
         gameView.update(
-            List.of(),       // Lista vuota (mentre scarti non fai altre azioni)
-            true,            // Turno umano
-            "Qualcuno ha scartato! Hai una carta uguale?", 
+            List.of(),
+            true,
+            "Qualcuno ha scartato! Hai una carta uguale?",
             Optional.empty(),
-            cartaTest,       // Passiamo la carta Bastoni 7
-            true,             // TRUE forza l'apertura dell'overlay
+            cartaTest,
+            true,
             handTest
         );
     }
