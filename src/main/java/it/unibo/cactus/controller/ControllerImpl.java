@@ -57,9 +57,7 @@ public class ControllerImpl implements Controller {
     // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
-        if (game == null || game.isFinished()) { //x evitare crash
-            return;
-        }
+        if (game == null || game.isFinished()) return;
 
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             if (simultaneousDiscardStartTime == 0) {
@@ -125,6 +123,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
+        if (game.isFinished()) return;
         game.performAction(action);
         closeSimultaneousDiscard();
         //view.updateGame(game);

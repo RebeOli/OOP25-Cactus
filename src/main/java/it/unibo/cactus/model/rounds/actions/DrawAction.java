@@ -13,10 +13,10 @@ public final class DrawAction implements RoundAction {
 
     @Override
     public void execute(final MutableRound round) {
-        final Optional<Card> card = round.getDrawPile().draw();
-        if (card.isEmpty()) {
-            throw new IllegalStateException("Cannot draw a card: draw pile is empty");
+        if (round.getDrawPile().isEmpty()) {
+            round.getDrawPile().refill(round.getDiscardPile().drainAll());
         }
+        final Optional<Card> card = round.getDrawPile().draw();
         round.setDrawnCard(card);
         round.advancePhase();
     }
