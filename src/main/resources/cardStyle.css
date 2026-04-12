@@ -24,3 +24,10 @@
     -fx-border-width: 3;
     -fx-border-radius: 5;
 }
+.cardSlotEmpty {
+    -fx-border-color: rgb(10, 61, 31);
+    -fx-border-width: 2;
+    -fx-border-style: dashed;
+    -fx-border-radius: 6;
+    -fx-opacity: 0.4;
+}

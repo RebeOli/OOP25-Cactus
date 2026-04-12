@@ -44,12 +44,14 @@ public class CardView extends StackPane {
     public void setCardData(Card card) {
         if (card != null) {
             this.frontImage = ImageLoader.getCardImage(card.getSuit(), card.getValue());
+            this.imageView.setVisible(true);
             if (isFaceUp) {
                 this.imageView.setImage(frontImage);
             }
         } else {
             this.frontImage = null;
             this.imageView.setImage(backImage);
+            this.imageView.setVisible(false);
             this.isFaceUp = false;
         }
     }
@@ -118,5 +120,18 @@ public class CardView extends StackPane {
 
     public void bindHeight(javafx.beans.binding.DoubleBinding heightBinding) {
         this.imageView.fitHeightProperty().bind(heightBinding);
+    }
+
+    public void setEmpty(boolean empty) {
+        if (empty) {
+            this.imageView.setVisible(false);
+            this.getStyleClass().add("cardSlotEmpty");
+            this.setVisible(true);
+            this.setMinSize(40, 56);
+        } else {
+            this.imageView.setVisible(true); 
+            this.getStyleClass().remove("cardSlotEmpty");
+            this.setMinSize(0, 0);
+        }
     }
 }
