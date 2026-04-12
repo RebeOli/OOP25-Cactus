@@ -75,7 +75,7 @@
 }
 
 /* Stile dei bottoni dentro il menu */
-.button.menuButton {
+.btnMenu {
     -fx-background-color: #fdf3e3;
     -fx-border-color: #8a7a4a;
     -fx-border-width: 2;
@@ -85,12 +85,12 @@
     -fx-padding: 10 20 10 20;
 }
 
-.button.menuButton:hover {
+.btnMenu:hover {
     -fx-background-color: #FFD700; /* Oro quando passi sopra */
     -fx-cursor: hand;
 }
 
-.button.menuButton:pressed {
+.btnMenu:pressed {
     -fx-background-color: #e5c100;
 }
 
