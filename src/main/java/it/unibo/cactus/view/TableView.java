@@ -17,14 +17,14 @@ public class TableView extends BorderPane {
     private final HBox pilesContainer;
     private final CardView zoomedDrawnCard;
 
-    public TableView() {
+    public TableView(String humanName, String bot1Name, String bot2Name, String bot3Name) {
         this.getStyleClass().add("gameTable");
         this.setPadding(new Insets(10, 10, 80, 10));
 
-        this.humanHand = new PlayerHandView("Rebecca", PlayerHandView.Position.BOTTOM);
-        this.bot1Hand = new PlayerHandView("Bot 1", PlayerHandView.Position.LEFT);
-        this.bot2Hand = new PlayerHandView("Bot 2", PlayerHandView.Position.TOP);
-        this.bot3Hand = new PlayerHandView("Bot 3", PlayerHandView.Position.RIGHT);
+        this.humanHand = new PlayerHandView(humanName, PlayerHandView.Position.BOTTOM);
+        this.bot1Hand = new PlayerHandView(bot1Name, PlayerHandView.Position.LEFT);
+        this.bot2Hand = new PlayerHandView(bot2Name, PlayerHandView.Position.TOP);
+        this.bot3Hand = new PlayerHandView(bot3Name, PlayerHandView.Position.RIGHT);
 
         this.setBottom(humanHand);
         this.setLeft(bot1Hand);
