@@ -11,7 +11,7 @@ public class DrawPileView extends StackPane {
     private Label countLabel;
 
     public DrawPileView() {
-        //this.cardBackView = new ImageView(ImageLoader.getCardBack());
+        this.cardBackView = new ImageView(ImageLoader.getCardBack());
         this.cardBackView.setPreserveRatio(true);
         this.cardBackView.fitHeightProperty().bind(
             this.heightProperty().multiply(0.8)

@@ -52,7 +52,8 @@ public class PlayerHandView extends VBox {
         for (int i = 0; i < 6; i++) {
             if (i < hand.size()) {
                 Card modelCard = hand.getCard(i);
-                slots[i].setCardData(modelCard); 
+                slots[i].setCardData(modelCard);
+                slots[i].setEmpty(false);
                 slots[i].setVisible(true);
                 if (!hand.isHidden(i)) {
                     slots[i].setFaceUp(true);
@@ -60,9 +61,9 @@ public class PlayerHandView extends VBox {
                     slots[i].setFaceUp(false);
                 }
             } else {
-                slots[i].setCardData(null); 
-                slots[i].setVisible(false); 
-                slots[i].setHighlight(false); 
+                slots[i].setCardData(null);
+                slots[i].setEmpty(true);
+                slots[i].setHighlight(false);
             }
         }
     }
@@ -81,6 +82,6 @@ public class PlayerHandView extends VBox {
     }
 
     private double negativeSpacing() {
-        return -30.0;
+        return -25.0;
     }
 }
