@@ -6,16 +6,14 @@ import java.util.Optional;
 import it.unibo.cactus.controller.Controller;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.SpecialPower;
+import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.RoundAction;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -31,15 +29,14 @@ public class GameScreenView extends StackPane {
     private final SimultaneousDiscardOverlay overlay;
     private final MenuOverlay menuOverlay;
 
-
     public GameScreenView(final Controller controller, final TableView tableView,
                           final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
-        
+
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
-        overlay = new SimultaneousDiscardOverlay();
+        overlay = new SimultaneousDiscardOverlay(controller);
         menuOverlay = new MenuOverlay(onRestart, onStats, onHome);
-        menuOverlay.setContinueAction(() -> menuOverlay.hide());
+        menuOverlay.setContinueAction(menuOverlay::hide);
 
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
@@ -66,8 +63,8 @@ public class GameScreenView extends StackPane {
 
         final StackPane topBar = new StackPane(titleLabel, rightBox);
         topBar.setPadding(new Insets(10, 20, 10, 20));
-        StackPane.setAlignment(titleLabel, Pos.CENTER);
-        StackPane.setAlignment(rightBox, Pos.CENTER_RIGHT);
+        setAlignment(titleLabel, Pos.CENTER);
+        setAlignment(rightBox, Pos.CENTER_RIGHT);
         gameLayout.setTop(topBar);
 
         // bottom
@@ -85,14 +82,14 @@ public class GameScreenView extends StackPane {
         gameLayout.setCenter(tableView);
 
         // stack tutto insieme
-        this.getChildren().addAll(gameLayout, overlay, menuOverlay);
+        super.getChildren().addAll(gameLayout, overlay, menuOverlay);
     }
 
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage, final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous, final List<Card> playerHand) {
+    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage, final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous, final List<Card> playerHand, final Player player) {
         actionPanel.update(availableActions, isHumanTurn, currentPower);
         message.setText(completeMessage);
         if (isSimultaneous) {
-            overlay.show(topCard, playerHand);
+            overlay.show(topCard, playerHand, player);
         } else {
             overlay.hide();
         }

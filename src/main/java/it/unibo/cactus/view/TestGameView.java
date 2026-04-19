@@ -9,6 +9,8 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
+import it.unibo.cactus.model.players.HumanPlayer;
+import it.unibo.cactus.model.players.Player;
 
 public class TestGameView extends Application {
 
@@ -52,6 +54,7 @@ public class TestGameView extends Application {
         );
     }*/
         final TableView tableView = new TableView();
+        final Player humanPlayer = new HumanPlayer("TestPlayer");
 
         final GameScreenView gameView = new GameScreenView(
             null,
@@ -87,7 +90,8 @@ public class TestGameView extends Application {
             Optional.empty(),
             cartaTest,
             true,
-            handTest
+            handTest, 
+            humanPlayer
         );
     }
 

@@ -30,13 +30,13 @@ public class MenuOverlay extends StackPane {
         buttonBox.setMaxWidth(300);
         buttonBox.setMaxHeight(350);
 
-        for (Button b : new Button[]{btnContinue, btnRestart, btnStats, btnHome}) {
-            b.getStyleClass().add("btnMenu");
-            b.setMaxWidth(Double.MAX_VALUE); // I bottoni occupano tutta la larghezza del menuBox
+        for (final Button button : new Button[]{btnContinue, btnRestart, btnStats, btnHome}) {
+            button.getStyleClass().add("btnMenu");
+            button.setMaxWidth(Double.MAX_VALUE); // I bottoni occupano tutta la larghezza del menuBox
         }
 
-        this.getChildren().addAll(buttonBox);
-        StackPane.setAlignment(buttonBox, Pos.CENTER);
+        super.getChildren().addAll(buttonBox);
+        setAlignment(buttonBox, Pos.CENTER);
     }
 
     public void setContinueAction(final Runnable action) {

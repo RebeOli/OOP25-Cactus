@@ -141,7 +141,7 @@ public final class RoundImpl implements MutableRound {
 
     @Override
     public boolean isSimultaneousDiscardPhase() {
-        return this.phase.equals(TurnPhase.SIMULTANEOUS_DISCARD);
+        return this.phase == TurnPhase.SIMULTANEOUS_DISCARD;
     }
 
     @Override

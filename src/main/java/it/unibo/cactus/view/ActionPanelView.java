@@ -30,7 +30,7 @@ public class ActionPanelView extends HBox {
         final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
         
         for (final Button btn : allButtons) {
-            HBox.setHgrow(btn, Priority.ALWAYS); // Occupa lo spazio extra nel contenitore
+            setHgrow(btn, Priority.ALWAYS); // Occupa lo spazio extra nel contenitore
             btn.setMaxWidth(Double.MAX_VALUE);   // Non mettere limiti alla larghezza del bottone
             btn.setPrefHeight(60);        // Altezza preferita per renderli cliccabili facilmente
         }
@@ -40,11 +40,8 @@ public class ActionPanelView extends HBox {
         btnEndTurn.getStyleClass().add("btnAction");
         btnActivePower.getStyleClass().add("btnAction");
         btnSkipPower.getStyleClass().add("btnAction");
-        System.out.println("Classes btnCactus: " + btnCactus.getStyleClass());
-        System.out.println("Classes btnEndTurn: " + btnEndTurn.getStyleClass());
-        System.out.println("Colore fondo attuale: " + btnCactus.getBackground());
         this.setSpacing(10);
-        this.getChildren().addAll(allButtons);
+        super.getChildren().addAll(allButtons);
 
         btnCactus.setOnAction(e -> controller.handleAction(new CallCactusAction()));
         btnEndTurn.setOnAction(e -> controller.handleAction(new EndTurnAction()));

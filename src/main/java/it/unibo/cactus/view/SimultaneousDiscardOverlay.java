@@ -4,7 +4,10 @@ package it.unibo.cactus.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unibo.cactus.controller.Controller;
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -24,7 +27,11 @@ public class SimultaneousDiscardOverlay extends StackPane {
     private final List<CardView> slotCards = new ArrayList<>();
     private final CardView discardedCardView;
 
-    public SimultaneousDiscardOverlay() {
+    private final Controller controller;
+    private Player humanPlayer;
+
+    public SimultaneousDiscardOverlay(final Controller controller) {
+        this.controller = controller;
         this.setVisible(false);
         this.setAlignment(Pos.CENTER);
         this.getStyleClass().add("overlayBackground");
@@ -61,10 +68,13 @@ public class SimultaneousDiscardOverlay extends StackPane {
         }
 
         cardContainer.getChildren().addAll(titleLabel, subtitle, discardedCardView, progressBar, slotsBox);
-        this.getChildren().addAll(cardContainer);
+
+        final var children = this.getChildren();
+        children.addAll(cardContainer);
     }
 
-    public void show(final Card topCard, final List<Card> playerHand) {
+    public void show(final Card topCard, final List<Card> playerHand, final Player player) {
+        this.humanPlayer = player;
         if (topCard != null) {
             // usa ImageLoader di Mondardini
             discardedCardView.setCardData(topCard);
@@ -94,7 +104,7 @@ public class SimultaneousDiscardOverlay extends StackPane {
     }
 
     private void onSlotClicked(final int slotIndex) {
-        // il listener verrà collegato al Controller in Fase 2
-        System.out.println("Slot clicked: " + slotIndex);
+        controller.handleSimultaneousDiscard(new SimultaneousDiscardAction(humanPlayer, slotIndex));
+        hide();
     }
 }

@@ -8,7 +8,7 @@ import it.unibo.cactus.model.rounds.RoundAction;
 public record SimultaneousDiscardAction(Player player, int cardIndex) implements RoundAction {
 
     @Override
-    public void execute(MutableRound round) {
+    public void execute(final MutableRound round) {
         final Card discardCard = player.getHand().getCard(cardIndex);
         if(discardCard.getValue() == round.getDiscardPile().getTopCard().orElseThrow().getValue()) {
             round.getDiscardPile().discard(discardCard);
