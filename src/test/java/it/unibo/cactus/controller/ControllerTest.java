@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.score.GameResult;
@@ -92,14 +93,14 @@ public class ControllerTest {
 
     @Test
     void testStartGame() {
-        controller.startGame("Giulio");
+        controller.startGame("Giulio", BotDifficulty.EASY);
         assertTrue(fakeView.updateGame);
         assertEquals(4,fakeView.lastGame.getPlayers().size());
     }
 
     @Test
     void testHandleAction() {
-        controller.startGame("Giulio");
+        controller.startGame("Giulio", BotDifficulty.EASY);
         fakeView.updateGame = false;
         controller.handleAction(new DrawAction());
         assertTrue(fakeView.updateGame);
@@ -108,7 +109,7 @@ public class ControllerTest {
 
     @Test
     void testOnGameFinished() throws IOException {
-        controller.startGame("Giulio");
+        controller.startGame("Giulio", BotDifficulty.EASY);
         fakeView.updateGame = false;
         controller.onGameFinished();
         assertTrue(fakeView.showRank);

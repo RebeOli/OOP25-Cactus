@@ -13,7 +13,7 @@ public class ConfigScreenView extends VBox {
 
     private static final double MAX_FIELD_WIDTH = 200.0;
 
-    public ConfigScreenView() {
+    public ConfigScreenView(GameViewListener listener) {
         
         this.setAlignment(Pos.CENTER);
         
@@ -77,7 +77,10 @@ public class ConfigScreenView extends VBox {
             if (name == null || name.isBlank()) {
                 errorLbl.setText("Inserisci il tuo nome per iniziare.");
             } 
-            //else fa partire il gioco
+            else {
+                errorLbl.setText("");
+                listener.onGameStartRequested(name, difficultyCombobox.getValue());
+            }
         });
 
         this.getChildren().addAll(titleLbl, subtitleLbl, nameField, errorLbl, difficultyCombobox, startButton);

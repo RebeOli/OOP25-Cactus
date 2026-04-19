@@ -1,13 +1,14 @@
 package it.unibo.cactus.controller;
 
 import it.unibo.cactus.model.game.GameObserver;
+import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 
 public interface Controller extends GameObserver{
 
     //qui creo il game e passo a roundstate
-    void startGame(String playerName);
+    void startGame(String playerName, BotDifficulty difficulty);
 
     //gestisco le azioni che mi triggera la view
     void handleAction(RoundAction action);

@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameFactory;
+import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.RoundAction;
@@ -20,8 +21,9 @@ import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.view.GameView;
+import it.unibo.cactus.view.GameViewListener;
 
-public class ControllerImpl implements Controller {
+public class ControllerImpl implements Controller, GameViewListener {
     private static final int BOT_DELAY = 1500;
     private static final int SIMULTANEOUS_DISCARD_TIME = 4000;
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class.getName());
@@ -43,8 +45,8 @@ public class ControllerImpl implements Controller {
     }
 
     @Override
-    public void startGame(final String playerName) {
-        this.game = GameFactory.createGame(playerName);
+    public void startGame(final String playerName, BotDifficulty difficulty) {
+        this.game = GameFactory.createGame(playerName, difficulty);
         game.addObserver(this); //perchè come observer passiamo il controller
         view.updateGame(game);
     }
@@ -167,5 +169,10 @@ public class ControllerImpl implements Controller {
     @Override
     public void onGameStateChanged() {
         view.updateGame(game);
+    }
+
+    @Override
+    public void onGameStartRequested(String playerName, BotDifficulty difficulty) {
+        startGame(playerName, difficulty);
     }
 }

@@ -21,6 +21,7 @@ import it.unibo.cactus.model.pile.DiscardPileImpl;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.pile.DrawPileImpl;
 import it.unibo.cactus.model.players.AbstractPlayer;
+import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.PlayerHandImpl;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
@@ -61,7 +62,7 @@ final class RoundTest {
             new CardImpl(Suit.DENARI, 3, 3, null),
             new CardImpl(Suit.SPADE, 4, 4, null)
         )));
-        game = GameFactory.createGame("Pippo");
+        game = GameFactory.createGame("Pippo", BotDifficulty.EASY);
         round = new RoundImpl(game, discardPile, drawPile, player);
 
     }

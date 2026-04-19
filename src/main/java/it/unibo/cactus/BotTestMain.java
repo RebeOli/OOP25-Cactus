@@ -9,6 +9,7 @@ import java.util.Map;
 import it.unibo.cactus.controller.Controller;
 import it.unibo.cactus.controller.ControllerImpl;
 import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.TurnPhase;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -33,7 +34,7 @@ public class BotTestMain {
         );
 
         System.out.println("=== START DEL GIOCO ===");
-        controller.startGame("Rebecca");
+        controller.startGame("Rebecca", BotDifficulty.EASY);
 
         int cicliDiSicurezza = 0;
         int turniCompletati = 0;
