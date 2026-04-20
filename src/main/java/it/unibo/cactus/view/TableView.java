@@ -1,5 +1,6 @@
 package it.unibo.cactus.view;
 
+import it.unibo.cactus.model.cards.Card;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
@@ -7,7 +8,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
- * Represents the view of the game table
+ * Represents the view of the game table.
  */
 public class TableView extends BorderPane {
 
@@ -59,7 +60,7 @@ public class TableView extends BorderPane {
         pilesContainer.getChildren().addAll(drawPile, discardPile);
         this.zoomedDrawnCard = new CardView();
         zoomedDrawnCard.setVisible(false);
-        VBox centerArea = new VBox(CENTER_SPACING);
+        final VBox centerArea = new VBox(CENTER_SPACING);
         centerArea.setAlignment(Pos.CENTER);
         centerArea.getChildren().addAll(pilesContainer, zoomedDrawnCard);
         this.setCenter(centerArea);
@@ -90,7 +91,7 @@ public class TableView extends BorderPane {
      *
      * @param card the card to be shown
      */
-    public void showDrawnCard(it.unibo.cactus.model.cards.Card card) {
+    public void showDrawnCard(final Card card) {
         zoomedDrawnCard.setCardData(card);
         zoomedDrawnCard.setFaceUp(true);
         zoomedDrawnCard.setVisible(true);
