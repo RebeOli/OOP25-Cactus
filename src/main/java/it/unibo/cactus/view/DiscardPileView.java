@@ -7,7 +7,7 @@ import javafx.scene.layout.StackPane;
 /**
  * View representing the game's discard pile.
  * Manages the display of the top card and its visual states.
-*/
+ */
 public final class DiscardPileView extends StackPane {
 
     private static final String CSS_DISCARD_PILE_PULSING = "discardPilePulsing";
@@ -32,6 +32,7 @@ public final class DiscardPileView extends StackPane {
 
     /**
      * Updates the pile view.
+     * 
      * @param suit the card suit
      * @param value the card value
      * @param isSimultaneousDiscardPhase whether the game is in the discard phase

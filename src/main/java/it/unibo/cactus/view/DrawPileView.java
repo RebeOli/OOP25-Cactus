@@ -29,7 +29,7 @@ public final class DrawPileView extends StackPane {
 
         this.countLabel.getStyleClass().add("pileCount");
 
-        StackPane.setAlignment(this.countLabel, Pos.BOTTOM_CENTER); //posiziona il numero in basso al centro
+        setAlignment(this.countLabel, Pos.BOTTOM_CENTER); //posiziona il numero in basso al centro
 
         this.getChildren().addAll(this.cardBackView, this.countLabel);
 
@@ -37,6 +37,7 @@ public final class DrawPileView extends StackPane {
 
     /**
      * Updates the draw pile state.
+     *
      * @param remainingCards the number of cards left in the deck
      * @param isHumanTurn whether it is currently the human player's turn
      */

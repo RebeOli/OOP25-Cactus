@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
  * View representing the end game screen with rankings and actions.
  */
 public final class EndScreenView extends StackPane {
-    
+
     private static final int BUTTON_SPACING = 20;
     private static final double CARD_MAX_HEIGHT = 450;
     private static final double CARD_MAX_WIDTH = 400;
@@ -73,19 +73,20 @@ public final class EndScreenView extends StackPane {
 
     /**
      * Displays the game results and ranking.
+     *
      * @param finalsScores finalsScores a map containing players and their final scores
      */
     public void showResults(final Map<Player, Integer> finalsScores) {
         this.rankingBox.getChildren().clear();
 
-        var rankingList = finalsScores.entrySet().stream()
+        final var rankingList = finalsScores.entrySet().stream()
             .sorted(Map.Entry.comparingByValue())
             .toList();
 
         this.winnerLabel.setText(rankingList.getFirst().getKey().getName() + "WON!");
 
         for (int i = 1; i < rankingList.size(); i++) {
-            var playerScore = rankingList.get(i);
+            final var playerScore = rankingList.get(i);
             final Label rankLabel = new Label(
                 (i + 1) + "° - " + playerScore.getKey().getName()
                 + " (" + playerScore.getValue() + " pt)"
@@ -99,6 +100,7 @@ public final class EndScreenView extends StackPane {
 
     /**
      * Sets the action to be performed when the close button is clicked.
+     *
      * @param action the action to run
      */
     public void setOnCloseRequested(final Runnable action) {
@@ -110,6 +112,7 @@ public final class EndScreenView extends StackPane {
 
     /**
      * Sets the action to be performed when the play again button is clicked.
+     *
      * @param action the action to run
      */
     public void setOnPlayAgainRequested(final Runnable action) {
