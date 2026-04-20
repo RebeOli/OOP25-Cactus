@@ -14,13 +14,24 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
-public class ActionPanelView extends HBox {
+/**
+ * Panel containing the action buttons for the human player.
+ * Displays buttons for calling cactus, ending the turn, activating or skipping a special power.
+ */
+public final class ActionPanelView extends HBox {
+    private static final double BTN_PREF_HEIGHT = 60;
+    private static final String BTN_ACTION_STYLE = "btnAction";
 
     private final Button btnCactus;
     private final Button btnEndTurn;
     private final Button btnActivePower;
     private final Button btnSkipPower;
 
+    /**
+     * Creates the action panel and binds each button to the controller.
+     * 
+     * @param controller the game controller
+     */
     public ActionPanelView(final Controller controller) {
         //Inizializzo i bottoni
         btnCactus = new Button("Call Cactus!");
@@ -28,18 +39,18 @@ public class ActionPanelView extends HBox {
         btnActivePower = new Button("Active Power");
         btnSkipPower = new Button("Skip Power");
         final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
-        
+
         for (final Button btn : allButtons) {
             setHgrow(btn, Priority.ALWAYS); // Occupa lo spazio extra nel contenitore
             btn.setMaxWidth(Double.MAX_VALUE);   // Non mettere limiti alla larghezza del bottone
-            btn.setPrefHeight(60);        // Altezza preferita per renderli cliccabili facilmente
+            btn.setPrefHeight(BTN_PREF_HEIGHT);        // Altezza preferita per renderli cliccabili facilmente
         }
 
         this.getStyleClass().add("actionPanel");
         btnCactus.getStyleClass().add("btnCactus");
-        btnEndTurn.getStyleClass().add("btnAction");
-        btnActivePower.getStyleClass().add("btnAction");
-        btnSkipPower.getStyleClass().add("btnAction");
+        btnEndTurn.getStyleClass().add(BTN_ACTION_STYLE);
+        btnActivePower.getStyleClass().add(BTN_ACTION_STYLE);
+        btnSkipPower.getStyleClass().add(BTN_ACTION_STYLE);
         this.setSpacing(10);
         super.getChildren().addAll(allButtons);
 
@@ -49,8 +60,15 @@ public class ActionPanelView extends HBox {
         btnActivePower.setOnAction(e -> controller.handleAction(new ActivatePowerAction())); // da sistemare il target
     }
 
-
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final Optional<SpecialPower> currentPower) {
+    /**
+     * Updates the state of the buttons based on the available actions and whose turn it is.
+     * 
+     * @param availableActions the list of actions the current player can perform
+     * @param isHumanTurn true if it's the human player's turn
+     * @param currentPower the current special power
+     */
+    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn,
+        final Optional<SpecialPower> currentPower) {
         if (!isHumanTurn) {
             btnCactus.setDisable(true);
             btnEndTurn.setDisable(true);

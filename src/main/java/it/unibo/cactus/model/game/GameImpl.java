@@ -163,7 +163,7 @@ public final class GameImpl implements Game {
         observers.forEach(GameObserver::onRoundAdvanced);
     }
 
-    private void notifyGameStateChanged(){
+    private void notifyGameStateChanged() {
         observers.forEach(GameObserver::onGameStateChanged);
     }
 

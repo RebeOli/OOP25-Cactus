@@ -22,13 +22,26 @@ import javafx.scene.layout.VBox;
  * Composes the table, action panel, message label, overlays and menu.
  */
 
-public class GameScreenView extends StackPane {
+public final class GameScreenView extends StackPane {
+    private static final int TOP_BAR_PADDING = 10;
+    private static final int TOP_BAR_SIDE_PADDING = 20;
+    private static final int BOTTOM_SPACING = 15;
+    private static final int BOTTOM_PADDING = 20;
 
     private final ActionPanelView actionPanel;
     private final Label message;
     private final SimultaneousDiscardOverlay overlay;
     private final MenuOverlay menuOverlay;
 
+    /**
+     * Creates the main game screen.
+     * 
+     * @param controller the game controller
+     * @param tableView the table view
+     * @param onRestart action to run on restart
+     * @param onStats action to run on stats
+     * @param onHome action to run on home
+     */
     public GameScreenView(final Controller controller, final TableView tableView,
                           final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
 
@@ -62,7 +75,7 @@ public class GameScreenView extends StackPane {
         rightBox.setAlignment(Pos.CENTER_RIGHT);
 
         final StackPane topBar = new StackPane(titleLabel, rightBox);
-        topBar.setPadding(new Insets(10, 20, 10, 20));
+        topBar.setPadding(new Insets(TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING, TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING));
         setAlignment(titleLabel, Pos.CENTER);
         setAlignment(rightBox, Pos.CENTER_RIGHT);
         gameLayout.setTop(topBar);
@@ -73,8 +86,8 @@ public class GameScreenView extends StackPane {
         message.getStyleClass().add("statusLabel");
         final VBox bottomPanel = new VBox(message, actionPanel);
         bottomPanel.setFillWidth(true);
-        bottomPanel.setSpacing(15);
-        bottomPanel.setPadding(new Insets(0, 0, 20, 0));
+        bottomPanel.setSpacing(BOTTOM_SPACING);
+        bottomPanel.setPadding(new Insets(0, 0, BOTTOM_PADDING, 0));
         bottomPanel.setAlignment(Pos.CENTER);
         gameLayout.setBottom(bottomPanel);
 
@@ -85,7 +98,21 @@ public class GameScreenView extends StackPane {
         super.getChildren().addAll(gameLayout, overlay, menuOverlay);
     }
 
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage, final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous, final List<Card> playerHand, final Player player) {
+    /**
+     * Updates the view based on the current game state.
+     * 
+     * @param availableActions the list of actions the current player can perform
+     * @param isHumanTurn true if it is the human player's turn
+     * @param completeMessage the status message to display
+     * @param currentPower the current special power
+     * @param topCard the top card of the discard pile
+     * @param isSimultaneous true if the simultaneous discard phase is active
+     * @param playerHand the human player's hand
+     * @param player the human player
+     */
+    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage,
+        final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous,
+        final List<Card> playerHand, final Player player) {
         actionPanel.update(availableActions, isHumanTurn, currentPower);
         message.setText(completeMessage);
         if (isSimultaneous) {

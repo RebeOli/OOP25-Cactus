@@ -1,6 +1,5 @@
 package it.unibo.cactus.view;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,17 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
-public class SimultaneousDiscardOverlay extends StackPane {
+/**
+ * Overlay displayed during the simultaneous discard phase.
+ * Shows the top card and the player's hand, allowing them to attempt a discard.
+ */
+public final class SimultaneousDiscardOverlay extends StackPane {
+    private static final int CONTAINER_SPACING = 20;
+    private static final int CONTAINER_MAX_WIDTH = 400;
+    private static final int CONTAINER_MAX_HEIGHT = 450;
+    private static final double DISCARD_CARD_HEIGHT = 0.25;
+    private static final double SLOT_CARD_HEIGHT = 0.15;
+
     private final ProgressBar progressBar;
     private final Label titleLabel;
     private Timeline timeline;
@@ -30,17 +39,22 @@ public class SimultaneousDiscardOverlay extends StackPane {
     private final Controller controller;
     private Player humanPlayer;
 
+    /**
+     * Creates the simultaneous discard overlay.
+     * 
+     * @param controller the game controller
+     */
     public SimultaneousDiscardOverlay(final Controller controller) {
         this.controller = controller;
         this.setVisible(false);
         this.setAlignment(Pos.CENTER);
         this.getStyleClass().add("overlayBackground");
-        
+
         final VBox cardContainer = new VBox();
         cardContainer.getStyleClass().add("overlayCard");
         cardContainer.setAlignment(Pos.CENTER);
-        cardContainer.setSpacing(20);
-        cardContainer.setMaxSize(400, 450); // Dimensioni fisse del pop-up
+        cardContainer.setSpacing(CONTAINER_SPACING);
+        cardContainer.setMaxSize(CONTAINER_MAX_WIDTH, CONTAINER_MAX_HEIGHT); // Dimensioni fisse del pop-up
 
         titleLabel = new Label("Simulateous discard!");
         titleLabel.getStyleClass().add("overlayTitle");
@@ -49,7 +63,7 @@ public class SimultaneousDiscardOverlay extends StackPane {
         subtitle.getStyleClass().add("overlaySubtitle");
 
         discardedCardView = new CardView();
-        discardedCardView.bindHeight(this.heightProperty().multiply(0.25));
+        discardedCardView.bindHeight(this.heightProperty().multiply(DISCARD_CARD_HEIGHT));
 
         progressBar = new ProgressBar(1.0);
         progressBar.setMaxWidth(Double.MAX_VALUE);
@@ -60,7 +74,7 @@ public class SimultaneousDiscardOverlay extends StackPane {
         slotsBox.setSpacing(10);
         for (int i = 0; i < 4; i++) {
             final CardView slot = new CardView();
-            slot.bindHeight(this.heightProperty().multiply(0.15));
+            slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
             final int slotIndex = i;
             slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
             slotCards.add(slot);
@@ -73,6 +87,13 @@ public class SimultaneousDiscardOverlay extends StackPane {
         children.addAll(cardContainer);
     }
 
+    /**
+     * Shows the overlay with the given top card and player hand.
+     * 
+     * @param topCard the top card of the discard pile
+     * @param playerHand the human player's hand
+     * @param player the human player
+     */
     public void show(final Card topCard, final List<Card> playerHand, final Player player) {
         this.humanPlayer = player;
         if (topCard != null) {
@@ -96,6 +117,9 @@ public class SimultaneousDiscardOverlay extends StackPane {
         timeline.play();
     }
 
+    /**
+     * Hides the overlay and stops the timer.
+     */
     public void hide() {
         if (timeline != null) {
             timeline.stop();
