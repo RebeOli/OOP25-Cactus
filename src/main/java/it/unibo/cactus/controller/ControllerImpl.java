@@ -1,8 +1,11 @@
 package it.unibo.cactus.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,13 +31,15 @@ public class ControllerImpl implements Controller {
     private long botStartTime;
     private long simultaneousDiscardStartTime;
     private final HistoryManager historyManager;
-    private boolean botHaveDiscarded;
+    private boolean humanWindowExpired;
+    private final Random random;
 
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
         this.botStartTime = 0;
         this.historyManager = historyManager;
-        this.botHaveDiscarded = false;
+        this.humanWindowExpired = false;
+        this.random = new Random();
     }
 
     @Override
@@ -52,48 +57,48 @@ public class ControllerImpl implements Controller {
     // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
-        if (game == null || game.isFinished()) { //x evitare crash
-            return;
-        }
-
-        final Player currentPlayer = game.getCurrentPlayer();
+        if (game == null || game.isFinished()) return;
 
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             if (simultaneousDiscardStartTime == 0) {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
-                botHaveDiscarded = false;
+                humanWindowExpired = false;
             }
-            if (!botHaveDiscarded && System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
-                botHaveDiscarded = true;
-                for (var p : game.getPlayers()) {
-                    if(p instanceof BotPlayer bot) {
+            
+            if (!humanWindowExpired 
+                && System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
+                humanWindowExpired = true;
+
+                //Raccolgo in una lista tutte le azioni di scarto simultaneo dei bot (SimultaneousDiscardAction).
+                //I bot che non vogliono scartare restituiscono SkipSimultaneousDiscardAction, che viene ignorata implicitamente
+                final List<SimultaneousDiscardAction> botActions = new ArrayList<>();
+                for (final Player player : game.getPlayers()) {
+                    if (!player.isHuman() && player instanceof final BotPlayer bot) {
                         final RoundAction action = bot.chooseAction(game.getCurrentRound());
-                        if(action instanceof SimultaneousDiscardAction simAction) {
-                            handleSimultaneousDiscard(simAction);
-                            if (!game.getCurrentRound().isSimultaneousDiscardPhase()) {
-                                return;
-                            }
+                        if (action instanceof final SimultaneousDiscardAction simAction) {
+                            botActions.add(simAction);
                         }
                     }
                 }
+
+                // Se più bot vogliono scartare, ne scelgo uno randomicamente
+                if (!botActions.isEmpty()) {
+                    final SimultaneousDiscardAction chosen = botActions.get(random.nextInt(botActions.size()));
+                    handleSimultaneousDiscard(chosen);
+                    return;
+                }
             }
-                /*game.getPlayers().stream()
-                        .filter(p -> !p.isHuman())
-                        .filter(p -> p instanceof BotPlayer )
-                        .forEach(p -> {
-                            final RoundAction action = ((BotPlayer)p).chooseAction(game.getCurrentRound());
-                            if(action instanceof SimultaneousDiscardAction simAction) {
-                                handleSimultaneousDiscard(simAction);
-                            }
-                        });
-            }*/
-            if (game.getCurrentRound().isSimultaneousDiscardPhase() && System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
-                simultaneousDiscardStartTime = 0;
-                game.endSimultaneousDiscard();
+
+            //Se nessun giocatore ha scartato entro SIMULTANEOUS_DISCARD_TIME, chiudo la fase senza nessuno scarto
+            if (game.getCurrentRound().isSimultaneousDiscardPhase() 
+                && System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
+                closeSimultaneousDiscard();
             }
             return;
         }
 
+        
+        final Player currentPlayer = game.getCurrentPlayer();
         if (currentPlayer instanceof BotPlayer currentBotPlayer) {
             if(botStartTime == 0) {
                 botStartTime=System.currentTimeMillis();
@@ -108,17 +113,19 @@ public class ControllerImpl implements Controller {
         }
     }
 
+    private void closeSimultaneousDiscard() {
+        simultaneousDiscardStartTime = 0;
+        humanWindowExpired = false;
+        if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
+            game.endSimultaneousDiscard();
+        }
+    }
 
     @Override
     public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
-        int oldSize = action.player().getHand().size();
+        if (game.isFinished()) return;
         game.performAction(action);
-        if (action.player().getHand().size() < oldSize) {
-            simultaneousDiscardStartTime = 0;
-            if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
-                game.endSimultaneousDiscard();
-            }
-        }
+        closeSimultaneousDiscard();
         //view.updateGame(game);
     }
 

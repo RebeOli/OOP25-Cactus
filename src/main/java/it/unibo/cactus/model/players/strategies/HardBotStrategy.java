@@ -6,46 +6,38 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
+import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.TurnPhase;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
-import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
+import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
+import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 /**
  * A bot strategy that makes decisions based only on currently visible cards,
  * with memory between turns.
  */
-public class HardBotStrategy implements BotStrategy {
-    
+public class HardBotStrategy extends AbstractBotStrategy {
+
     private static final int AVERAGE_UNKNOWN_SCORE = 5;
     private static final int CACTUS_SCORE_THRESHOLD = 8;
 
-    private final BotMemory memory = new SelfBotMemory();
+    private final Player self;
+    private final BotMemory memory;
 
-    /** {@inheritDoc} */
-    @Override
-    public RoundAction chooseAction(final Round round) {
-        final TurnPhase phase = round.getPhase();
-        final PlayerHand hand = round.getCurrentPlayer().getHand();
-
-        return switch (phase) {
-            case DRAW -> new DrawAction();
-            case DECISION -> chooseDecision(round);
-            case SPECIAL_POWER -> chooseSpecialPower(round, hand);
-            case END_TURN -> chooseEndTurn(round, hand);
-            case SIMULTANEOUS_DISCARD -> chooseSimultaneousDiscard(round, hand);
-            case ENDED -> throw new IllegalStateException("chooseAction called on ENDED round");
-        };
+    public HardBotStrategy(final Player self, final BotMemory memory) {
+        this.self = self;
+        this.memory = memory;
     }
 
-    private RoundAction chooseDecision(final Round round) {
+    @Override
+    protected RoundAction chooseDecision(final Round round) {
         final int drawnScore = round.getDrawnCard().orElseThrow().getScore();
         final Map<Integer, Card> knownCards = memory.getAllKnownCards();
 
@@ -75,7 +67,8 @@ public class HardBotStrategy implements BotStrategy {
         return new DiscardAction();
     }
 
-    private RoundAction chooseSpecialPower(final Round round, final PlayerHand hand) {
+    @Override
+    protected RoundAction chooseSpecialPower(final Round round) {
         // Se la carta non ha il potere Peek, salto
         Optional<Card> drawn = round.getDrawnCard();
         boolean isPeek = drawn.isPresent()
@@ -84,6 +77,8 @@ public class HardBotStrategy implements BotStrategy {
         if (!isPeek) {
             return new SkipPowerAction();
         }
+
+        final PlayerHand hand = self.getHand();
 
         // Cerco il primo slot ancora sconosciuto in memoria per spiare la carta
         for (int i = 0; i < hand.size(); i++) {
@@ -98,10 +93,11 @@ public class HardBotStrategy implements BotStrategy {
         return new SkipPowerAction();
     }
 
-    private RoundAction chooseEndTurn(final Round round, final PlayerHand hand) {
+    @Override
+    protected RoundAction chooseEndTurn(final Round round) {
 
         // Stimo il punteggio totale (sommo le carte note e valore medio per quelle sconosciute)
-        final int unknownCount = hand.size() - memory.getAllKnownCards().size();
+        final int unknownCount = self.getHand().size() - memory.getAllKnownCards().size();
         final int estimatedScore = memory.getKnownScore() + AVERAGE_UNKNOWN_SCORE * unknownCount;
 
         // Chiamo Cactus! se il punteggio stimato è sufficientemente basso e se non siamo già al turno finale
@@ -112,7 +108,29 @@ public class HardBotStrategy implements BotStrategy {
         return new EndTurnAction();
     }
 
-    private RoundAction chooseSimultaneousDiscard(final Round round, final PlayerHand hand) {
-        return null;
+    @Override
+    protected RoundAction chooseSimultaneousDiscard(final Round round) {
+        final Optional<Card> topCard = round.getDiscardTopCard();    
+        
+        //TO-DO:
+        //Sostituire il magic number con una chiamata più parlante come !hand.isFull()
+        if (topCard.isEmpty()
+            || self.getHand().size() >= 6) {
+            return new SkipSimultaneousDiscardAction();
+        }
+        final int targetValue = topCard.get().getValue();
+
+        // Cerco in memoria la carta nota con valore corrispondente
+        int bestIndex = -1;
+        for (final Map.Entry<Integer, Card> entry : memory.getAllKnownCards().entrySet()) {
+            if (entry.getValue().getValue() == targetValue) {
+                bestIndex = entry.getKey();
+            }
+        }
+        //Se trovo una carta in mano con valore uguale al valore target la scarto, altrimento salto l'azione
+        if (bestIndex >= 0) {
+            return new SimultaneousDiscardAction(self, bestIndex);
+        }
+        return new SkipSimultaneousDiscardAction();
     }
 }
