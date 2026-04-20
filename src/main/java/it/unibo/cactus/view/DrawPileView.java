@@ -5,16 +5,25 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
-public class DrawPileView extends StackPane {
+/**
+ * View representing the game's draw pile.
+ * Displays the card back and the number of remaining cards.
+ */
+public final class DrawPileView extends StackPane {
 
-    private ImageView cardBackView;
-    private Label countLabel;
+    private static final double TOP_CARD_HEIGHT = 0.8;
+    private static final String CSS_PILE_DISABLED = "pileDisabled";
+    private final ImageView cardBackView;
+    private final Label countLabel;
 
+    /**
+     * Constructs a new DrawPileView.
+     */
     public DrawPileView() {
         this.cardBackView = new ImageView(ImageLoader.getCardBack());
         this.cardBackView.setPreserveRatio(true);
         this.cardBackView.fitHeightProperty().bind(
-            this.heightProperty().multiply(0.8)
+            this.heightProperty().multiply(TOP_CARD_HEIGHT)
         );
         this.countLabel = new Label("40");
 
@@ -26,16 +35,21 @@ public class DrawPileView extends StackPane {
 
     }
 
+    /**
+     * Updates the draw pile state.
+     * @param remainingCards the number of cards left in the deck
+     * @param isHumanTurn whether it is currently the human player's turn
+     */
     public void update(final int remainingCards, final boolean isHumanTurn) {
         this.countLabel.setText(String.valueOf(remainingCards));
 
         if (isHumanTurn) {
-            this.getStyleClass().remove("pileDisabled");
+            this.getStyleClass().remove(CSS_PILE_DISABLED);
         } else {
-            if (!this.getStyleClass().contains("pileDisabled")) {
-                this.getStyleClass().add("pileDisabled");
+            if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
+                this.getStyleClass().add(CSS_PILE_DISABLED);
             }
         }
-
     }
+
 }
