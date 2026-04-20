@@ -175,4 +175,9 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void onGameStartRequested(String playerName, BotDifficulty difficulty) {
         startGame(playerName, difficulty);
     }
+
+    @Override
+    public void onPeekConfirmed() {
+        //peek delle due carte concluso. Mostro il tavolo da gioco
+    }
 }

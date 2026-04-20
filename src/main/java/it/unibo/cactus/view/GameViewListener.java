@@ -6,4 +6,5 @@ public interface GameViewListener {
 
     void onGameStartRequested(String playerName, BotDifficulty difficulty);
 
+    void onPeekConfirmed();
 }
