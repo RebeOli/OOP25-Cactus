@@ -1,10 +1,6 @@
 package it.unibo.cactus.view;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collector;
 
 import it.unibo.cactus.model.players.Player;
 import javafx.geometry.Pos;
@@ -13,22 +9,31 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Pair;
 
-public class EndScreenView extends StackPane{
+/**
+ * View representing the end game screen with rankings and actions.
+ */
+public final class EndScreenView extends StackPane {
     
-    private Label winnerLabel;
-    private Label winnerScoreLabel;
-    private VBox rankingBox;
-    private Button playAgainButton;
-    private Button closeButton;
+    private static final int BUTTON_SPACING = 20;
+    private static final double CARD_MAX_HEIGHT = 450;
+    private static final double CARD_MAX_WIDTH = 400;
+    private static final int BOX_SPACING = 15;
+    private final Label winnerLabel;
+    private final Label winnerScoreLabel;
+    private final VBox rankingBox;
+    private final Button playAgainButton;
+    private final Button closeButton;
 
+    /**
+     * Constructs a new EndScreenView.
+     */
     public EndScreenView() {
         this.getStyleClass().add("overlayBackground");
 
-        final VBox endBox = new VBox(15);
+        final VBox endBox = new VBox(BOX_SPACING);
         endBox.setAlignment(Pos.CENTER);
-        endBox.setMaxSize(400, 450); 
+        endBox.setMaxSize(CARD_MAX_WIDTH, CARD_MAX_HEIGHT);
         endBox.getStyleClass().add("overlayCard");
 
         final Label titleLabel = new Label("GAME OVER!");
@@ -41,10 +46,10 @@ public class EndScreenView extends StackPane{
         this.winnerScoreLabel = new Label();
         this.winnerScoreLabel.getStyleClass().add("endScore");
 
-        this.rankingBox = new VBox(15);
+        this.rankingBox = new VBox(BOX_SPACING);
         this.rankingBox.setAlignment(Pos.CENTER);
 
-        final HBox buttonBox = new HBox(20);
+        final HBox buttonBox = new HBox(BUTTON_SPACING);
         buttonBox.setAlignment(Pos.CENTER);
 
         this.playAgainButton = new Button("PLAY AGAIN");
@@ -66,6 +71,10 @@ public class EndScreenView extends StackPane{
         this.setVisible(false);
     }
 
+    /**
+     * Displays the game results and ranking.
+     * @param finalsScores finalsScores a map containing players and their final scores
+     */
     public void showResults(final Map<Player, Integer> finalsScores) {
         this.rankingBox.getChildren().clear();
 
@@ -77,7 +86,10 @@ public class EndScreenView extends StackPane{
 
         for (int i = 1; i < rankingList.size(); i++) {
             var playerScore = rankingList.get(i);
-            final Label rankLabel = new Label((i + 1) + "° - " + playerScore.getKey().getName() + " (" + playerScore.getValue() + " pt)");
+            final Label rankLabel = new Label(
+                (i + 1) + "° - " + playerScore.getKey().getName()
+                + " (" + playerScore.getValue() + " pt)"
+            );
             rankLabel.getStyleClass().add("overlaySubtitle");
             this.rankingBox.getChildren().add(rankLabel);
         }
@@ -85,6 +97,10 @@ public class EndScreenView extends StackPane{
         this.setVisible(true);
     }
 
+    /**
+     * Sets the action to be performed when the close button is clicked.
+     * @param action the action to run
+     */
     public void setOnCloseRequested(final Runnable action) {
         this.closeButton.setOnAction(e -> {
             this.setVisible(false);
@@ -92,6 +108,10 @@ public class EndScreenView extends StackPane{
         });
     }
 
+    /**
+     * Sets the action to be performed when the play again button is clicked.
+     * @param action the action to run
+     */
     public void setOnPlayAgainRequested(final Runnable action) {
         this.playAgainButton.setOnAction(e -> {
             this.setVisible(false);
