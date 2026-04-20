@@ -64,7 +64,7 @@ public class PlayerHandView extends VBox {
             }
             cardsContainer.getChildren().add(slots[i]);
         }
-        this.getChildren().addAll(nameLabel, cardsContainer);
+        super.getChildren().addAll(nameLabel, cardsContainer);
     }
 
     /**

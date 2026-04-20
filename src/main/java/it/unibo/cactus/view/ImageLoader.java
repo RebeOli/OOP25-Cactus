@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import it.unibo.cactus.model.cards.Suit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Class for loading and caching card images.
  */
 public final class ImageLoader {
 
+    private static final Logger LOGGER = Logger.getLogger(ImageLoader.class.getName());
     private static final Map<String, Image> IMAGES_CACHE = new HashMap<>();
     private static final String SEPARATOR = "_";
     private static Image cardBack;
@@ -40,8 +43,8 @@ public final class ImageLoader {
                 }
             }
             loaded = true;
-        } catch (final NullPointerException | IllegalArgumentException e) {
-            e.printStackTrace();
+        } catch (final IllegalStateException | IllegalArgumentException e) {
+            LOGGER.log(Level.SEVERE, "Error while loading card images", e);
         }
     }
 

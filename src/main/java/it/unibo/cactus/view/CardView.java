@@ -45,7 +45,7 @@ public class CardView extends StackPane {
         this.highlightEffect.setColor(Color.YELLOW);
         this.highlightEffect.setSpread(HIGHLIGHT_SPREAD);
         this.highlightEffect.setRadius(HIGHLIGHT_RADIUS);
-        this.getChildren().add(imageView);
+        super.getChildren().add(imageView);
     }
 
     /**
@@ -63,7 +63,7 @@ public class CardView extends StackPane {
      *
      * @param card the card model containing suit and value
      */
-    public void setCardData(final Card card) {
+    public final void setCardData(final Card card) {
         if (card != null) {
             this.frontImage = ImageLoader.getCardImage(card.getSuit(), card.getValue());
             this.imageView.setVisible(true);

@@ -48,11 +48,11 @@ public class TableView extends BorderPane {
         this.setLeft(bot1Hand);
         this.setTop(bot2Hand);
         this.setRight(bot3Hand);
-        BorderPane.setAlignment(humanHand, Pos.BOTTOM_CENTER);
-        BorderPane.setAlignment(bot2Hand, Pos.TOP_CENTER);
-        BorderPane.setAlignment(bot1Hand, Pos.CENTER_LEFT);
-        BorderPane.setAlignment(bot3Hand, Pos.CENTER_RIGHT);
-        BorderPane.setMargin(humanHand, new Insets(0, 0, PADDING_STANDARD, 0));
+        setAlignment(humanHand, Pos.BOTTOM_CENTER);
+        setAlignment(bot2Hand, Pos.TOP_CENTER);
+        setAlignment(bot1Hand, Pos.CENTER_LEFT);
+        setAlignment(bot3Hand, Pos.CENTER_RIGHT);
+        setMargin(humanHand, new Insets(0, 0, PADDING_STANDARD, 0));
         this.drawPile = new DrawPileView();
         this.discardPile = new DiscardPileView();
         this.pilesContainer = new HBox(PILES_SPACING);
