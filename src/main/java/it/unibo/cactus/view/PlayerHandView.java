@@ -39,7 +39,7 @@ public class PlayerHandView extends VBox {
     public PlayerHandView(final String playerName, final Position position) {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(STANDARD_SPACING);
-        final boolean isHumanPlayer = (position == Position.BOTTOM);
+        final boolean isHumanPlayer = position == Position.BOTTOM;
         final Label nameLabel = new Label(playerName);
         nameLabel.getStyleClass().add("playerBadge");
         nameLabel.setStyle("-fx-font-size: " + (isHumanPlayer ? "18px" : "12px") + ";");
