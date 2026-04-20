@@ -106,14 +106,11 @@ final class GameTest {
     void testAdvancePlayerRotation() {
         for (int i = 0; i < 4; i++) {
             game.performAction(new DrawAction());
-            System.out.println("dopo draw: " + game.getCurrentRound().getPhase());
             game.performAction(new DiscardAction());
-            System.out.println("dopo discard: " + game.getCurrentRound().getPhase());
             if (game.getCurrentRound().getPhase() == TurnPhase.SPECIAL_POWER) {
                 game.performAction(new SkipPowerAction());
             }
             game.performAction(new EndTurnAction());
-            System.out.println("dopo endturn: " + game.getCurrentRound().getPhase());
             game.endSimultaneousDiscard();
         }
         assertEquals(players.get(0), game.getCurrentPlayer());
