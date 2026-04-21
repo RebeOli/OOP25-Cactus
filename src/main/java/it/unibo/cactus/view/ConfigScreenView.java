@@ -1,6 +1,7 @@
 package it.unibo.cactus.view;
 
 import it.unibo.cactus.model.players.BotDifficulty;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -11,11 +12,15 @@ import javafx.util.StringConverter;
 
 public class ConfigScreenView extends VBox {
 
-    private static final double MAX_FIELD_WIDTH = 200.0;
+    private static final double MAX_FIELD_WIDTH = 240.0;
+    private static final double SPACING = 16.0;
+    private static final double PADDING = 40.0;
 
     public ConfigScreenView(GameViewListener listener) {
         
         this.setAlignment(Pos.CENTER);
+        this.setSpacing(SPACING);
+        this.setPadding(new Insets(PADDING));
         
         final Label titleLbl = new Label("CACTUS!");
         titleLbl.getStyleClass().add("title");

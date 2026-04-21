@@ -17,6 +17,8 @@ public class GameViewImpl implements GameView {
         "/pileStyle.css",
         "/gameScreenStyle.css"
     );
+    private static final double SCENE_WIDTH = 1024.0;
+    private static final double SCENE_HEIGHT = 768.0;
 
     private final Stage primaryStage;
     private GameViewListener listener;
@@ -34,7 +36,7 @@ public class GameViewImpl implements GameView {
     @Override
     public void showConfigScreen(){
         final ConfigScreenView configView = new ConfigScreenView(this.listener);
-        final Scene scene = new Scene(configView);
+        final Scene scene = new Scene(configView, SCENE_WIDTH, SCENE_HEIGHT);
         applyStylesheet(scene);
         primaryStage.setScene(scene);
     };
@@ -43,7 +45,7 @@ public class GameViewImpl implements GameView {
     public void showGameScreen(){
         //To-DO: decommentare post merge
         /*GameScreenView gameScreen = new GameScreenView();
-        final Scene scene = new Scene(gameScreen);
+        final Scene scene = new Scene(gameScreen, SCENE_WIDTH, SCENE_HEIGHT);
         applyStylesheet(scene);
         primaryStage.setScene(scene);*/
     };
@@ -56,7 +58,7 @@ public class GameViewImpl implements GameView {
             .orElseThrow();
 
         final PeekInitialCardsView peekView = new PeekInitialCardsView(humanPlayer.getHand(), this.listener);
-        final Scene scene = new Scene(peekView);
+        final Scene scene = new Scene(peekView, SCENE_WIDTH, SCENE_HEIGHT);
         applyStylesheet(scene);
         primaryStage.setScene(scene);
     };
