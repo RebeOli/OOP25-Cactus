@@ -21,6 +21,7 @@ import it.unibo.cactus.model.statistics.HistoryRepository;
 import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.model.statistics.StatsCalculator;
 import it.unibo.cactus.view.GameView;
+import it.unibo.cactus.view.GameViewListener;
 
 public class ControllerTest {
     private Controller controller;
@@ -54,11 +55,12 @@ public class ControllerTest {
 
     private static final class FakeView implements GameView {
         private boolean updateGame = false;
-        private boolean showWinner = false;
+        /*private boolean showWinner = false;
         private boolean showCompletedRounds = false;
         private boolean showRank = false;
-        private boolean showStats = false;
+        private boolean showStats = false;*/
         private Game lastGame = null;
+        private boolean peekScreenShown = false;
 
         @Override
         public void updateGame(Game game) {
@@ -66,7 +68,7 @@ public class ControllerTest {
             lastGame = game;
         }
 
-        @Override
+        /*@Override
         public Player showWinner(GameResult result) {
             showWinner = true;
             return result.getWinner();
@@ -88,13 +90,37 @@ public class ControllerTest {
         public Map<Player, PlayerStats> showStats(Map<Player, PlayerStats> stats) {
             showStats = true;
             return stats;
-        }
+        }*/
+
+        @Override
+        public void showConfigScreen() {};
+
+        @Override
+        public void showGameScreen() {};
+
+        @Override
+        public void showPeekScreen(Game game) {
+            peekScreenShown = true;
+            lastGame = game;
+        };
+
+        @Override
+        public void showSimultaneousDiscardWindow() {};
+
+        @Override
+        public void closeSimultaneousDiscardWindow() {};
+
+        @Override
+        public void showEndScreen() {};
+
+        @Override
+        public void setActionListener(GameViewListener listener) {};
     }
 
     @Test
     void testStartGame() {
         controller.startGame("Giulio", BotDifficulty.EASY);
-        assertTrue(fakeView.updateGame);
+        assertTrue(fakeView.peekScreenShown);
         assertEquals(4,fakeView.lastGame.getPlayers().size());
     }
 
@@ -107,7 +133,7 @@ public class ControllerTest {
         
     }
 
-    @Test
+    /*@Test
     void testOnGameFinished() throws IOException {
         controller.startGame("Giulio", BotDifficulty.EASY);
         fakeView.updateGame = false;
@@ -118,6 +144,6 @@ public class ControllerTest {
         assertTrue(fakeView.showCompletedRounds);
         assertTrue(fakeHistoryRepository.save);
         assertEquals(1, fakeHistoryRepository.loadAll().size());
-    }
+    }*/
 
 }

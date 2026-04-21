@@ -48,7 +48,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void startGame(final String playerName, BotDifficulty difficulty) {
         this.game = GameFactory.createGame(playerName, difficulty);
         game.addObserver(this); //perchè come observer passiamo il controller
-        view.updateGame(game);
+        view.showPeekScreen(game);
     }
 
     @Override
@@ -65,6 +65,7 @@ public class ControllerImpl implements Controller, GameViewListener {
             if (simultaneousDiscardStartTime == 0) {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
                 humanWindowExpired = false;
+                view.showSimultaneousDiscardWindow();
             }
             
             if (!humanWindowExpired 
@@ -118,6 +119,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     private void closeSimultaneousDiscard() {
         simultaneousDiscardStartTime = 0;
         humanWindowExpired = false;
+        view.closeSimultaneousDiscardWindow();
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             game.endSimultaneousDiscard();
         }
@@ -137,9 +139,9 @@ public class ControllerImpl implements Controller, GameViewListener {
         var scores = calculator.calculateScores(game.getPlayers());
         final GameResult result = new GameResult(scores, game.getCompletedRounds());
 
-        view.showRank(result);
+        /*view.showRank(result);
         view.showWinner(result);
-        view.showCompletedRounds(result);
+        view.showCompletedRounds(result);*/
 
         try {
             historyManager.save(result);
@@ -157,7 +159,8 @@ public class ControllerImpl implements Controller, GameViewListener {
             }
         }
 
-        view.showStats(stats);
+        //view.showStats(stats);
+        view.showEndScreen();
         view.updateGame(game);
     }
 

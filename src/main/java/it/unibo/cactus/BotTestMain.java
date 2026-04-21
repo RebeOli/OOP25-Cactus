@@ -1,7 +1,6 @@
 package it.unibo.cactus;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,9 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.HistoryManagerImpl;
 import it.unibo.cactus.model.statistics.HistoryRepository;
-import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.model.statistics.StatsCalculator;
 import it.unibo.cactus.view.GameView;
+import it.unibo.cactus.view.GameViewListener;
 
 public class BotTestMain {
     public static void main(final String[] args) throws InterruptedException {
@@ -165,7 +164,7 @@ public class BotTestMain {
                 + " | Turno di: " + game.getCurrentPlayer().getName());
         }
 
-        @Override
+        /*
         public Player showWinner(final GameResult result) {
             System.out.println("=== VINCITORE: " + result.getWinner().getName() + " ===");
             System.out.println("=== PUNTEGGI ===");
@@ -174,12 +173,33 @@ public class BotTestMain {
             );
             return result.getWinner();
         }
-        @Override
+        
         public int showCompletedRounds(final GameResult result) { return result.completedRounds(); }
-        @Override
+        
         public Map<Player, Integer> showRank(final GameResult result) { return result.scores(); }
+        
+        public Map<Player, PlayerStats> showStats(final Map<Player, PlayerStats> stats) { return stats; }*/
+
         @Override
-        public Map<Player, PlayerStats> showStats(final Map<Player, PlayerStats> stats) { return stats; }
+        public void showConfigScreen() {};
+
+        @Override
+        public void showGameScreen() {};
+
+        @Override
+        public void showPeekScreen(Game game) {};
+
+        @Override
+        public void showSimultaneousDiscardWindow() {};
+
+        @Override
+        public void closeSimultaneousDiscardWindow() {};
+
+        @Override
+        public void showEndScreen() {};
+
+        @Override
+        public void setActionListener(GameViewListener listener) {};
     }
 
     private static final class FakeHistoryRepository implements HistoryRepository {
