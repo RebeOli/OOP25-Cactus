@@ -57,7 +57,8 @@ public final class ActionPanelView extends HBox {
         btnCactus.setOnAction(e -> controller.handleAction(new CallCactusAction()));
         btnEndTurn.setOnAction(e -> controller.handleAction(new EndTurnAction()));
         btnSkipPower.setOnAction(e -> controller.handleAction(new SkipPowerAction()));
-        btnActivePower.setOnAction(e -> controller.handleAction(new ActivatePowerAction())); // da sistemare il target
+        btnActivePower.setOnAction(e -> {});
+     // da sistemare il target
     }
 
     /**
@@ -69,6 +70,11 @@ public final class ActionPanelView extends HBox {
      */
     public void update(final List<RoundAction> availableActions, final boolean isHumanTurn,
         final Optional<SpecialPower> currentPower) {
+        /*btnActivePower.setOnAction(e -> {
+            currentPower.isPresent(power -> {
+                //TO DO
+            });
+        });*/
         if (!isHumanTurn) {
             btnCactus.setDisable(true);
             btnEndTurn.setDisable(true);
