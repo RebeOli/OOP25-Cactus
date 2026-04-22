@@ -12,7 +12,7 @@
     -fx-border-width: 2;
     -fx-text-fill: #3d2b10;
     -fx-font-family: "Georgia";
-    -fx-font-size: 12px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 
@@ -22,8 +22,9 @@
 }
 
 .btnAction:disabled {
-    -fx-opacity: 0.45;
-    -fx-cursor: default;
+    -fx-background-color: #fdf3e3; 
+    -fx-opacity: 0.5;
+    -fx-text-fill: #8a7a4a;
 }
 
 .btnCactus {
@@ -32,7 +33,7 @@
     -fx-border-width: 2;
     -fx-text-fill: #f0f0e8;
     -fx-font-family: "Georgia";
-    -fx-font-size: 13px;
+    -fx-font-size: 20px;
     -fx-cursor: hand;
 }
 
@@ -41,15 +42,56 @@
 }
 
 .btnCactus:disabled {
-    -fx-opacity: 0.45;
-    -fx-cursor: default;
+    -fx-background-color: #3d7a3d;
+    -fx-opacity: 0.5;
+    -fx-text-fill: #cccccc;
 }
 
 .statusLabel {
     -fx-font-family: "Georgia";
-    -fx-font-size: 11px;
+    -fx-font-size: 22px;
     -fx-text-fill: #5c4a1e;
     -fx-font-style: italic;
+}
+
+/* Questo deve coprire TUTTA l'area disponibile */
+.menuOverlay {
+    -fx-background-color: rgba(0, 0, 0, 0.6); /* Nero trasparente al 60% */
+    -fx-alignment: center;
+}
+
+/* Il rettangolo con i bottoni deve essere opaco per leggersi bene */
+.menuBox {
+    -fx-background-color: #fdf3e3; 
+    -fx-border-color: #c9a84c;
+    -fx-border-width: 3;
+    -fx-padding: 30;
+    -fx-spacing: 20;
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    /* Impedisce al box di allargarsi troppo */
+    -fx-max-width: 300;
+    -fx-max-height: 400;
+}
+
+/* Stile dei bottoni dentro il menu */
+.btnMenu {
+    -fx-background-color: #fdf3e3;
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 2;
+    -fx-text-fill: #3d2b10;
+    -fx-font-family: "Georgia";
+    -fx-font-size: 14px;
+    -fx-padding: 10 20 10 20;
+}
+
+.btnMenu:hover {
+    -fx-background-color: #FFD700; /* Oro quando passi sopra */
+    -fx-cursor: hand;
+}
+
+.btnMenu:pressed {
+    -fx-background-color: #e5c100;
 }
 
 .overlayBackground {
@@ -76,4 +118,45 @@
     -fx-font-family: "Georgia";
     -fx-font-size: 11px;
     -fx-text-fill: #8a7a4a;
+}
+/* Rettangolo centrale bianco con il numero */
+.discardCardDisplay {
+    -fx-background-color: white;
+    -fx-border-color: #3d2b10;
+    -fx-border-width: 2;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2b10;
+    -fx-alignment: center;
+}
+
+/* I 4 piccoli slot marroni */
+.cardSlotMini {
+    -fx-background-color: #3d2b10; /* Marrone scuro */
+    -fx-border-color: #8a7a4a;
+    -fx-border-width: 1;
+    -fx-text-fill: #8a7a4a;
+    -fx-font-size: 9px;
+    -fx-alignment: center;
+}
+
+/* La barra del tempo (color oro come nello screen) */
+.custom-progress-bar {
+    -fx-pref-height: 12px;
+}
+.custom-progress-bar .bar {
+    -fx-background-color: #c9a84c; /* Colore oro */
+    -fx-background-insets: 0;
+    -fx-background-radius: 2;
+}
+.custom-progress-bar .track {
+    -fx-background-color: #e0d5b5; /* Fondo barra spento */
+    -fx-background-radius: 2;
+}
+
+.titleLabel {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3d2b10;
 }
