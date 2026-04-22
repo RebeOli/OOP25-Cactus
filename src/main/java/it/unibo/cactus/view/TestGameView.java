@@ -53,7 +53,7 @@ public class TestGameView extends Application {
             List.of()
         );
     }*/
-        final TableView tableView = new TableView();
+        final TableView tableView = new TableView("Giocatore", "Bot1", "Bot2", "Bot3");
         final Player humanPlayer = new HumanPlayer("TestPlayer");
 
         final GameScreenView gameView = new GameScreenView(
