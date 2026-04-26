@@ -1,7 +1,6 @@
 package it.unibo.cactus.model.rounds.actions;
 
 import it.unibo.cactus.model.cards.Card;
-import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.cards.target.PowerTarget;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.MutableRound;
@@ -9,7 +8,6 @@ import it.unibo.cactus.model.rounds.MutableRound;
 /**
  * Action that activates the special power of the discarded card.
  *
- * @param game   the current {@link Game} instance
  * @param target the target of the special power
  */
 public record ActivatePowerAction(PowerTarget target) implements RoundAction {

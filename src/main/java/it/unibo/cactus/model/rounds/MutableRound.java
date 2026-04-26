@@ -12,13 +12,6 @@ import it.unibo.cactus.model.pile.DrawPile;
 public interface MutableRound extends Round {
 
     /**
-     * Returns the card drawn from the draw pile during the current turn, if present.
-     * 
-     * @return an {@link Optional} containing the drawn {@link Card}, or empty if no card has been drawn yet.
-     */
-    Optional<Card> getDrawnCard();
-
-    /**
      * Sets the card drawn during the current turn.
      * 
      * @param card an {@link Optional} containing the drawn {@link Card}, or empty to clear it.

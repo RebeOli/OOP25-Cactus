@@ -23,6 +23,8 @@ import it.unibo.cactus.model.rounds.actions.SwapAction;
  * Manages the phases of a single player's turn and the available actions for each phase.
  */
 public final class RoundImpl implements MutableRound {
+    private static final int MAX_HAND_SIZE = 6;
+
     private final Game game;
     private TurnPhase phase;
     private Optional<Card> drawnCard;
@@ -67,9 +69,9 @@ public final class RoundImpl implements MutableRound {
             case SIMULTANEOUS_DISCARD -> {
                 final List<RoundAction> actions = new ArrayList<>();
                 game.getPlayers().stream()
-                    .filter(p -> p.getHand().size() < 6)
+                    .filter(p -> p.getHand().size() < MAX_HAND_SIZE)
                     .forEach(p -> {
-                        for (int i = 0 ; i < p.getHand().size() ; i++) {
+                        for (int i = 0; i < p.getHand().size(); i++) {
                             actions.add(new SimultaneousDiscardAction(p, i));
                         }
                 });
@@ -141,7 +143,7 @@ public final class RoundImpl implements MutableRound {
 
     @Override
     public boolean isSimultaneousDiscardPhase() {
-        return this.phase.equals(TurnPhase.SIMULTANEOUS_DISCARD);
+        return this.phase == TurnPhase.SIMULTANEOUS_DISCARD;
     }
 
     @Override
@@ -153,7 +155,7 @@ public final class RoundImpl implements MutableRound {
     }
 
     @Override
-    public Optional<Card> getDiscardTopCard(){
+    public Optional<Card> getDiscardTopCard() {
         return getDiscardPile().getTopCard();
     }
 

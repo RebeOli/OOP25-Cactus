@@ -14,11 +14,9 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
-import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameFactory;
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DiscardPileImpl;
-import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.pile.DrawPileImpl;
 import it.unibo.cactus.model.players.AbstractPlayer;
 import it.unibo.cactus.model.players.BotDifficulty;
@@ -38,18 +36,20 @@ import it.unibo.cactus.model.players.Player;
 final class RoundTest {
     private static final int HAND_SIZE = 4;
     private static final int SWAP_INDEX = 1;
+    private static final int EXPECTED_HAND_SIZE_AFTER_DISCARD = 3;
+    private static final int EXPECTED_HAND_SIZE_AFTER_PENALTY = 5;
+    private static final int MAX_HAND_SIZE = 6;
+
     private static final CardImpl PLAIN_CARD = new CardImpl(Suit.BASTONI, 5, 5, null);
     private static final CardImpl POWER_CARD = new CardImpl(Suit.SPADE, 7, 7, (player, target) -> { });
     private DiscardPile discardPile;
     private Player player;
     private RoundImpl round;
-    private DrawPile drawPile;
-    private Game game;
 
     @BeforeEach
     void setUp() {
         discardPile = new DiscardPileImpl();
-        drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD, PLAIN_CARD));
+        final var drawPile = new DrawPileImpl(List.of(PLAIN_CARD, POWER_CARD, PLAIN_CARD));
         player = new AbstractPlayer("TestPlayer") {
             @Override
             public boolean isHuman() { 
@@ -62,7 +62,7 @@ final class RoundTest {
             new CardImpl(Suit.DENARI, 3, 3, null),
             new CardImpl(Suit.SPADE, 4, 4, null)
         )));
-        game = GameFactory.createGame("Pippo", BotDifficulty.EASY);
+        final var game = GameFactory.createGame("Pippo", BotDifficulty.EASY);
         round = new RoundImpl(game, discardPile, drawPile, player);
 
     }
@@ -224,7 +224,7 @@ final class RoundTest {
         discardPile.discard(new CardImpl(Suit.BASTONI, 4, 4, null));
         assertEquals(discardPile.getTopCard().orElseThrow().getValue(), player.getHand().getCard(3).getValue());
         round.execute(new SimultaneousDiscardAction(player, 3));
-        assertEquals(3, player.getHand().size());
+        assertEquals(EXPECTED_HAND_SIZE_AFTER_DISCARD, player.getHand().size());
     }
 
     @Test 
@@ -235,7 +235,7 @@ final class RoundTest {
         assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
         assertNotEquals(discardPile.getTopCard().orElseThrow().getValue(), player.getHand().getCard(3).getValue());
         round.execute(new SimultaneousDiscardAction(player, 3));
-        assertEquals(5, player.getHand().size());
+        assertEquals(EXPECTED_HAND_SIZE_AFTER_PENALTY, player.getHand().size());
     }
 
     @Test 
@@ -247,8 +247,8 @@ final class RoundTest {
         assertNotEquals(discardPile.getTopCard().orElseThrow().getValue(), player.getHand().getCard(3).getValue());
         round.execute(new SimultaneousDiscardAction(player, 3));
         round.execute(new SimultaneousDiscardAction(player, 3));
-        assertEquals(6, player.getHand().size());
-        assertThrows(NoSuchElementException.class, ()->round.execute(new SimultaneousDiscardAction(player, 3)));
+        assertEquals(MAX_HAND_SIZE, player.getHand().size());
+        assertThrows(NoSuchElementException.class, () -> round.execute(new SimultaneousDiscardAction(player, 3)));
     }
 
 }
