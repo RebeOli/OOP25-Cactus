@@ -3,7 +3,6 @@ package it.unibo.cactus.view;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.cactus.controller.Controller;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
@@ -32,7 +31,7 @@ public final class ActionPanelView extends HBox {
      * 
      * @param controller the game controller
      */
-    public ActionPanelView(final Controller controller) {
+    public ActionPanelView(final ActionPanelListener listener) {
         //Inizializzo i bottoni
         btnCactus = new Button("Call Cactus!");
         btnEndTurn = new Button("End Turn");
@@ -54,11 +53,10 @@ public final class ActionPanelView extends HBox {
         this.setSpacing(10);
         super.getChildren().addAll(allButtons);
 
-        btnCactus.setOnAction(e -> controller.handleAction(new CallCactusAction()));
-        btnEndTurn.setOnAction(e -> controller.handleAction(new EndTurnAction()));
-        btnSkipPower.setOnAction(e -> controller.handleAction(new SkipPowerAction()));
-        btnActivePower.setOnAction(e -> {});
-     // da sistemare il target
+        btnCactus.setOnAction(e -> listener.onCallCactusClicked());
+        btnEndTurn.setOnAction(e -> listener.onEndTurnClicked());
+        btnSkipPower.setOnAction(e -> listener.onSkipPowerClicked());
+        btnActivePower.setOnAction(e -> listener.onActivatePowerClicked());
     }
 
     /**
