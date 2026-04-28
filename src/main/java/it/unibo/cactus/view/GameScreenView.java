@@ -37,6 +37,11 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private final GameViewListener listener;
     private final TableView tableView;
     private Optional<SpecialPower> currentPower = Optional.empty();
+    private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
+    private int firstSwapPlayerIdx;
+    private int firstSwapCardIdx;
+
+    private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
     /**
      * Creates the main game screen.
@@ -122,6 +127,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final List<Card> playerHand, final Player player) {
         actionPanel.update(availableActions, isHumanTurn, currentPower);
         this.currentPower = currentPower;
+        this.currSwapPhase = SwapPhase.NO_SELECTION;
         message.setText(completeMessage);
         if (isSimultaneous) {
             overlay.show(topCard, playerHand, player);
@@ -141,15 +147,41 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final Optional<Integer> playerIdx = tableView.getSelectedPlayerIndex();
         final Optional<Integer> cardIdx = tableView.getSelectedCardIndex();
         if (power instanceof PeekPower) {
+            if (cardIdx.isEmpty()) {
+                return;
+            }
+
             listener.onPeekPowerRequested(cardIdx.get());
         }
         else if (power instanceof RevealPower) {
+            if (playerIdx.isEmpty() || cardIdx.isEmpty()) {
+                return;
+            }
+
             listener.onRevealPowerRequested(playerIdx.get(), cardIdx.get());
         }
         else if (power instanceof SwapPower) {
-            
+            handleSwapPhase(playerIdx, cardIdx);
         }
     };
+
+    private void handleSwapPhase (final Optional<Integer> playerIndx, final Optional<Integer> cardInx) {
+        if(playerIndx.isEmpty() || cardInx.isEmpty()) {
+            return;
+        }
+
+        if(currSwapPhase == SwapPhase.NO_SELECTION){
+            firstSwapPlayerIdx = playerIndx.get();
+            firstSwapCardIdx = cardInx.get();
+            currSwapPhase = SwapPhase.FIRST_SELECTED;
+        }
+        else if(currSwapPhase == SwapPhase.FIRST_SELECTED){
+            listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, 
+                playerIndx.get(), cardInx.get());
+
+            currSwapPhase = SwapPhase.NO_SELECTION;
+        }
+    }
 
     @Override
     public void onSkipPowerClicked(){
