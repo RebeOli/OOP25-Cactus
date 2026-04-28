@@ -9,13 +9,20 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import it.unibo.cactus.model.cards.target.PeekTarget;
+import it.unibo.cactus.model.cards.target.RevealTarget;
+import it.unibo.cactus.model.cards.target.SwapTarget;
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.game.GameFactory;
 import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
+import it.unibo.cactus.model.rounds.actions.CallCactusAction;
+import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
+import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
@@ -186,37 +193,45 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onSkipPowerRequested(){
-
+        handleAction(new SkipPowerAction());
     };
 
     @Override
     public void onCallCactusRequested(){
-
+        handleAction(new CallCactusAction());
     };
 
     @Override
     public void onEndTurnRequested(){
-
+        handleAction(new EndTurnAction());
     };
 
     @Override
     public void onPeekPowerRequested(int cardIndex){
-
+        handleAction(new ActivatePowerAction(new PeekTarget(cardIndex)));
     };
 
     @Override
     public void onRevealPowerRequested(int playerIndex, int cardIndex){
-
+        final Player playerTarget = game.getPlayers().get(playerIndex);
+        handleAction(new ActivatePowerAction(new RevealTarget(playerTarget, cardIndex)));
     };
 
     @Override
     public void onSwapPowerRequested(int playerAIndex, int cardAIndex, int playerBIndex, int cardBIndex){
+        final Player playerATarget = game.getPlayers().get(playerAIndex);
+        final Player playerBTarget = game.getPlayers().get(playerBIndex);
+        handleAction(new ActivatePowerAction(new SwapTarget(playerATarget, cardAIndex, playerBTarget, cardBIndex)));
 
     };
 
     @Override
     public void onSimultaneousDiscardRequested(final int cardIndex) {
-        
+        final Player playerTarget = game.getPlayers().stream()
+        .filter(p -> p.isHuman())
+        .findFirst()
+        .orElseThrow();
+        handleAction(new SimultaneousDiscardAction(playerTarget, cardIndex));
     }
 
 }
