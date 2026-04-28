@@ -183,4 +183,40 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void onPeekConfirmed() {
         //peek delle due carte concluso. Mostro il tavolo da gioco
     }
+
+    @Override
+    public void onSkipPowerRequested(){
+
+    };
+
+    @Override
+    public void onCallCactusRequested(){
+
+    };
+
+    @Override
+    public void onEndTurnRequested(){
+
+    };
+
+    @Override
+    public void onPeekPowerRequested(int cardIndex){
+
+    };
+
+    @Override
+    public void onRevealPowerRequested(int playerIndex, int cardIndex){
+
+    };
+
+    @Override
+    public void onSwapPowerRequested(int playerAIndex, int cardAIndex, int playerBIndex, int cardBIndex){
+
+    };
+
+    @Override
+    public void onSimultaneousDiscardRequested(final int cardIndex) {
+        
+    }
+
 }
