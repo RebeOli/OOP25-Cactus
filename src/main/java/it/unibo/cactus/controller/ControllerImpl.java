@@ -249,8 +249,8 @@ public class ControllerImpl implements Controller, GameViewListener {
 
         final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
         final Optional<SpecialPower> currSpecialPower = round.getDrawnCard().flatMap(Card::getSpecialPower);
-        //TO-DO: implementa messaggio
-        return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), "", currSpecialPower, 
+        
+        return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
             topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer);
     }
 
@@ -259,6 +259,17 @@ public class ControllerImpl implements Controller, GameViewListener {
         .filter(p -> p.isHuman())
         .findFirst()
         .orElseThrow();
+    }
+
+    private String getRoundMessage(final Round round){
+        return switch (round.getPhase()) {
+            case DRAW -> "Pesca una carta dal mazzo";
+            case DECISION -> "Sostituisci una tua carta o scarta quella pescata";
+            case SPECIAL_POWER -> "Attiva il potere speciale o saltalo";
+            case END_TURN -> "Fine turno: chiama Cactus! o passa";
+            case SIMULTANEOUS_DISCARD -> "Scarto simultaneo! Vuoi scartare una carta?";
+            case ENDED -> "";
+        };
     }
 
 }
