@@ -61,7 +61,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void startGame(final String playerName, BotDifficulty difficulty) {
         this.game = GameFactory.createGame(playerName, difficulty);
         game.addObserver(this); //perchè come observer passiamo il controller
-        view.showPeekScreen(game);
+        view.showPeekScreen(getHumanPlayer().getHand());
     }
 
     @Override
@@ -249,7 +249,7 @@ public class ControllerImpl implements Controller, GameViewListener {
 
         final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
         final Optional<SpecialPower> currSpecialPower = round.getDrawnCard().flatMap(Card::getSpecialPower);
-        
+
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
             topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer);
     }

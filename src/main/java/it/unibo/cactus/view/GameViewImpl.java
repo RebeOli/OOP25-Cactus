@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.players.PlayerHand;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -53,13 +54,8 @@ public class GameViewImpl implements GameView {
     };
 
     @Override
-    public void showPeekScreen(Game game){
-        final Player humanPlayer = game.getPlayers().stream()
-            .filter(Player::isHuman)
-            .findFirst()
-            .orElseThrow();
-
-        final PeekInitialCardsView peekView = new PeekInitialCardsView(humanPlayer.getHand(), this.listener);
+    public void showPeekScreen(final PlayerHand hand){
+        final PeekInitialCardsView peekView = new PeekInitialCardsView(hand, this.listener);
         final Scene scene = new Scene(peekView, SCENE_WIDTH, SCENE_HEIGHT);
         applyStylesheet(scene);
         primaryStage.setScene(scene);
