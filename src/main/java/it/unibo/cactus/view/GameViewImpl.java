@@ -22,6 +22,7 @@ public class GameViewImpl implements GameView {
 
     private final Stage primaryStage;
     private GameViewListener listener;
+    private GameScreenView gameScreen;
 
     public GameViewImpl(final Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -42,12 +43,12 @@ public class GameViewImpl implements GameView {
     };
 
     @Override
-    public void showGameScreen(){
-        //To-DO: decommentare post merge
-        /*GameScreenView gameScreen = new GameScreenView();
+    public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name){
+        TableView tableView = new TableView(humanName, bot1Name, bot2Name, bot3Name);
+        this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showConfigScreen, this::showConfigScreen);
         final Scene scene = new Scene(gameScreen, SCENE_WIDTH, SCENE_HEIGHT);
         applyStylesheet(scene);
-        primaryStage.setScene(scene);*/
+        primaryStage.setScene(scene);
     };
 
     @Override

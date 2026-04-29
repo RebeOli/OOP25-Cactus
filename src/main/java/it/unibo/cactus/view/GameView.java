@@ -8,7 +8,7 @@ public interface GameView {
 
     void showConfigScreen();
 
-    void showGameScreen();
+    void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name);
 
     void showPeekScreen(Game game);
 
