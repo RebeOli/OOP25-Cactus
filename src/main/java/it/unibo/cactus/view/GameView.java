@@ -4,7 +4,7 @@ import it.unibo.cactus.model.game.Game;
 
 public interface GameView {
 
-    void updateGame(Game game);
+    void updateGame(final GameUpdateData data);
 
     void showConfigScreen();
 

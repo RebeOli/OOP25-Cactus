@@ -1,15 +1,11 @@
 package it.unibo.cactus.view;
 
-import java.util.List;
 import java.util.Optional;
 
-import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.SwapPower;
-import it.unibo.cactus.model.players.Player;
-import it.unibo.cactus.model.rounds.RoundAction;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -122,15 +118,13 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
      * @param playerHand the human player's hand
      * @param player the human player
      */
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage,
-        final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous,
-        final List<Card> playerHand, final Player player) {
-        actionPanel.update(availableActions, isHumanTurn, currentPower);
-        this.currentPower = currentPower;
+    public void update(GameUpdateData data) {
+        actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
+        this.currentPower = data.currentPower();
         this.currSwapPhase = SwapPhase.NO_SELECTION;
-        message.setText(completeMessage);
-        if (isSimultaneous) {
-            overlay.show(topCard, playerHand, player);
+        message.setText(data.completeMessage());
+        if (data.isSimultaneous()) {
+            overlay.show(data.topCard(), data.playerHand(), data.player());
         } else {
             overlay.hide();
         }

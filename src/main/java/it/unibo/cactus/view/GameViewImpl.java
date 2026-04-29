@@ -29,9 +29,10 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void updateGame(Game game){
-        // TODO: sostituire con GameScreenView post merge      
-        //gameScreen.update(..);
+    public void updateGame(final GameUpdateData data){     
+        if(gameScreen != null){
+            gameScreen.update(data);
+        }
     };
 
     @Override

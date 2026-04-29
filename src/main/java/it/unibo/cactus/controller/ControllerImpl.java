@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.cards.target.RevealTarget;
 import it.unibo.cactus.model.cards.target.SwapTarget;
@@ -17,6 +20,8 @@ import it.unibo.cactus.model.game.GameFactory;
 import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.BotPlayer;
 import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.players.PlayerHand;
+import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -27,6 +32,7 @@ import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
+import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
 import it.unibo.cactus.view.GameViewListener;
 
@@ -168,17 +174,17 @@ public class ControllerImpl implements Controller, GameViewListener {
 
         //view.showStats(stats);
         view.showEndScreen();
-        view.updateGame(game);
+        view.updateGame(buildUpdateData());
     }
 
     @Override
     public void onRoundAdvanced() {
-        this.view.updateGame(game);
+        this.view.updateGame(buildUpdateData());
     }
 
     @Override
     public void onGameStateChanged() {
-        view.updateGame(game);
+        view.updateGame(buildUpdateData());
     }
 
     @Override
@@ -227,11 +233,32 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onSimultaneousDiscardRequested(final int cardIndex) {
-        final Player playerTarget = game.getPlayers().stream()
+        final Player playerTarget = getHumanPlayer();
+        handleSimultaneousDiscard(new SimultaneousDiscardAction(playerTarget, cardIndex));
+    }
+
+    private GameUpdateData buildUpdateData() {
+        final Player humanPlayer = getHumanPlayer();
+        final Round round = game.getCurrentRound();
+
+        final PlayerHand hand = humanPlayer.getHand();
+        final List<Card> cards = new ArrayList<>();
+        for(int i = 0; i < hand.size(); i++){
+            cards.add(hand.getCard(i));
+        }
+
+        final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
+        final Optional<SpecialPower> currSpecialPower = round.getDrawnCard().flatMap(Card::getSpecialPower);
+        //TO-DO: implementa messaggio
+        return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), "", currSpecialPower, 
+            topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer);
+    }
+
+    private Player getHumanPlayer(){
+        return game.getPlayers().stream()
         .filter(p -> p.isHuman())
         .findFirst()
         .orElseThrow();
-        handleSimultaneousDiscard(new SimultaneousDiscardAction(playerTarget, cardIndex));
     }
 
 }
