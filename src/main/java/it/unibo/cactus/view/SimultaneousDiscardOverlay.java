@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.function.IntConsumer;
 
 import it.unibo.cactus.model.cards.Card;
-import it.unibo.cactus.model.players.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -92,7 +91,7 @@ public final class SimultaneousDiscardOverlay extends StackPane {
      * @param playerHand the human player's hand
      * @param player the human player
      */
-    public void show(final Card topCard, final List<Card> playerHand, final Player player) {
+    public void show(final Card topCard, final List<Card> playerHand) {
         if (topCard != null) {
             // usa ImageLoader di Mondardini
             discardedCardView.setCardData(topCard);

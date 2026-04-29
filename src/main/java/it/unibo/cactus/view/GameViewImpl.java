@@ -3,7 +3,7 @@ package it.unibo.cactus.view;
 import java.net.URL;
 import java.util.List;
 
-import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import javafx.scene.Scene;
@@ -31,7 +31,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void updateGame(final GameUpdateData data){     
-        if(gameScreen != null){
+        if(gameScreen != null) {
             gameScreen.update(data);
         }
     };
@@ -62,13 +62,17 @@ public class GameViewImpl implements GameView {
     };
 
     @Override
-    public void showSimultaneousDiscardWindow(){
-        //TO-DO: dopo merge
+    public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand){
+        if(gameScreen != null){
+            gameScreen.showSimultaneousDiscardWindow(topCard, playerHand);
+        }
     };
 
     @Override
     public void closeSimultaneousDiscardWindow(){
-        //TO-DO: dopo merge
+        if(gameScreen != null){
+            gameScreen.hideSimultaneousDiscardWindow();
+        }
     };
 
     @Override

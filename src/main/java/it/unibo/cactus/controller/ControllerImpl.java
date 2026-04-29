@@ -78,7 +78,14 @@ public class ControllerImpl implements Controller, GameViewListener {
             if (simultaneousDiscardStartTime == 0) {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
                 humanWindowExpired = false;
-                view.showSimultaneousDiscardWindow();
+
+                final PlayerHand hand = getHumanPlayer().getHand();
+                final List<Card> cards = new ArrayList<>();
+                for(int i = 0; i < hand.size(); i++){
+                    cards.add(hand.getCard(i));
+                }
+
+                view.showSimultaneousDiscardWindow(game.getDiscardPile().getTopCard().orElse(null), cards);
             }
             
             if (!humanWindowExpired 

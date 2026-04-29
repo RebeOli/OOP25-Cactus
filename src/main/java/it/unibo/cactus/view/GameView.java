@@ -1,5 +1,8 @@
 package it.unibo.cactus.view;
 
+import java.util.List;
+
+import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.PlayerHand;
 
 public interface GameView {
@@ -12,7 +15,7 @@ public interface GameView {
 
     void showPeekScreen(final PlayerHand hand);
 
-    void showSimultaneousDiscardWindow();
+    void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand);
 
     void closeSimultaneousDiscardWindow();
 

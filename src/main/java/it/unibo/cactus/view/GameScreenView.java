@@ -1,7 +1,9 @@
 package it.unibo.cactus.view;
 
+import java.util.List;
 import java.util.Optional;
 
+import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
@@ -118,15 +120,15 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
      * @param playerHand the human player's hand
      * @param player the human player
      */
-    public void update(GameUpdateData data) {
+    public void update(final GameUpdateData data) {
         actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
         this.currentPower = data.currentPower();
         this.currSwapPhase = SwapPhase.NO_SELECTION;
         message.setText(data.completeMessage());
         if (data.isSimultaneous()) {
-            overlay.show(data.topCard(), data.playerHand(), data.player());
+            showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
         } else {
-            overlay.hide();
+            hideSimultaneousDiscardWindow();
         }
     }
 
@@ -191,5 +193,13 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     public void onEndTurnClicked(){
         listener.onEndTurnRequested();
     };
+
+    public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {
+        overlay.show(topCard, playerHand);
+    }
+
+    public void hideSimultaneousDiscardWindow() {
+        overlay.hide();
+    }
 
 }
