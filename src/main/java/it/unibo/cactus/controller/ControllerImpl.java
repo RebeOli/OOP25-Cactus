@@ -196,7 +196,13 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onPeekConfirmed() {
-        //peek delle due carte concluso. Mostro il tavolo da gioco
+        List<String> botNames = new ArrayList<>();
+        for(Player p : game.getPlayers()) {
+            if(!p.isHuman()) {
+                botNames.add(p.getName());
+            }
+        }
+        view.showGameScreen(getHumanPlayer().getName(), botNames.get(0), botNames.get(1), botNames.get(2));
     }
 
     @Override
@@ -250,7 +256,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         }
 
         final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
-        final Optional<SpecialPower> currSpecialPower = round.getDrawnCard().flatMap(Card::getSpecialPower);
+        final Optional<SpecialPower> currSpecialPower = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
 
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
             topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer);
