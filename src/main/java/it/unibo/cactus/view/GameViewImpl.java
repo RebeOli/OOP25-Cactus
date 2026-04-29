@@ -2,6 +2,7 @@ package it.unibo.cactus.view;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
@@ -76,12 +77,14 @@ public class GameViewImpl implements GameView {
     };
 
     @Override
-    public void showEndScreen(){
-        //To-DO: decommentare post merge
-        /*EndGameScreenView endGameScreen = new EndGameScreenView();
-        final Scene scene = new Scene(endGameScreen);
+    public void showEndScreen(final Map<Player, Integer> finalsScores){
+        final EndScreenView endGameScreen = new EndScreenView();
+        endGameScreen.showResults(finalsScores);
+        endGameScreen.setOnPlayAgainRequested(this::showConfigScreen);
+        endGameScreen.setOnCloseRequested(primaryStage::close);
+        final Scene scene = new Scene(endGameScreen, SCENE_WIDTH, SCENE_HEIGHT);
         applyStylesheet(scene);
-        primaryStage.setScene(scene);*/
+        primaryStage.setScene(scene);
     };
 
     @Override

@@ -159,10 +159,6 @@ public class ControllerImpl implements Controller, GameViewListener {
         var scores = calculator.calculateScores(game.getPlayers());
         final GameResult result = new GameResult(scores, game.getCompletedRounds());
 
-        /*view.showRank(result);
-        view.showWinner(result);
-        view.showCompletedRounds(result);*/
-
         try {
             historyManager.save(result);
         } catch (final IOException e) {
@@ -179,8 +175,7 @@ public class ControllerImpl implements Controller, GameViewListener {
             }
         }
 
-        //view.showStats(stats);
-        view.showEndScreen();
+        view.showEndScreen(scores);
         view.updateGame(buildUpdateData());
     }
 

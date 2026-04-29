@@ -1,8 +1,10 @@
 package it.unibo.cactus.view;
 
 import java.util.List;
+import java.util.Map;
 
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 
 public interface GameView {
@@ -19,7 +21,7 @@ public interface GameView {
 
     void closeSimultaneousDiscardWindow();
 
-    void showEndScreen();
+    void showEndScreen(final Map<Player, Integer> finalsScores);
 
     void setActionListener(GameViewListener listener);
 
