@@ -40,6 +40,10 @@ public final class BotPlayer extends AbstractPlayer {
      * Selects the next action for this bot's turn.
      */
     public RoundAction chooseAction(final Round round) {
-        return strategy.chooseAction(round);       
+        return strategy.chooseAction(round);
+    }
+
+    public void performInitialPeek() {
+        strategy.performInitialPeek(getHand());
     }
 }

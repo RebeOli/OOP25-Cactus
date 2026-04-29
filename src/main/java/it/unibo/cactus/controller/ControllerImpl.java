@@ -196,6 +196,11 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onPeekConfirmed() {
+        for (final Player player : game.getPlayers()) {
+            if (!player.isHuman() && player instanceof final BotPlayer botPlayer) {
+                botPlayer.performInitialPeek();
+            }
+        }
         List<String> botNames = new ArrayList<>();
         for(Player p : game.getPlayers()) {
             if(!p.isHuman()) {

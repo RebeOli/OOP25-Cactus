@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -28,6 +29,10 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
     public EasyBotStrategy(final Player self) {
         this.self = self;
         this.roundsPlayed = 0;
+    }
+
+    @Override
+    public void performInitialPeek(final PlayerHand hand) {
     }
 
     @Override

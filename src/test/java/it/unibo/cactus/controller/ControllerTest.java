@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.cactus.model.cards.Card;
-import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
@@ -20,7 +19,6 @@ import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.HistoryManagerImpl;
 import it.unibo.cactus.model.statistics.HistoryRepository;
-import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.model.statistics.StatsCalculator;
 import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
@@ -105,17 +103,17 @@ public class ControllerTest {
         
     }
 
-    /*@Test
+    @Test
     void testOnGameFinished() throws IOException {
         controller.startGame("Giulio", BotDifficulty.EASY);
         fakeView.updateGame = false;
         controller.onGameFinished();
-        assertTrue(fakeView.showRank);
+        /*assertTrue(fakeView.showRank);
         assertTrue(fakeView.showStats);
         assertTrue(fakeView.showWinner);
-        assertTrue(fakeView.showCompletedRounds);
+        assertTrue(fakeView.showCompletedRounds);*/
         assertTrue(fakeHistoryRepository.save);
         assertEquals(1, fakeHistoryRepository.loadAll().size());
-    }*/
+    }
 
 }

@@ -36,6 +36,10 @@ public class MediumBotStrategy extends AbstractBotStrategy {
     }
 
     @Override
+    public void performInitialPeek(final PlayerHand hand) {
+    }
+
+    @Override
     protected RoundAction chooseDecision(final Round round) {
         final int drawnScore = round.getDrawnCard().orElseThrow().getScore();
         int maxVisibleScore = -1;
