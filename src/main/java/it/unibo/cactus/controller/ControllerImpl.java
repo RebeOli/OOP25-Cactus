@@ -231,7 +231,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         .filter(p -> p.isHuman())
         .findFirst()
         .orElseThrow();
-        handleAction(new SimultaneousDiscardAction(playerTarget, cardIndex));
+        handleSimultaneousDiscard(new SimultaneousDiscardAction(playerTarget, cardIndex));
     }
 
 }
