@@ -64,15 +64,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
 
-        // top, senza titolo in alto
-        /*final Button btnMenu = new Button("Menu");
-        btnMenu.getStyleClass().add("btnMenu");
-        btnMenu.setOnAction(e -> menuOverlay.show());
-        final HBox topBar = new HBox(btnMenu);
-        topBar.setAlignment(Pos.TOP_RIGHT);
-        topBar.setPadding(new Insets(20, 20, 0, 0));
-        gameLayout.setTop(topBar);*/
-
         //con titolo in alto. 
         final Button btnMenu = new Button("Menu");
         btnMenu.getStyleClass().add("btnMenu");
