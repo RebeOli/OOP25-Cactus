@@ -37,6 +37,15 @@ public class HardBotStrategy extends AbstractBotStrategy {
     }
 
     @Override
+    public void performInitialPeek(final PlayerHand hand) {
+        for (int i = 0; i < 2; i++) {
+            if (hand.isHidden(i)) {
+                memory.rememberCard(i, hand.getCard(i));
+            }
+        }
+    }
+
+    @Override
     protected RoundAction chooseDecision(final Round round) {
         final int drawnScore = round.getDrawnCard().orElseThrow().getScore();
         final Map<Integer, Card> knownCards = memory.getAllKnownCards();

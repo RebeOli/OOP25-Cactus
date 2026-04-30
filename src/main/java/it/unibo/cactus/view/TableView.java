@@ -1,5 +1,8 @@
 package it.unibo.cactus.view;
 
+import java.util.List;
+import java.util.Optional;
+
 import it.unibo.cactus.model.cards.Card;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,6 +31,9 @@ public class TableView extends BorderPane {
     private final DiscardPileView discardPile;
     private final HBox pilesContainer;
     private final CardView zoomedDrawnCard;
+    private final List<PlayerHandView> hands;    
+    private Optional<Integer> selectedPlayerIndex = Optional.empty();
+    private Optional<Integer> selectedCardIndex = Optional.empty();
 
     /**
      * Constructs the game table, setting up the players and the layout.
@@ -44,6 +50,7 @@ public class TableView extends BorderPane {
         this.bot1Hand = new PlayerHandView(bot1Name, PlayerHandView.Position.LEFT);
         this.bot2Hand = new PlayerHandView(bot2Name, PlayerHandView.Position.TOP);
         this.bot3Hand = new PlayerHandView(bot3Name, PlayerHandView.Position.RIGHT);
+        this.hands = List.of(humanHand, bot1Hand, bot2Hand, bot3Hand);
         this.setBottom(humanHand);
         this.setLeft(bot1Hand);
         this.setTop(bot2Hand);
@@ -65,14 +72,12 @@ public class TableView extends BorderPane {
         centerArea.getChildren().addAll(pilesContainer, zoomedDrawnCard);
         this.setCenter(centerArea);
         setupResponsiveSizes();
+        setupHandlers();           
     }
 
     private void setupResponsiveSizes() {
         final javafx.beans.binding.DoubleBinding standardCardHeight = this.heightProperty().multiply(CARD_HEIGHT_RATIO);
-        humanHand.bindCardsHeight(standardCardHeight);
-        bot1Hand.bindCardsHeight(standardCardHeight);
-        bot2Hand.bindCardsHeight(standardCardHeight);
-        bot3Hand.bindCardsHeight(standardCardHeight);
+        hands.forEach(p -> { p.bindCardsHeight(standardCardHeight); });
         final javafx.beans.binding.DoubleBinding pileHeight = this.heightProperty().multiply(PILE_HEIGHT_RATIO);
         drawPile.prefHeightProperty().bind(pileHeight);
         drawPile.maxHeightProperty().bind(pileHeight);
@@ -85,7 +90,7 @@ public class TableView extends BorderPane {
 
         zoomedDrawnCard.bindHeight(this.heightProperty().multiply(ZOOMED_CARD_RATIO));
     }
-
+    
     /**
      * Shows the drawn card in the center of the table.
      *
@@ -166,4 +171,46 @@ public class TableView extends BorderPane {
     public CardView getZoomedDrawnCard() {
         return zoomedDrawnCard;
     }
+
+    public Optional<Integer> getSelectedPlayerIndex() {
+        return selectedPlayerIndex;
+    }
+
+    public Optional<Integer> getSelectedCardIndex() {
+        return selectedCardIndex;
+    }
+
+    private void setupHandlers() {
+        for (int p = 0; p < hands.size(); p++) {
+            final int pi = p;
+            for (int s = 0; s < 6; s++) {
+                final int si = s;
+                final CardView slot = hands.get(p).getSlot(s);
+                if (slot != null) {
+                    slot.setOnCardClicked(() -> onCardSelected(pi, si));
+                }
+            }
+        } 
+    }
+
+    private void onCardSelected(final int playerIndex, final int cardIndex) {
+        clearSelection();
+        selectedPlayerIndex = Optional.of(playerIndex);
+        selectedCardIndex = Optional.of(cardIndex);
+        final CardView card = hands.get(playerIndex).getSlot(cardIndex);
+        if (card != null) {
+            card.setHighlight(true);
+        }
+    }
+
+    private void clearSelection() {
+        if (selectedPlayerIndex.isPresent()) {
+            final CardView card = hands.get(selectedPlayerIndex.get()).getSlot(selectedCardIndex.get());
+            if (card != null) {
+                card.setHighlight(false);
+            }
+        }
+        selectedPlayerIndex = Optional.empty();
+        selectedCardIndex = Optional.empty();
+    }    
 }

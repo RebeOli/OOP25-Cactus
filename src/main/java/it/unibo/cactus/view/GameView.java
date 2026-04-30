@@ -1,23 +1,28 @@
 package it.unibo.cactus.view;
 
+import java.util.List;
 import java.util.Map;
 
-import it.unibo.cactus.model.game.Game;
+import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
-import it.unibo.cactus.model.score.GameResult;
-import it.unibo.cactus.model.statistics.PlayerStats;
+import it.unibo.cactus.model.players.PlayerHand;
 
 public interface GameView {
 
-    void updateGame(Game game);
+    void updateGame(final GameUpdateData data);
 
-    Player showWinner(GameResult result);
+    void showConfigScreen();
 
-    int showCompletedRounds(GameResult result);
+    void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name);
 
-    Map<Player,Integer> showRank(GameResult result);
+    void showPeekScreen(final PlayerHand hand);
 
-    Map<Player,PlayerStats> showStats(Map<Player,PlayerStats> stats);
+    void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand);
 
+    void closeSimultaneousDiscardWindow();
+
+    void showEndScreen(final Map<Player, Integer> finalsScores);
+
+    void setActionListener(GameViewListener listener);
 
 }

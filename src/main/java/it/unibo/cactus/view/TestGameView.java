@@ -83,7 +83,7 @@ public class TestGameView extends Application {
             new CardImpl(Suit.DENARI, 5, 5, null)
         );
         
-        gameView.update(
+        gameView.update(new GameUpdateData(
             List.of(),
             true,
             "Qualcuno ha scartato! Hai una carta uguale?",
@@ -92,7 +92,7 @@ public class TestGameView extends Application {
             true,
             handTest, 
             humanPlayer
-        );
+        ));
     }
 
     public static void main(String[] args) {

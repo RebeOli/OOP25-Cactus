@@ -3,11 +3,11 @@ package it.unibo.cactus.view;
 import java.util.List;
 import java.util.Optional;
 
-import it.unibo.cactus.controller.Controller;
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.PeekPower;
+import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
-import it.unibo.cactus.model.players.Player;
-import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.cards.SwapPower;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
  * Composes the table, action panel, message label, overlays and menu.
  */
 
-public final class GameScreenView extends StackPane {
+public final class GameScreenView extends StackPane implements ActionPanelListener {
     private static final int TOP_BAR_PADDING = 10;
     private static final int TOP_BAR_SIDE_PADDING = 20;
     private static final int BOTTOM_SPACING = 15;
@@ -32,6 +32,14 @@ public final class GameScreenView extends StackPane {
     private final Label message;
     private final SimultaneousDiscardOverlay overlay;
     private final MenuOverlay menuOverlay;
+    private final GameViewListener listener;
+    private final TableView tableView;
+    private Optional<SpecialPower> currentPower = Optional.empty();
+    private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
+    private int firstSwapPlayerIdx;
+    private int firstSwapCardIdx;
+
+    private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
     /**
      * Creates the main game screen.
@@ -42,12 +50,14 @@ public final class GameScreenView extends StackPane {
      * @param onStats action to run on stats
      * @param onHome action to run on home
      */
-    public GameScreenView(final Controller controller, final TableView tableView,
+    public GameScreenView(final GameViewListener listener, final TableView tableView,
                           final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
 
+        this.listener = listener;
+        this.tableView = tableView;                
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
-        overlay = new SimultaneousDiscardOverlay(controller);
+        overlay = new SimultaneousDiscardOverlay(cardIndex -> { listener.onSimultaneousDiscardRequested(cardIndex); });
         menuOverlay = new MenuOverlay(onRestart, onStats, onHome);
         menuOverlay.setContinueAction(menuOverlay::hide);
 
@@ -81,7 +91,7 @@ public final class GameScreenView extends StackPane {
         gameLayout.setTop(topBar);
 
         // bottom
-        actionPanel = new ActionPanelView(controller);
+        actionPanel = new ActionPanelView(this);
         message = new Label("Draw a card from the pile");
         message.getStyleClass().add("statusLabel");
         final VBox bottomPanel = new VBox(message, actionPanel);
@@ -110,15 +120,86 @@ public final class GameScreenView extends StackPane {
      * @param playerHand the human player's hand
      * @param player the human player
      */
-    public void update(final List<RoundAction> availableActions, final boolean isHumanTurn, final String completeMessage,
-        final Optional<SpecialPower> currentPower, final Card topCard, final boolean isSimultaneous,
-        final List<Card> playerHand, final Player player) {
-        actionPanel.update(availableActions, isHumanTurn, currentPower);
-        message.setText(completeMessage);
-        if (isSimultaneous) {
-            overlay.show(topCard, playerHand, player);
+    public void update(final GameUpdateData data) {
+        actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
+        this.currentPower = data.currentPower();
+        this.currSwapPhase = SwapPhase.NO_SELECTION;
+        message.setText(data.completeMessage());
+        if (data.isSimultaneous()) {
+            showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
         } else {
-            overlay.hide();
+            hideSimultaneousDiscardWindow();
         }
     }
+
+    @Override
+    public void onActivatePowerClicked(){
+
+        if (currentPower.isEmpty()) {
+            return;
+        }
+
+        final SpecialPower power = currentPower.get();
+        final Optional<Integer> playerIdx = tableView.getSelectedPlayerIndex();
+        final Optional<Integer> cardIdx = tableView.getSelectedCardIndex();
+        if (power instanceof PeekPower) {
+            if (cardIdx.isEmpty()) {
+                return;
+            }
+
+            listener.onPeekPowerRequested(cardIdx.get());
+        }
+        else if (power instanceof RevealPower) {
+            if (playerIdx.isEmpty() || cardIdx.isEmpty()) {
+                return;
+            }
+
+            listener.onRevealPowerRequested(playerIdx.get(), cardIdx.get());
+        }
+        else if (power instanceof SwapPower) {
+            handleSwapPhase(playerIdx, cardIdx);
+        }
+    };
+
+    private void handleSwapPhase (final Optional<Integer> playerIndx, final Optional<Integer> cardInx) {
+        if(playerIndx.isEmpty() || cardInx.isEmpty()) {
+            return;
+        }
+
+        if(currSwapPhase == SwapPhase.NO_SELECTION){
+            firstSwapPlayerIdx = playerIndx.get();
+            firstSwapCardIdx = cardInx.get();
+            currSwapPhase = SwapPhase.FIRST_SELECTED;
+        }
+        else if(currSwapPhase == SwapPhase.FIRST_SELECTED){
+            listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, 
+                playerIndx.get(), cardInx.get());
+
+            currSwapPhase = SwapPhase.NO_SELECTION;
+        }
+    }
+
+    @Override
+    public void onSkipPowerClicked(){
+        listener.onSkipPowerRequested();
+    };
+
+    @Override
+    public void onCallCactusClicked(){
+        listener.onCallCactusRequested();
+    };
+
+    @Override
+    public void onEndTurnClicked(){
+        listener.onEndTurnRequested();
+    };
+
+    public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {
+        overlay.show(topCard, playerHand);
+    }
+
+    public void hideSimultaneousDiscardWindow() {
+        overlay.hide();
+    }
+
 }
