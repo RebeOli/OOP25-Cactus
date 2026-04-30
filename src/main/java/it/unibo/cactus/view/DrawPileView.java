@@ -53,4 +53,12 @@ public final class DrawPileView extends StackPane {
         }
     }
 
+    public void setOnDrawAction(final Runnable action) {
+        this.setOnMouseClicked(event -> {
+            if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
+                action.run();
+            }
+        });
+    }
+
 }
