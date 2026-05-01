@@ -130,7 +130,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
         this.currentPower = data.currentPower();
         this.currSwapPhase = SwapPhase.NO_SELECTION;
-
+        tableView.setSelectionEnabled(data.isHumanTurn());
         if(!data.allHands().isEmpty()) {
             tableView.updateAllHands(data.allHands());
         }
