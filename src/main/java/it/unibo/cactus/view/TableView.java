@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.players.PlayerHand;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
@@ -31,9 +32,10 @@ public class TableView extends BorderPane {
     private final DiscardPileView discardPile;
     private final HBox pilesContainer;
     private final CardView zoomedDrawnCard;
-    private final List<PlayerHandView> hands;    
+    private final List<PlayerHandView> hands;
     private Optional<Integer> selectedPlayerIndex = Optional.empty();
     private Optional<Integer> selectedCardIndex = Optional.empty();
+    private boolean selectionEnabled = false;
 
     /**
      * Constructs the game table, setting up the players and the layout.
@@ -72,7 +74,7 @@ public class TableView extends BorderPane {
         centerArea.getChildren().addAll(pilesContainer, zoomedDrawnCard);
         this.setCenter(centerArea);
         setupResponsiveSizes();
-        setupHandlers();           
+        setupHandlers();
     }
 
     private void setupResponsiveSizes() {
@@ -109,6 +111,12 @@ public class TableView extends BorderPane {
         zoomedDrawnCard.setVisible(false);
     }
 
+    public void setSelectionEnabled(final boolean enabled) {
+        this.selectionEnabled = enabled;
+        if (!enabled) {
+            clearSelection();
+        }
+    }
     /**
      * Returns the view of the human player's hand.
      *
@@ -194,6 +202,9 @@ public class TableView extends BorderPane {
     }
 
     private void onCardSelected(final int playerIndex, final int cardIndex) {
+        if (!selectionEnabled) {
+            return;
+        }
         clearSelection();
         selectedPlayerIndex = Optional.of(playerIndex);
         selectedCardIndex = Optional.of(cardIndex);
@@ -213,4 +224,11 @@ public class TableView extends BorderPane {
         selectedPlayerIndex = Optional.empty();
         selectedCardIndex = Optional.empty();
     }    
+
+    public void updateAllHands(final List<PlayerHand> hands) {
+        humanHand.updateHand(hands.get(0));
+        bot1Hand.updateHand(hands.get(1));
+        bot2Hand.updateHand(hands.get(2));
+        bot3Hand.updateHand(hands.get(3));
+    }
 }

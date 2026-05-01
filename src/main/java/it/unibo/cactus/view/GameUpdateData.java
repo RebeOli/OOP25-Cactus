@@ -6,6 +6,7 @@ import java.util.Optional;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.players.Player;
+import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.RoundAction;
 
 public record GameUpdateData(
@@ -16,5 +17,9 @@ public record GameUpdateData(
     Card topCard, 
     boolean isSimultaneous,
     List<Card> playerHand, 
-    Player player
+    Player player,
+    List<PlayerHand> allHands,
+    int remainingCards,
+    Card drawnCard,
+    String currentPlayerName
 ) {}

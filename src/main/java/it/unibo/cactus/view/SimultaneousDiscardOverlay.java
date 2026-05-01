@@ -33,6 +33,7 @@ public final class SimultaneousDiscardOverlay extends StackPane {
     private final HBox slotsBox;
     private final List<CardView> slotCards = new ArrayList<>();
     private final CardView discardedCardView;
+    private boolean actionSent = false;
 
     private final java.util.function.IntConsumer onCardChosen;
 
@@ -69,14 +70,14 @@ public final class SimultaneousDiscardOverlay extends StackPane {
         slotsBox = new HBox();
         slotsBox.setAlignment(Pos.CENTER);
         slotsBox.setSpacing(10);
-        for (int i = 0; i < 4; i++) {
-            final CardView slot = new CardView();
-            slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
-            final int slotIndex = i;
-            slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
-            slotCards.add(slot);
-            slotsBox.getChildren().add(slot);
-        }
+        // for (int i = 0; i < 4; i++) {
+        //     final CardView slot = new CardView();
+        //     slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
+        //     final int slotIndex = i;
+        //     slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
+        //     slotCards.add(slot);
+        //     slotsBox.getChildren().add(slot);
+        // }
 
         cardContainer.getChildren().addAll(titleLabel, subtitle, discardedCardView, progressBar, slotsBox);
 
@@ -92,13 +93,29 @@ public final class SimultaneousDiscardOverlay extends StackPane {
      * @param player the human player
      */
     public void show(final Card topCard, final List<Card> playerHand) {
+        this.actionSent = false;
+        
+        // 1. Svuotiamo gli slot vecchi prima di crearne di nuovi
+        slotsBox.getChildren().clear();
+        slotCards.clear();
+
         if (topCard != null) {
-            // usa ImageLoader di Mondardini
             discardedCardView.setCardData(topCard);
             discardedCardView.setFaceUp(true);
+            
+            // 2. Creiamo dinamicamente uno slot per ogni carta che hai in mano!
             for (int i = 0; i < playerHand.size(); i++) {
-                slotCards.get(i).setCardData(playerHand.get(i));
-                slotCards.get(i).setFaceUp(false);
+                final CardView slot = new CardView();
+                slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
+                
+                final int slotIndex = i;
+                slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
+                
+                slot.setCardData(playerHand.get(i));
+                slot.setFaceUp(false); // Le carte nello scarto simultaneo partono coperte
+                
+                slotCards.add(slot);
+                slotsBox.getChildren().add(slot);
             }
         }
 
@@ -124,6 +141,10 @@ public final class SimultaneousDiscardOverlay extends StackPane {
     }
 
     private void onSlotClicked(final int slotIndex) {
+        if (actionSent) {
+            return;
+        }
+        actionSent = true;
         onCardChosen.accept(slotIndex);
         hide();
     }

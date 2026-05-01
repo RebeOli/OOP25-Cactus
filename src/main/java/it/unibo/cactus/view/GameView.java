@@ -11,7 +11,11 @@ public interface GameView {
 
     void updateGame(final GameUpdateData data);
 
+    void showIntroScreen();
+
     void showConfigScreen();
+
+    void showStatsScreen();
 
     void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name);
 

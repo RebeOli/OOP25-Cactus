@@ -84,7 +84,13 @@ public class ControllerTest {
         public void showEndScreen(final Map<Player, Integer> scores) {};
 
         @Override
-        public void setActionListener(GameViewListener listener) {};
+        public void setActionListener(GameViewListener listener) {}
+
+        @Override
+        public void showStatsScreen() {}
+
+        @Override
+        public void showIntroScreen() {}
     }
 
     @Test
