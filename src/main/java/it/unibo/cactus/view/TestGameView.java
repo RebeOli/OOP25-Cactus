@@ -91,7 +91,8 @@ public class TestGameView extends Application {
             cartaTest,
             true,
             handTest, 
-            humanPlayer
+            humanPlayer,
+            List.of()
         ));
     }
 
