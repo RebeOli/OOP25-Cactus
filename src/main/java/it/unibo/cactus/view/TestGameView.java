@@ -93,7 +93,8 @@ public class TestGameView extends Application {
             handTest, 
             humanPlayer,
             List.of(),
-            40
+            40,
+            cartaTest
             //Optional.empty()
         ));
     }

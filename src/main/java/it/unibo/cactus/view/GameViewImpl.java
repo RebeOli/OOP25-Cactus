@@ -41,7 +41,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void updateGame(final GameUpdateData data) {     
+    public void updateGame(final GameUpdateData data) {
         if (gameScreen != null) {
             gameScreen.update(data);
         }

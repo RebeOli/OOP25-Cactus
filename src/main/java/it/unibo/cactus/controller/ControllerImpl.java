@@ -262,7 +262,7 @@ public class ControllerImpl implements Controller, GameViewListener {
             cards.add(hand.getCard(i));
         }
 
-        final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
+        final Card discardTopCard = game.getDiscardPile().getTopCard().orElse(null);
         final Optional<SpecialPower> currSpecialPower = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
 
         final List<PlayerHand> allHands = new ArrayList<>();
@@ -270,8 +270,13 @@ public class ControllerImpl implements Controller, GameViewListener {
             allHands.add(p.getHand());
         }
 
+        Card drawnCard = null;
+        if (round.getDrawnCard().isPresent()) { 
+            drawnCard = round.getDrawnCard().get();
+        }
+
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size()/*, game.getDiscardPile().getTopCard()*/);
+            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard/*, game.getDiscardPile().getTopCard()*/);
     }
 
     private Player getHumanPlayer(){

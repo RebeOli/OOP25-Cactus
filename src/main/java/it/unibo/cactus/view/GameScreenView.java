@@ -131,9 +131,16 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         }
 
         tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
+        tableView.showDrawnCard(data.topCard());
         //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
+        if (data.drawnCard() != null) {
+            tableView.showDrawnCard(data.drawnCard());
+        } else {
+            tableView.hideDrawnCard();
+        }
 
         message.setText(data.completeMessage());
+
         if (data.isSimultaneous()) {
             showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
         } else {

@@ -19,6 +19,7 @@ public record GameUpdateData(
     List<Card> playerHand, 
     Player player,
     List<PlayerHand> allHands,
-    int remainingCards
+    int remainingCards,
+    Card drawnCard
     //Optional<Card> discardCard
 ) {}
