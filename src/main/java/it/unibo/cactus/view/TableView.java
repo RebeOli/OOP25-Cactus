@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.players.PlayerHand;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
@@ -213,4 +214,11 @@ public class TableView extends BorderPane {
         selectedPlayerIndex = Optional.empty();
         selectedCardIndex = Optional.empty();
     }    
+
+    public void updateAllHands(final List<PlayerHand> hands) {
+        humanHand.updateHand(hands.get(0));
+        bot1Hand.updateHand(hands.get(1));
+        bot2Hand.updateHand(hands.get(2));
+        bot3Hand.updateHand(hands.get(3));
+    }
 }
