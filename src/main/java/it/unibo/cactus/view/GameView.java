@@ -11,6 +11,8 @@ public interface GameView {
 
     void updateGame(final GameUpdateData data);
 
+    void showIntroScreen();
+
     void showConfigScreen();
 
     void showStatsScreen();

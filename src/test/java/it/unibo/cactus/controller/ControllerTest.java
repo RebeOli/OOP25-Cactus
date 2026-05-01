@@ -87,7 +87,10 @@ public class ControllerTest {
         public void setActionListener(GameViewListener listener) {}
 
         @Override
-        public void showStatsScreen() {};
+        public void showStatsScreen() {}
+
+        @Override
+        public void showIntroScreen() {}
     }
 
     @Test
