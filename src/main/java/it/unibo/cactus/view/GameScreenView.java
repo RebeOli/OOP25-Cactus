@@ -139,21 +139,32 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         this.currentPower = data.currentPower();
         this.currSwapPhase = SwapPhase.NO_SELECTION;
         tableView.setSelectionEnabled(data.isHumanTurn());
+        
         if(!data.allHands().isEmpty()) {
             tableView.updateAllHands(data.allHands());
         }
 
         tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
         //tableView.getDiscardPile().update(data.discardCard().getSuit(), data.discardCard().getValue(), data.isSimultaneous());
-        tableView.showDrawnCard(data.topCard());
-        //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
+        
+        // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
+            // 1. Se stiamo pescando, mostra la carta pescata
             tableView.showDrawnCard(data.drawnCard());
+        } else if (data.topCard() != null) {
+            // 2. Altrimenti, mostra lo scarto in cima (utile per lo scarto simultaneo dei bot!)
+            tableView.showDrawnCard(data.topCard());
         } else {
+            // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
         }
+        // -------------------------------------------------
+
+        //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
+        
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
+        
         if (data.isSimultaneous()) {
             if (!this.simultaneousAnswered && !overlay.isVisible()) {
                 showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
