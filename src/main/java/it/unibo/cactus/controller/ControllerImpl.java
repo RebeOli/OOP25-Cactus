@@ -25,6 +25,7 @@ import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
+import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
@@ -300,6 +301,16 @@ public class ControllerImpl implements Controller, GameViewListener {
     @Override
     public void onDrawCardRequest() {
         handleAction(new DrawAction());
+    }
+
+    @Override
+    public void onDiscardDrawnCardRequested() {
+        handleAction(new DiscardAction());
+    }
+
+    @Override
+    public void onSwapWithDrawnCardRequested(int cardIndex) {
+        //TO DO
     }
 
 }

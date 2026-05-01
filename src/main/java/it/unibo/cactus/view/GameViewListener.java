@@ -24,4 +24,8 @@ public interface GameViewListener {
 
     void onDrawCardRequest();
 
+    void onDiscardDrawnCardRequested();
+
+    void onSwapWithDrawnCardRequested(int cardIndex);
+
 }
