@@ -32,9 +32,10 @@ public class TableView extends BorderPane {
     private final DiscardPileView discardPile;
     private final HBox pilesContainer;
     private final CardView zoomedDrawnCard;
-    private final List<PlayerHandView> hands;    
+    private final List<PlayerHandView> hands;
     private Optional<Integer> selectedPlayerIndex = Optional.empty();
     private Optional<Integer> selectedCardIndex = Optional.empty();
+    private boolean selectionEnabled = false;
 
     /**
      * Constructs the game table, setting up the players and the layout.
@@ -110,6 +111,12 @@ public class TableView extends BorderPane {
         zoomedDrawnCard.setVisible(false);
     }
 
+    public void setSelectionEnabled(final boolean enabled) {
+        this.selectionEnabled = enabled;
+        if (!enabled) {
+            clearSelection();
+        }
+    }
     /**
      * Returns the view of the human player's hand.
      *
@@ -195,6 +202,9 @@ public class TableView extends BorderPane {
     }
 
     private void onCardSelected(final int playerIndex, final int cardIndex) {
+        if (!selectionEnabled) {
+            return;
+        }
         clearSelection();
         selectedPlayerIndex = Optional.of(playerIndex);
         selectedCardIndex = Optional.of(cardIndex);
