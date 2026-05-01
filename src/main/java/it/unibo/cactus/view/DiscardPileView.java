@@ -37,22 +37,39 @@ public final class DiscardPileView extends StackPane {
      * @param value the card value
      * @param isSimultaneousDiscardPhase whether the game is in the discard phase
      */
+    // public void update(final Suit suit, final int value, final boolean isSimultaneousDiscardPhase) {
+    //     if (isSimultaneousDiscardPhase) {
+    //         this.topCardView.setImage(ImageLoader.getCardImage(suit, value));
+    //         this.topCardView.setVisible(true);
+    //         this.getStyleClass().remove(CSS_CARD_SLOT_EMPTY);
+    //         this.getStyleClass().remove(CSS_PILE_DISABLED);
+    //         if (!this.getStyleClass().contains(CSS_DISCARD_PILE_PULSING)) {
+    //             this.getStyleClass().add(CSS_DISCARD_PILE_PULSING);
+    //         }
+    //     } else {
+    //         this.topCardView.setImage(null);
+    //         this.getStyleClass().add(CSS_CARD_SLOT_EMPTY);
+    //         this.getStyleClass().remove(CSS_DISCARD_PILE_PULSING);
+    //         if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
+    //             this.getStyleClass().add(CSS_PILE_DISABLED);
+    //         }
+    //     }
+    // }
+
     public void update(final Suit suit, final int value, final boolean isSimultaneousDiscardPhase) {
+        // mostra sempre la carta top
+        this.topCardView.setImage(ImageLoader.getCardImage(suit, value));
+        this.topCardView.setVisible(true);
+        this.getStyleClass().remove(CSS_CARD_SLOT_EMPTY);
+        this.getStyleClass().remove(CSS_PILE_DISABLED);
+
+        // l'animazione pulsante solo durante lo scarto simultaneo
         if (isSimultaneousDiscardPhase) {
-            this.topCardView.setImage(ImageLoader.getCardImage(suit, value));
-            this.topCardView.setVisible(true);
-            this.getStyleClass().remove(CSS_CARD_SLOT_EMPTY);
-            this.getStyleClass().remove(CSS_PILE_DISABLED);
             if (!this.getStyleClass().contains(CSS_DISCARD_PILE_PULSING)) {
                 this.getStyleClass().add(CSS_DISCARD_PILE_PULSING);
             }
         } else {
-            this.topCardView.setImage(null);
-            this.getStyleClass().add(CSS_CARD_SLOT_EMPTY);
             this.getStyleClass().remove(CSS_DISCARD_PILE_PULSING);
-            if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
-                this.getStyleClass().add(CSS_PILE_DISABLED);
-            }
         }
     }
 }

@@ -191,4 +191,10 @@ public class CardView extends StackPane {
             this.setMinSize(0, 0);
         }
     }
+
+    public void setOnDiscardAction(final Runnable action) {
+        this.setOnMouseClicked(event -> {
+            action.run();
+        });
+    }
 }

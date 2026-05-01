@@ -25,9 +25,12 @@ import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
+import it.unibo.cactus.model.rounds.actions.DiscardAction;
+import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
+import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
@@ -261,7 +264,7 @@ public class ControllerImpl implements Controller, GameViewListener {
             cards.add(hand.getCard(i));
         }
 
-        final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
+        final Card discardTopCard = game.getDiscardPile().getTopCard().orElse(null);
         final Optional<SpecialPower> currSpecialPower = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
 
         final List<PlayerHand> allHands = new ArrayList<>();
@@ -269,8 +272,18 @@ public class ControllerImpl implements Controller, GameViewListener {
             allHands.add(p.getHand());
         }
 
+        Card drawnCard = null;
+        if (round.getDrawnCard().isPresent()) { 
+            drawnCard = round.getDrawnCard().get();
+        }
+
+        // Card discardCard = null;
+        // if (game.getDiscardPile().getTopCard().isPresent()) { 
+        //     drawnCard = game.getDiscardPile().getTopCard().get();
+        // }
+
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands);
+            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard);
     }
 
     private Player getHumanPlayer(){
@@ -289,6 +302,21 @@ public class ControllerImpl implements Controller, GameViewListener {
             case SIMULTANEOUS_DISCARD -> "Scarto simultaneo! Vuoi scartare una carta?";
             case ENDED -> "";
         };
+    }
+
+    @Override
+    public void onDrawCardRequest() {
+        handleAction(new DrawAction());
+    }
+
+    @Override
+    public void onDiscardDrawnCardRequested() {
+        handleAction(new DiscardAction());
+    }
+
+    @Override
+    public void onSwapWithDrawnCardRequested(int cardIndex) {
+        handleAction(new SwapAction(cardIndex));
     }
 
 }

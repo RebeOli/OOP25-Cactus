@@ -73,7 +73,7 @@ public class TableView extends BorderPane {
         centerArea.getChildren().addAll(pilesContainer, zoomedDrawnCard);
         this.setCenter(centerArea);
         setupResponsiveSizes();
-        setupHandlers();           
+        setupHandlers();
     }
 
     private void setupResponsiveSizes() {

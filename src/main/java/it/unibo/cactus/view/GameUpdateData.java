@@ -18,5 +18,7 @@ public record GameUpdateData(
     boolean isSimultaneous,
     List<Card> playerHand, 
     Player player,
-    List<PlayerHand> allHands
+    List<PlayerHand> allHands,
+    int remainingCards,
+    Card drawnCard
 ) {}

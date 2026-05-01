@@ -81,21 +81,32 @@ public final class StatsView extends StackPane {
      * @param stats the statistics data to display
      */
     public void showStats(final String playerName, final PlayerStats stats) {
-        this.titleLabel.setText(playerName + "'s Statistics");
-        this.winsLabel.setText("Your wins: " + stats.wins());
-        final var rounds = stats.averageRounds();
-        this.avRoundsLabel.setText(String.format("Average Rounds: %.2f" + rounds));
+        if (stats == null || stats.generalRanking().isEmpty()) {
+            // 2. Comportamento se non ci sono statistiche
+            this.winsLabel.setText("No statistics yet.");
+            this.avRoundsLabel.setText(""); // Lascia vuota l'etichetta dei round
+            
+            // Opzionale: puoi aggiungere un'etichetta anche per la classifica generale vuota
+            final Label noRankingLabel = new Label("No ranking available.");
+            noRankingLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
+            this.rankingBox.getChildren().add(noRankingLabel);
+            
+        } else {
+            this.titleLabel.setText(playerName + "'s Statistics");
+            this.winsLabel.setText("Your wins: " + stats.wins());
+            final var rounds = stats.averageRounds();
+            this.avRoundsLabel.setText(String.format("Average Rounds: %.2f" + rounds));
 
-        this.rankingBox.getChildren().clear(); //svuota vecchia classifica
+            this.rankingBox.getChildren().clear(); //svuota vecchia classifica
 
-        stats.generalRanking().entrySet().stream()
-            .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-            .forEach(e -> {
-                final Label playerRankLabel = new Label("Player: " + e.getKey() + " - Wins:" + e.getValue());
-                playerRankLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
-                this.rankingBox.getChildren().add(playerRankLabel);
-            });
-
+            stats.generalRanking().entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .forEach(e -> {
+                    final Label playerRankLabel = new Label("Player: " + e.getKey() + " - Wins:" + e.getValue());
+                    playerRankLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
+                    this.rankingBox.getChildren().add(playerRankLabel);
+                });
+        }
         this.setVisible(true);
 
     }

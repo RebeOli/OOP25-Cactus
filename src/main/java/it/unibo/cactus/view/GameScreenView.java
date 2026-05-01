@@ -54,7 +54,13 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
                           final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
 
         this.listener = listener;
-        this.tableView = tableView;                
+        this.tableView = tableView;
+
+        tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
+
+        tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
+        //tableView.getHumanHand().setOnSwapAction(() -> listener.onSwapWithDrawnCardRequested(0));
+
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
         overlay = new SimultaneousDiscardOverlay(cardIndex -> { listener.onSimultaneousDiscardRequested(cardIndex); });
@@ -129,7 +135,18 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             tableView.updateAllHands(data.allHands());
         }
 
+        tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
+        //tableView.getDiscardPile().update(data.discardCard().getSuit(), data.discardCard().getValue(), data.isSimultaneous());
+        tableView.showDrawnCard(data.topCard());
+        //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
+        if (data.drawnCard() != null) {
+            tableView.showDrawnCard(data.drawnCard());
+        } else {
+            tableView.hideDrawnCard();
+        }
+
         message.setText(data.completeMessage());
+
         if (data.isSimultaneous()) {
             showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
         } else {
