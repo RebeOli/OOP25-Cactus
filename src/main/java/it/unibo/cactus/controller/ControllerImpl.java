@@ -209,6 +209,7 @@ public class ControllerImpl implements Controller, GameViewListener {
             }
         }
         view.showGameScreen(getHumanPlayer().getName(), botNames.get(0), botNames.get(1), botNames.get(2));
+        view.updateGame(buildUpdateData());
     }
 
     @Override
@@ -264,8 +265,13 @@ public class ControllerImpl implements Controller, GameViewListener {
         final Card topCard = game.getDiscardPile().getTopCard().orElse(null);
         final Optional<SpecialPower> currSpecialPower = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
 
+        final List<PlayerHand> allHands = new ArrayList<>();
+        for(final Player p : game.getPlayers()) {
+            allHands.add(p.getHand());
+        }
+
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer);
+            topCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands);
     }
 
     private Player getHumanPlayer(){
