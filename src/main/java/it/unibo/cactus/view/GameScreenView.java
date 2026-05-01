@@ -54,7 +54,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
                           final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
 
         this.listener = listener;
-        this.tableView = tableView;                
+        this.tableView = tableView;
+        tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
         overlay = new SimultaneousDiscardOverlay(cardIndex -> { listener.onSimultaneousDiscardRequested(cardIndex); });

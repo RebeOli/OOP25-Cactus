@@ -25,6 +25,7 @@ import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
+import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
@@ -283,6 +284,11 @@ public class ControllerImpl implements Controller, GameViewListener {
             case SIMULTANEOUS_DISCARD -> "Scarto simultaneo! Vuoi scartare una carta?";
             case ENDED -> "";
         };
+    }
+
+    @Override
+    public void onDrawCardRequest() {
+        handleAction(new DrawAction());
     }
 
 }

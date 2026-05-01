@@ -22,4 +22,6 @@ public interface GameViewListener {
 
     void onSimultaneousDiscardRequested(final int cardIndex);
 
+    void onDrawCardRequest();
+
 }
