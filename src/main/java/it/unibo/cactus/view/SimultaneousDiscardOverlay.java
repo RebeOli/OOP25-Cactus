@@ -33,6 +33,7 @@ public final class SimultaneousDiscardOverlay extends StackPane {
     private final HBox slotsBox;
     private final List<CardView> slotCards = new ArrayList<>();
     private final CardView discardedCardView;
+    private boolean actionSent = false;
 
     private final java.util.function.IntConsumer onCardChosen;
 
@@ -92,6 +93,7 @@ public final class SimultaneousDiscardOverlay extends StackPane {
      * @param player the human player
      */
     public void show(final Card topCard, final List<Card> playerHand) {
+        this.actionSent = false;
         if (topCard != null) {
             // usa ImageLoader di Mondardini
             discardedCardView.setCardData(topCard);
@@ -124,6 +126,10 @@ public final class SimultaneousDiscardOverlay extends StackPane {
     }
 
     private void onSlotClicked(final int slotIndex) {
+        if (actionSent) {
+            return;
+        }
+        actionSent = true;
         onCardChosen.accept(slotIndex);
         hide();
     }

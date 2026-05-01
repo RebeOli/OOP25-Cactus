@@ -34,11 +34,12 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private final MenuOverlay menuOverlay;
     private final GameViewListener listener;
     private final TableView tableView;
+    private final Label turnLabel;
     private Optional<SpecialPower> currentPower = Optional.empty();
     private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
     private int firstSwapPlayerIdx;
     private int firstSwapCardIdx;
-    private final Label turnLabel;
+    private boolean simultaneousAnswered = false;
 
     private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
@@ -66,7 +67,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
-        overlay = new SimultaneousDiscardOverlay(cardIndex -> { listener.onSimultaneousDiscardRequested(cardIndex); });
+        overlay = new SimultaneousDiscardOverlay(cardIndex -> { 
+            this.simultaneousAnswered = true; // <-- Ci segniamo che hai risposto!
+            listener.onSimultaneousDiscardRequested(cardIndex);
+         });
         menuOverlay = new MenuOverlay(onRestart, onStats, onHome);
         menuOverlay.setContinueAction(menuOverlay::hide);
 
@@ -151,8 +155,11 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
         if (data.isSimultaneous()) {
-            showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
+            if (!this.simultaneousAnswered && !overlay.isVisible()) {
+                showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
+            }
         } else {
+            this.simultaneousAnswered = false;
             hideSimultaneousDiscardWindow();
         }
     }
