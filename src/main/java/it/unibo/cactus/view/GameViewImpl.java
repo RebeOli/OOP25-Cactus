@@ -41,6 +41,11 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
+    public void showIntroScreen() {
+        final IntroScreenView introView = new IntroScreenView(this::showConfigScreen);
+        switchScreen(introView);
+    }
+    @Override
     public void updateGame(final GameUpdateData data) {
         if (gameScreen != null) {
             gameScreen.update(data);
