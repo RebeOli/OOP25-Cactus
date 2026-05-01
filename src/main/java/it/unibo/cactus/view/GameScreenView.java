@@ -38,6 +38,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
     private int firstSwapPlayerIdx;
     private int firstSwapCardIdx;
+    private final Label turnLabel;
 
     private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
@@ -55,6 +56,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         this.listener = listener;
         this.tableView = tableView;
+        this.turnLabel = new Label("");
+        this.turnLabel.setId("turnLabel");
 
         tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
 
@@ -90,10 +93,11 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final HBox rightBox = new HBox(btnMenu);
         rightBox.setAlignment(Pos.CENTER_RIGHT);
 
-        final StackPane topBar = new StackPane(titleLabel, rightBox);
+        final StackPane topBar = new StackPane(turnLabel, titleLabel, rightBox);
         topBar.setPadding(new Insets(TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING, TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING));
         setAlignment(titleLabel, Pos.CENTER);
         setAlignment(rightBox, Pos.CENTER_RIGHT);
+        setAlignment(turnLabel, Pos.CENTER_LEFT);
         gameLayout.setTop(topBar);
 
         // bottom
@@ -144,9 +148,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         } else {
             tableView.hideDrawnCard();
         }
-
         message.setText(data.completeMessage());
-
+        turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
         if (data.isSimultaneous()) {
             showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
         } else {

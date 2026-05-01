@@ -20,5 +20,6 @@ public record GameUpdateData(
     Player player,
     List<PlayerHand> allHands,
     int remainingCards,
-    Card drawnCard
+    Card drawnCard,
+    String currentPlayerName
 ) {}

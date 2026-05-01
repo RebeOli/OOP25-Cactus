@@ -283,7 +283,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         // }
 
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard);
+            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName());
     }
 
     private Player getHumanPlayer(){
