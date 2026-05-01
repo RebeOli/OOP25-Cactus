@@ -105,6 +105,12 @@ public class PlayerHandView extends VBox {
         return null;
     }
 
+    public void setOnSwapAction(final Runnable action) {
+        this.setOnMouseClicked(event -> {
+            action.run();
+        });
+    }
+
     /**
      * Binds the height of all cards in the hand to an external property for responsive sizing.
      *

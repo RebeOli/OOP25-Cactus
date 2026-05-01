@@ -56,7 +56,7 @@ public class GameViewImpl implements GameView {
     @Override
     public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
         final TableView tableView = new TableView(humanName, bot1Name, bot2Name, bot3Name);
-        this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showConfigScreen, this::showConfigScreen);
+        this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showStatsScreen, this::showConfigScreen);
         switchScreen(gameScreen);
     }
 
@@ -123,5 +123,11 @@ public class GameViewImpl implements GameView {
                 scene.getStylesheets().add(resource.toExternalForm());
             }
         }
+    }
+
+    @Override
+    public void showStatsScreen() {
+        final StatsView statsView = new StatsView();
+        switchScreen(statsView);
     }
 }

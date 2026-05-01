@@ -30,6 +30,7 @@ import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
+import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.statistics.HistoryManager;
@@ -276,8 +277,13 @@ public class ControllerImpl implements Controller, GameViewListener {
             drawnCard = round.getDrawnCard().get();
         }
 
+        // Card discardCard = null;
+        // if (game.getDiscardPile().getTopCard().isPresent()) { 
+        //     drawnCard = game.getDiscardPile().getTopCard().get();
+        // }
+
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard/*, game.getDiscardPile().getTopCard()*/);
+            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard);
     }
 
     private Player getHumanPlayer(){
@@ -310,7 +316,7 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onSwapWithDrawnCardRequested(int cardIndex) {
-        //TO DO
+        handleAction(new SwapAction(cardIndex));
     }
 
 }

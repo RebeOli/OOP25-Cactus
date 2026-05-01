@@ -55,7 +55,12 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         this.listener = listener;
         this.tableView = tableView;
+
         tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
+
+        tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
+        //tableView.getHumanHand().setOnSwapAction(() -> listener.onSwapWithDrawnCardRequested(0));
+
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
         overlay = new SimultaneousDiscardOverlay(cardIndex -> { listener.onSimultaneousDiscardRequested(cardIndex); });
@@ -131,6 +136,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         }
 
         tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
+        //tableView.getDiscardPile().update(data.discardCard().getSuit(), data.discardCard().getValue(), data.isSimultaneous());
         tableView.showDrawnCard(data.topCard());
         //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
         if (data.drawnCard() != null) {

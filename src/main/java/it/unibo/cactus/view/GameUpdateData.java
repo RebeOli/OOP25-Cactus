@@ -21,5 +21,4 @@ public record GameUpdateData(
     List<PlayerHand> allHands,
     int remainingCards,
     Card drawnCard
-    //Optional<Card> discardCard
 ) {}

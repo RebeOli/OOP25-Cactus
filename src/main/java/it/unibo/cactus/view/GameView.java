@@ -13,6 +13,8 @@ public interface GameView {
 
     void showConfigScreen();
 
+    void showStatsScreen();
+
     void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name);
 
     void showPeekScreen(final PlayerHand hand);
