@@ -38,7 +38,7 @@ val javafxPlatform = when {
     else -> "linux" // Fallback
 }
 
-val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics", "media")
+val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics")
 val javaFxVersion = "23.0.2"
 
 dependencies {
