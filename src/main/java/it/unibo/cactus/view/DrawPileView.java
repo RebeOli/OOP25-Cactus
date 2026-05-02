@@ -15,7 +15,6 @@ public final class DrawPileView extends StackPane {
     private static final String CSS_PILE_DISABLED = "pileDisabled";
     private final ImageView cardBackView;
     private final Label countLabel;
-    private boolean drawIsDone = false;
 
     /**
      * Constructs a new DrawPileView.
@@ -44,10 +43,9 @@ public final class DrawPileView extends StackPane {
      */
     public void update(final int remainingCards, final boolean isHumanTurn) {
         this.countLabel.setText(String.valueOf(remainingCards));
-        if (isHumanTurn && !drawIsDone) {
+        if (isHumanTurn) {
             this.getStyleClass().remove(CSS_PILE_DISABLED);
         } else {
-            this.drawIsDone = false;
             if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
                 this.getStyleClass().add(CSS_PILE_DISABLED);
             }
@@ -57,9 +55,7 @@ public final class DrawPileView extends StackPane {
     public void setOnDrawAction(final Runnable action) {
         this.setOnMouseClicked(event -> {
             if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
-                this.drawIsDone=true;
                 action.run();
-                this.getStyleClass().add(CSS_PILE_DISABLED);
             }
         });
     }

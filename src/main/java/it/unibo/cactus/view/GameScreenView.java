@@ -9,6 +9,7 @@ import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.SwapPower;
 import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -147,7 +148,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             tableView.updateAllHands(data.allHands());
         }
 
-        tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
+        //tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
+        final boolean canDraw = data.isHumanTurn() && data.availableActions().stream()
+            .anyMatch(a -> a instanceof DrawAction);
+        tableView.getDrawPile().update(data.remainingCards(), canDraw);
 
         // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
@@ -160,6 +164,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         } else if (data.topCard() != null) {
             // 2. Altrimenti, mostra lo scarto in cima (utile per lo scarto simultaneo dei bot!)
             tableView.getDiscardPile().update(data.topCard().getSuit(), data.topCard().getValue(), data.isSimultaneous());
+            tableView.hideDrawnCard();
         } else {
             // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
