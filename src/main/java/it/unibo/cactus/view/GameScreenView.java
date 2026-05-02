@@ -8,6 +8,8 @@ import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.SwapPower;
+import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.actions.SwapAction;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -40,6 +42,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private int firstSwapPlayerIdx;
     private int firstSwapCardIdx;
     private boolean simultaneousAnswered = false;
+    private List<RoundAction> currentAvailableActions;
     //private boolean drawIsDone = false;
 
 
@@ -63,8 +66,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         this.turnLabel.setId("turnLabel");
 
         tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
-
         tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
+        tableView.setOnCardClicked((playerIndex, cardIndex) -> {
+            final boolean canSwap = currentAvailableActions.stream()
+                .anyMatch(a -> a instanceof SwapAction);
+            if (playerIndex == 0 && canSwap) {
+            listener.onSwapWithDrawnCardRequested(cardIndex);
+            }
+        });
         //tableView.getHumanHand().setOnSwapAction(() -> listener.onSwapWithDrawnCardRequested(0));
 
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
@@ -131,6 +140,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
         this.currentPower = data.currentPower();
         this.currSwapPhase = SwapPhase.NO_SELECTION;
+        this.currentAvailableActions = data.availableActions();
         tableView.setSelectionEnabled(data.isHumanTurn());
         
         if(!data.allHands().isEmpty()) {
@@ -138,8 +148,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         }
 
         tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
-        //tableView.getDiscardPile().update(data.discardCard().getSuit(), data.discardCard().getValue(), data.isSimultaneous());
-        
+
         // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
             if(!data.isHumanTurn()) {
@@ -151,15 +160,11 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         } else if (data.topCard() != null) {
             // 2. Altrimenti, mostra lo scarto in cima (utile per lo scarto simultaneo dei bot!)
             tableView.getDiscardPile().update(data.topCard().getSuit(), data.topCard().getValue(), data.isSimultaneous());
-            //tableView.showDrawnCard(data.topCard());
         } else {
             // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
         }
-        // -------------------------------------------------
 
-        //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
-        
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
         
