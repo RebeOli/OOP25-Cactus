@@ -32,6 +32,7 @@ public class GameViewImpl implements GameView {
     private GameViewListener listener;
     private GameScreenView gameScreen;
     private StatsView statsView;
+    private String humanPlayerName;
 
     /**
      * Constructs the main view manager.
@@ -63,6 +64,7 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
+        this.humanPlayerName = humanName;       
         final TableView tableView = new TableView(humanName, bot1Name, bot2Name, bot3Name);
         this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showStatsScreen, this::showConfigScreen);
         switchScreen(gameScreen);
@@ -137,7 +139,7 @@ public class GameViewImpl implements GameView {
     public void showStatsScreen() {
         statsView = new StatsView(() -> switchScreen(gameScreen));
         switchScreen(statsView);
-        listener.onUpdateStats();
+        listener.onUpdateStats(humanPlayerName);
     }
 
     @Override

@@ -28,6 +28,6 @@ public interface GameViewListener {
 
     void onSwapWithDrawnCardRequested(final int cardIndex);
 
-    void onUpdateStats();
+    void onUpdateStats(final String playerName);
 
 }

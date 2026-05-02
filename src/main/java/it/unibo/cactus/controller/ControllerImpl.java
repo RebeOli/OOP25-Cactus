@@ -320,8 +320,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     }
 
     @Override
-    public void onUpdateStats() {
-        final var playerName = getHumanPlayer().getName();
+    public void onUpdateStats(final String playerName) {
         PlayerStats playerStats = new PlayerStats(0, null, 0);
         try {
             playerStats = historyManager.getStats(playerName);
