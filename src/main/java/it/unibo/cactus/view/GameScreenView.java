@@ -168,7 +168,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
         
-        if (data.isSimultaneous()) {
+        if (data.isSimultaneous() && data.playerHand().size()<6) {
             if (!this.simultaneousAnswered && !overlay.isVisible()) {
                 showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
             }
