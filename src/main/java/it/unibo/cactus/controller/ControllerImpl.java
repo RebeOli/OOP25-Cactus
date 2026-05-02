@@ -2,6 +2,7 @@ package it.unibo.cactus.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -321,11 +322,19 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onUpdateStats(final String playerName) {
-        PlayerStats playerStats = new PlayerStats(0, null, 0);
+        PlayerStats playerStats = new PlayerStats(0, Collections.emptyMap(), 0);
+        // try {
+        //     playerStats = historyManager.getStats(playerName);
+        // } catch (final IOException e) {
+        //     System.out.println("an error occurs while reading from the history file");
+        // }
         try {
-            playerStats = historyManager.getStats(playerName);
-        } catch (final IOException e) {
-            System.out.println("an error occurs while reading from the history file");
+            PlayerStats fetchedStats = historyManager.getStats(playerName);
+            if (fetchedStats != null) {
+                playerStats = fetchedStats;
+            }
+        } catch (final Exception e) { // <--- CAMBIA QUI: da IOException a Exception
+            System.out.println("Errore di Gson/Lettura: " + e.getMessage());
         }
         view.updateStats(playerName, playerStats);
     }

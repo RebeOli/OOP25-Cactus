@@ -1,6 +1,7 @@
 package it.unibo.cactus.view;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +34,7 @@ public class GameViewImpl implements GameView {
     private GameScreenView gameScreen;
     private StatsView statsView;
     private String humanPlayerName;
+    private List<String> playersNames;
 
     /**
      * Constructs the main view manager.
@@ -64,7 +66,8 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
-        this.humanPlayerName = humanName;       
+        this.humanPlayerName = humanName;
+        this.playersNames = new ArrayList<>(List.of(humanName, bot1Name, bot2Name, bot3Name));
         final TableView tableView = new TableView(humanName, bot1Name, bot2Name, bot3Name);
         this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showStatsScreen, this::showConfigScreen);
         switchScreen(gameScreen);
@@ -137,9 +140,12 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatsScreen() {
-        statsView = new StatsView(() -> switchScreen(gameScreen));
+        statsView = new StatsView(playersNames, () -> switchScreen(gameScreen));
+        statsView.setOnPlayerSelected(selectedName -> {
+            listener.onUpdateStats(selectedName);
+        });
         switchScreen(statsView);
-        listener.onUpdateStats(humanPlayerName);
+        listener.onUpdateStats(humanPlayerName); //lascio di default prima che venga effettivamente cliccato qualcosa
     }
 
     @Override
