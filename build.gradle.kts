@@ -74,3 +74,14 @@ application {
     // Define the main class for the application
     mainClass.set(main)
 }
+
+tasks.named<JavaExec>("run") {
+    doFirst {
+        val javafxJars = classpath.filter { it.name.contains("javafx") }
+        jvmArgs(
+            "--module-path", javafxJars.asPath,
+            "--add-modules", javaFXModules.joinToString(",") { "javafx.$it" }
+        )
+        classpath = classpath.filter { !it.name.contains("javafx") }
+    }
+}
