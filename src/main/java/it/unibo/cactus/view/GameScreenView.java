@@ -140,11 +140,16 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         
         // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
-            // 1. Se stiamo pescando, mostra la carta pescata
-            tableView.showDrawnCard(data.drawnCard());
+            if(!data.isHumanTurn()) {
+                tableView.hideDrawnCard(); //disattivo la visualizzazione della carta pescata nel turno dei bot
+            } else {
+                // 1. Se stiamo pescando, mostra la carta pescata
+                tableView.showDrawnCard(data.drawnCard());
+            }
         } else if (data.topCard() != null) {
             // 2. Altrimenti, mostra lo scarto in cima (utile per lo scarto simultaneo dei bot!)
-            tableView.showDrawnCard(data.topCard());
+            tableView.getDiscardPile().update(data.topCard().getSuit(), data.topCard().getValue(), data.isSimultaneous());
+            //tableView.showDrawnCard(data.topCard());
         } else {
             // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
