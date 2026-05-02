@@ -40,6 +40,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private int firstSwapPlayerIdx;
     private int firstSwapCardIdx;
     private boolean simultaneousAnswered = false;
+    //private boolean drawIsDone = false;
+
 
     private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
