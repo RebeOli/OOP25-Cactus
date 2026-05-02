@@ -29,7 +29,7 @@ public final class StatsView extends StackPane {
     /**
      * Constructs a new StatsView.
      */
-    public StatsView(final GameViewListener viewListener) {
+    public StatsView(final Runnable onBack) {
         //strato sotto oscuramento
         this.getStyleClass().add("overlayBackground");
 
@@ -59,7 +59,7 @@ public final class StatsView extends StackPane {
 
         this.closeButton = new Button("X");
         this.closeButton.getStyleClass().add("btnAction");
-        this.closeButton.setOnAction(event -> this.setVisible(false));
+        this.closeButton.setOnAction(event -> onBack.run());
 
         statsBox.getChildren().addAll(
             this.titleLabel,
@@ -71,8 +71,6 @@ public final class StatsView extends StackPane {
         );
 
         this.getChildren().add(statsBox);
-        this.setVisible(false);
-        viewListener.onUpdateStats();
     }
 
     /**
@@ -108,8 +106,6 @@ public final class StatsView extends StackPane {
                     this.rankingBox.getChildren().add(playerRankLabel);
                 });
         }
-        this.setVisible(true);
-
     }
 
 }

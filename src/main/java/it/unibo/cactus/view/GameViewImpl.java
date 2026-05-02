@@ -135,8 +135,9 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatsScreen() {
-        statsView = new StatsView(listener);
+        statsView = new StatsView(() -> switchScreen(gameScreen));
         switchScreen(statsView);
+        listener.onUpdateStats();
     }
 
     @Override
