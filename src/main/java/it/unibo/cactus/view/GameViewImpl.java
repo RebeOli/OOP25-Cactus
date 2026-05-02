@@ -40,11 +40,12 @@ public class GameViewImpl implements GameView {
         this.primaryStage = primaryStage;
     }
 
-    @Override
-    public void showIntroScreen() {
-        final IntroScreenView introView = new IntroScreenView(this::showConfigScreen);
-        switchScreen(introView);
-    }
+    // @Override
+    // public void showIntroScreen() {
+    //     final IntroScreenView introView = new IntroScreenView(this::showConfigScreen);
+    //     switchScreen(introView);
+    // }
+
     @Override
     public void updateGame(final GameUpdateData data) {
         if (gameScreen != null) {

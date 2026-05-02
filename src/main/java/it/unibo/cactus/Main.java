@@ -37,7 +37,8 @@ public class Main extends Application {
 
         primaryStage.setMinWidth(1024);
         primaryStage.setMinHeight(768);
-        view.showIntroScreen();
+        //view.showIntroScreen();
+        view.showConfigScreen();
         primaryStage.setMaximized(true);
         primaryStage.show();
     }
