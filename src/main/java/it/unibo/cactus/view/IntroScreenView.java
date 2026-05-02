@@ -29,7 +29,6 @@ public class IntroScreenView extends VBox {
             
             mediaPlayer.play();
         } catch (Exception e) {
-            System.err.println("Unable to load the video: " + e.getMessage());
             onPlayClicked.run(); 
         }
         this.getChildren().add(mediaView);
