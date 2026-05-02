@@ -19,6 +19,7 @@ import it.unibo.cactus.model.rounds.actions.DrawAction;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.HistoryManagerImpl;
 import it.unibo.cactus.model.statistics.HistoryRepository;
+import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.model.statistics.StatsCalculator;
 import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
@@ -88,6 +89,9 @@ public class ControllerTest {
 
         @Override
         public void showStatsScreen() {}
+
+        @Override
+        public void updateStats(String playerName, PlayerStats playerStats) {}
 
         // @Override
         // public void showIntroScreen() {}

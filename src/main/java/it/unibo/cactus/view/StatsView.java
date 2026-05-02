@@ -29,7 +29,7 @@ public final class StatsView extends StackPane {
     /**
      * Constructs a new StatsView.
      */
-    public StatsView() {
+    public StatsView(final GameViewListener viewListener) {
         //strato sotto oscuramento
         this.getStyleClass().add("overlayBackground");
 
@@ -72,6 +72,7 @@ public final class StatsView extends StackPane {
 
         this.getChildren().add(statsBox);
         this.setVisible(false);
+        viewListener.onUpdateStats();
     }
 
     /**

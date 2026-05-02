@@ -319,4 +319,16 @@ public class ControllerImpl implements Controller, GameViewListener {
         handleAction(new SwapAction(cardIndex));
     }
 
+    @Override
+    public void onUpdateStats() {
+        final var playerName = getHumanPlayer().getName();
+        PlayerStats playerStats = new PlayerStats(0, null, 0);
+        try {
+            playerStats = historyManager.getStats(playerName);
+        } catch (final IOException e) {
+            System.out.println("an error occurs while reading from the history file");
+        }
+        view.updateStats(playerName, playerStats);
+    }
+
 }

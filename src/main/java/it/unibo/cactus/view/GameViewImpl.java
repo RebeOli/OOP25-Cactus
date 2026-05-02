@@ -7,6 +7,7 @@ import java.util.Map;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
+import it.unibo.cactus.model.statistics.PlayerStats;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -30,6 +31,7 @@ public class GameViewImpl implements GameView {
     private final Stage primaryStage;
     private GameViewListener listener;
     private GameScreenView gameScreen;
+    private StatsView statsView;
 
     /**
      * Constructs the main view manager.
@@ -133,7 +135,13 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatsScreen() {
-        final StatsView statsView = new StatsView();
+        statsView = new StatsView(listener);
         switchScreen(statsView);
     }
+
+    @Override
+    public void updateStats(String playerName, PlayerStats playerStats) {
+        statsView.showStats(playerName, playerStats);
+    }
+
 }
