@@ -91,6 +91,9 @@ public class ControllerTest {
         public void showStatsScreen() {}
 
         @Override
+        public void showIntroScreen() {}
+
+        @Override
         public void updateStats(String playerName, PlayerStats playerStats) {}
 
         // @Override
