@@ -83,7 +83,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             listener.onSimultaneousDiscardRequested(cardIndex);
          });
         menuOverlay = new MenuOverlay(onRestart, onStats, onHome);
-        menuOverlay.setContinueAction(menuOverlay::hide);
+        menuOverlay.setContinueAction(() -> {
+            menuOverlay.hide();
+            listener.onResumeRequested();
+        });
 
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
@@ -91,7 +94,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         //con titolo in alto. 
         final Button btnMenu = new Button("Menu");
         btnMenu.getStyleClass().add("btnMenu");
-        btnMenu.setOnAction(e -> menuOverlay.show());
+        btnMenu.setOnAction(e -> {
+            menuOverlay.show();
+            listener.onPauseRequested();
+        });
 
         final Label titleLabel = new Label("🌵 CACTUS 🌵");
         titleLabel.getStyleClass().add("titleLabel");

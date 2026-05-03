@@ -28,4 +28,8 @@ public interface GameViewListener {
 
     void onSwapWithDrawnCardRequested(int cardIndex);
 
+    void onPauseRequested();
+
+    void onResumeRequested();
+
 }

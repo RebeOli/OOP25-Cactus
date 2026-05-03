@@ -51,6 +51,8 @@ public class ControllerImpl implements Controller, GameViewListener {
     private final HistoryManager historyManager;
     private boolean humanWindowExpired;
     private final Random random;
+    private boolean isPaused = false;
+    private long pauseStartTime = 0;
 
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
@@ -75,7 +77,9 @@ public class ControllerImpl implements Controller, GameViewListener {
     // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
-        if (game == null || game.isFinished()) return;
+        if (game == null || game.isFinished() || isPaused) {
+            return;
+        }
 
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             if (simultaneousDiscardStartTime == 0) {
@@ -318,6 +322,28 @@ public class ControllerImpl implements Controller, GameViewListener {
     @Override
     public void onSwapWithDrawnCardRequested(int cardIndex) {
         handleAction(new SwapAction(cardIndex));
+    }
+
+    @Override
+    public void onPauseRequested() {
+        if (!isPaused) {
+            isPaused = true;
+            pauseStartTime = System.currentTimeMillis();
+        }
+    }
+
+    @Override
+    public void onResumeRequested() {
+        if (isPaused) {
+            isPaused = false;
+            long pausedDuration = System.currentTimeMillis() - pauseStartTime; 
+            if (botStartTime != 0) {
+                botStartTime += pausedDuration;
+            }
+            if (simultaneousDiscardStartTime != 0) {
+                simultaneousDiscardStartTime += pausedDuration;
+            }
+        }
     }
 
 }
