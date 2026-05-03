@@ -69,7 +69,7 @@ public class GameViewImpl implements GameView {
         this.humanPlayerName = humanName;
         this.playersNames = new ArrayList<>(List.of(humanName, bot1Name, bot2Name, bot3Name));
         final TableView tableView = new TableView(humanName, bot1Name, bot2Name, bot3Name);
-        this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showStatsScreen, this::showConfigScreen);
+        this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showStatsScreen);
         switchScreen(gameScreen);
     }
 

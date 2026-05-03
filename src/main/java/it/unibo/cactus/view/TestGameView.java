@@ -60,7 +60,6 @@ public class TestGameView extends Application {
             null,
             tableView,
             () -> {},
-            () -> {},
             () -> {}
         );
         

@@ -24,21 +24,19 @@ public final class MenuOverlay extends StackPane {
      * @param onStats action to run when the player opens statistics
      * @param onHome action to run when the player returns to the home screen
      */
-    public MenuOverlay(final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
+    public MenuOverlay(final Runnable onRestart, final Runnable onStats) {
         this.setVisible(false);
         this.getStyleClass().add("menuOverlay");
 
         final Button btnRestart = new Button("Restart Game");
         final Button btnStats = new Button("Statistics");
-        final Button btnHome = new Button("Home");
         btnRules = new Button("Rules");
 
         btnRestart.setOnAction(e -> onRestart.run());
         btnStats.setOnAction(e -> onStats.run());
-        btnHome.setOnAction(e -> onHome.run());
 
         // box centrale con i pulsanti
-        final VBox buttonBox = new VBox(btnContinue, btnRestart, btnStats, btnRules, btnHome);
+        final VBox buttonBox = new VBox(btnContinue, btnRestart, btnStats, btnRules);
         buttonBox.getStyleClass().add("menuBox");
         buttonBox.setAlignment(Pos.CENTER);
         buttonBox.setSpacing(SPACING);
@@ -46,7 +44,7 @@ public final class MenuOverlay extends StackPane {
         buttonBox.setMaxWidth(MAX_WIDTH);
         buttonBox.setMaxHeight(MAX_HEIGHT);
 
-        for (final Button button : new Button[]{btnContinue, btnRestart, btnStats, btnRules, btnHome}) {
+        for (final Button button : new Button[]{btnContinue, btnRestart, btnStats, btnRules}) {
             button.getStyleClass().add("btnMenu");
             button.setMaxWidth(Double.MAX_VALUE); // I bottoni occupano tutta la larghezza del menuBox
         }

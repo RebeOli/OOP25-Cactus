@@ -59,7 +59,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
      * @param onHome action to run on home
      */
     public GameScreenView(final GameViewListener listener, final TableView tableView,
-                          final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
+                          final Runnable onRestart, final Runnable onStats) {
 
         this.listener = listener;
         this.tableView = tableView;
@@ -87,7 +87,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             this.simultaneousAnswered = true; // <-- Ci segniamo che hai risposto!
             listener.onSimultaneousDiscardRequested(cardIndex);
          });
-        menuOverlay = new MenuOverlay(onRestart, onStats, onHome);
+        menuOverlay = new MenuOverlay(onRestart, onStats);
         menuOverlay.setContinueAction(() -> {
             menuOverlay.hide();
             listener.onResumeRequested();
