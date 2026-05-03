@@ -93,6 +93,9 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             listener.onResumeRequested();
         });
 
+        final RulesOverlay rulesOverlay = new RulesOverlay();
+        menuOverlay.setOnRulesRequested(() -> rulesOverlay.show());
+
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
 
@@ -135,7 +138,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         gameLayout.setCenter(tableView);
 
         // stack tutto insieme
-        super.getChildren().addAll(gameLayout, overlay, menuOverlay);
+        super.getChildren().addAll(gameLayout, overlay, menuOverlay, rulesOverlay);
     }
 
     /**

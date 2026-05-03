@@ -169,6 +169,12 @@
     -fx-text-fill: #3d2b10;
 }
 
+.transparent-scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-control-inner-background: transparent;
+}
+
 #turnLabel {
     -fx-font-family: "Georgia";
     -fx-font-size: 18px;
