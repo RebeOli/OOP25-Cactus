@@ -69,9 +69,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
         tableView.setOnCardClicked((playerIndex, cardIndex) -> {
             final boolean canSwap = currentAvailableActions.stream()
-                .anyMatch(a -> a instanceof SwapAction);
+                .anyMatch(a -> a instanceof SwapAction);            
+            final boolean isSpecialPowerPhase = !currentPower.isEmpty();
+
             if (playerIndex == 0 && canSwap) {
-            listener.onSwapWithDrawnCardRequested(cardIndex);
+                listener.onSwapWithDrawnCardRequested(cardIndex);
+            }
+            else if(isSpecialPowerPhase) {
+                handlePowerTarget(playerIndex, cardIndex);
             }
         });
         //tableView.getHumanHand().setOnSwapAction(() -> listener.onSwapWithDrawnCardRequested(0));
@@ -184,30 +189,17 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
     @Override
     public void onActivatePowerClicked(){
-
         if (currentPower.isEmpty()) return;
         final SpecialPower power = currentPower.get();
-        
-        final Optional<Integer> playerIdx = tableView.getSelectedPlayerIndex();
-        final Optional<Integer> cardIdx = tableView.getSelectedCardIndex();
+
         if (power instanceof PeekPower) {
-            if (cardIdx.isEmpty()) {
-                return;
-            }
             message.setText("Seleziona una tua carta da spiare");
-            listener.onPeekPowerRequested(cardIdx.get());
-            tableView.peekPlayerCard(playerIdx.get(), cardIdx.get());
         }
         else if (power instanceof RevealPower) {
-            if (playerIdx.isEmpty() || cardIdx.isEmpty()) {
-                return;
-            }
             message.setText("Seleziona una carta qualsiasi da girare");
-            listener.onRevealPowerRequested(playerIdx.get(), cardIdx.get());
-            tableView.peekPlayerCard(playerIdx.get(), cardIdx.get());
         }
         else if (power instanceof SwapPower) {
-            handleSwapPhase(playerIdx, cardIdx);
+            message.setText("Seleziona la prima carta da scambiare");
         }
     };
 
@@ -216,41 +208,35 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             return;
         }
         if(currSwapPhase == SwapPhase.NO_SELECTION){
-            message.setText("Seleziona la prima carta da scambiare");
             firstSwapPlayerIdx = playerIndx.get();
             firstSwapCardIdx = cardInx.get();
             currSwapPhase = SwapPhase.FIRST_SELECTED;
+            message.setText("Seleziona la seconda carta da scambiare");
         }
         else if(currSwapPhase == SwapPhase.FIRST_SELECTED){
-            message.setText("Seleziona la seconda carta da scambiare");
             listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, 
                 playerIndx.get(), cardInx.get());
 
             currSwapPhase = SwapPhase.NO_SELECTION;
+            message.setText("Scambio avvenuto.");
         }
     }
 
-    /*  aggiunto io per prova poteri
     private void handlePowerTarget(final int playerIndex, final int cardIndex) {
         final SpecialPower power = currentPower.get();
         if (power instanceof PeekPower) {
             if (playerIndex == 0) {
                 listener.onPeekPowerRequested(cardIndex);
-                powerActivated = false;
+                tableView.peekPlayerCard(playerIndex, cardIndex);
             }
         } else if (power instanceof RevealPower) {
             listener.onRevealPowerRequested(playerIndex, cardIndex);
-            powerActivated = false;
+            tableView.peekPlayerCard(playerIndex, cardIndex);
         } else if (power instanceof SwapPower) {
             handleSwapPhase(Optional.of(playerIndex), Optional.of(cardIndex));
-            if (currSwapPhase == SwapPhase.FIRST_SELECTED) {
-                message.setText("Ora seleziona la carta del bot da scambiare");
-            } else {
-                powerActivated = false;
-            }
         }
     }
-    */
+    
     @Override
     public void onSkipPowerClicked(){
         listener.onSkipPowerRequested();
