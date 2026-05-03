@@ -89,8 +89,8 @@ public class ControllerTest {
         @Override
         public void showStatsScreen() {}
 
-        // @Override
-        // public void showIntroScreen() {}
+        @Override
+        public void showIntroScreen() {}
     }
 
     @Test

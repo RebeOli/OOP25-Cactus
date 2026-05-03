@@ -1,7 +1,6 @@
 package it.unibo.cactus.view;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -14,30 +13,24 @@ public class IntroScreenView extends VBox {
 
     public IntroScreenView(final Runnable onPlayClicked) {
         this.setAlignment(Pos.CENTER);
-        this.setSpacing(50);
         
         this.getStyleClass().add("gameTable"); 
 
         final MediaView mediaView = new MediaView();
         try {
-            final String videoPath = getClass().getResource("/video/cactus_intro.mp4").toExternalForm();
+            final String videoPath = getClass().getResource("/video/cactus_intro_finale.mp4").toExternalForm();
             final Media media = new Media(videoPath);
             final MediaPlayer mediaPlayer = new MediaPlayer(media);
             mediaView.setMediaPlayer(mediaPlayer);
             mediaView.setFitWidth(800); 
             mediaView.setPreserveRatio(true);
             mediaPlayer.setCycleCount(1);
+            mediaPlayer.setOnEndOfMedia(() -> onPlayClicked.run());
+            
             mediaPlayer.play();
         } catch (Exception e) {
-            System.err.println("Unable to load the video");
+            onPlayClicked.run(); 
         }
-
-        final Button playButton = new Button("PLAY");
-        playButton.getStyleClass().add("btnMenu"); 
-        playButton.setStyle("-fx-font-size: 24px; -fx-padding: 15 50 15 50;");
-        
-        playButton.setOnAction(e -> onPlayClicked.run());
-
-        this.getChildren().addAll(mediaView, playButton);
+        this.getChildren().add(mediaView);
     }
 }
