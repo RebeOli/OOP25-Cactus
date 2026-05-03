@@ -38,6 +38,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private final GameViewListener listener;
     private final TableView tableView;
     private final Label turnLabel;
+    private final Button cactusCalledAvd;
     private Optional<SpecialPower> currentPower = Optional.empty();
     private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
     private int firstSwapPlayerIdx;
@@ -64,6 +65,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         this.tableView = tableView;
         this.turnLabel = new Label("");
         this.turnLabel.setId("turnLabel");
+        cactusCalledAvd = new Button("");
+        cactusCalledAvd.setDisable(true);
+        cactusCalledAvd.setVisible(false);
+        cactusCalledAvd.getStyleClass().add("btnCalledCactus");
 
         tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
         tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
@@ -105,11 +110,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final HBox rightBox = new HBox(btnMenu);
         rightBox.setAlignment(Pos.CENTER_RIGHT);
 
-        final StackPane topBar = new StackPane(turnLabel, titleLabel, rightBox);
+        final HBox leftBox = new HBox(15, turnLabel, cactusCalledAvd);
+        leftBox.setAlignment(Pos.CENTER_LEFT);
+
+        final StackPane topBar = new StackPane(leftBox, titleLabel, rightBox);
         topBar.setPadding(new Insets(TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING, TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING));
         setAlignment(titleLabel, Pos.CENTER);
         setAlignment(rightBox, Pos.CENTER_RIGHT);
-        setAlignment(turnLabel, Pos.CENTER_LEFT);
+        setAlignment(leftBox, Pos.CENTER_LEFT); //  setAlignment(turnLabel, Pos.CENTER_LEFT);
         gameLayout.setTop(topBar);
 
         // bottom
@@ -177,7 +185,12 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
-        
+
+        if (data.cactusCalled()) {
+            cactusCalledAvd.setText(data.currentPlayerName().toUpperCase() + " CALLED CACTUS");
+            cactusCalledAvd.setVisible(true);
+        }
+
         if (data.isSimultaneous() && data.playerHand().size()<6) {
             if (!this.simultaneousAnswered && !overlay.isVisible()) {
                 showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
@@ -186,6 +199,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             this.simultaneousAnswered = false;
             hideSimultaneousDiscardWindow();
         }
+
     }
 
     @Override

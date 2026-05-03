@@ -95,7 +95,8 @@ public class TestGameView extends Application {
             List.of(),
             40,
             cartaTest,
-            ""
+            "",
+            false
         ));
     }
 

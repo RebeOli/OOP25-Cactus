@@ -27,6 +27,14 @@
     -fx-text-fill: #8a7a4a;
 }
 
+.btnCalledCactus {
+    -fx-background-color: #ffcc00;
+    -fx-text-fill: black;
+    -fx-font-weight: bold;
+    -fx-opacity: 1.0;
+    -fx-background-radius: 5
+}
+
 .btnCactus {
     -fx-background-color: #3d7a3d;
     -fx-border-color: #2a5a2a;
