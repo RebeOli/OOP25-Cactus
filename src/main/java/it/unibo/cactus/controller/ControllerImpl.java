@@ -158,11 +158,46 @@ public class ControllerImpl implements Controller, GameViewListener {
         //view.updateGame(game);
     }
 
+    // @Override
+    // public void onGameFinished() {
+    //     final ScoreCalculator calculator = new ScoreCalculator();
+    //     var scores = calculator.calculateScores(game.getPlayers());
+
+    //     final GameResult result = new GameResult(scores, game.getCompletedRounds());
+
+    //     try {
+    //         historyManager.save(result);
+    //     } catch (final IOException e) {
+    //         LOGGER.log(Level.SEVERE, "Impossible saving game result's on JSON", e);
+    //         //view.showError("Attention: it was not possible to save statistics.");
+    //     }
+
+    //     final Map<Player, PlayerStats> stats = new HashMap<>();
+    //     for (final Player player : game.getPlayers()) {
+    //         try {
+    //             stats.put(player, historyManager.getStats(player.getName()));
+    //         } catch (final IOException e) {
+    //             LOGGER.log(Level.SEVERE, "Impossible load game results's from JSON", e);
+    //         }
+    //     }
+
+    //     view.showEndScreen(scores);
+    //     view.updateGame(buildUpdateData());
+    // }
+
     @Override
     public void onGameFinished() {
         final ScoreCalculator calculator = new ScoreCalculator();
         var scores = calculator.calculateScores(game.getPlayers());
-        final GameResult result = new GameResult(scores, game.getCompletedRounds());
+
+        // nuova mappa per il salvataggio
+        final Map<String, Integer> saveScores = new HashMap<>();
+
+        for (final var entry : scores.entrySet()) {
+            saveScores.put(entry.getKey().getName(), entry.getValue());
+        }
+
+        final GameResult result = new GameResult(saveScores, game.getCompletedRounds());
 
         try {
             historyManager.save(result);
@@ -183,6 +218,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         view.showEndScreen(scores);
         view.updateGame(buildUpdateData());
     }
+
 
     @Override
     public void onRoundAdvanced() {
@@ -324,18 +360,10 @@ public class ControllerImpl implements Controller, GameViewListener {
     @Override
     public void onUpdateStats(final String playerName) {
         PlayerStats playerStats = new PlayerStats(0, Collections.emptyMap(), 0);
-        // try {
-        //     playerStats = historyManager.getStats(playerName);
-        // } catch (final IOException e) {
-        //     System.out.println("an error occurs while reading from the history file");
-        // }
         try {
-            PlayerStats fetchedStats = historyManager.getStats(playerName);
-            if (fetchedStats != null) {
-                playerStats = fetchedStats;
-            }
-        } catch (final Exception e) { // <--- CAMBIA QUI: da IOException a Exception
-            System.out.println("Errore di Gson/Lettura: " + e.getMessage());
+            playerStats = historyManager.getStats(playerName);
+        } catch (final IOException e) {
+            System.out.println("an error occurs while reading from the history file");
         }
         view.updateStats(playerName, playerStats);
     }

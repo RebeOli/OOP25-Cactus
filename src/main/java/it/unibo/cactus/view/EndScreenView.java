@@ -54,7 +54,7 @@ public final class EndScreenView extends StackPane {
 
         this.playAgainButton = new Button("PLAY AGAIN");
         this.playAgainButton.getStyleClass().add("btnPlayAgain");
-        this.closeButton = new Button("CLOSE");
+        this.closeButton = new Button("QUIT");
         this.closeButton.getStyleClass().add("btnPlayAgain");
 
         buttonBox.getChildren().addAll(this.playAgainButton, this.closeButton);
@@ -83,7 +83,7 @@ public final class EndScreenView extends StackPane {
             .sorted(Map.Entry.comparingByValue())
             .toList();
 
-        this.winnerLabel.setText(rankingList.getFirst().getKey().getName() + "WON!");
+        this.winnerLabel.setText(rankingList.getFirst().getKey().getName() + " WON!");
 
         for (int i = 1; i < rankingList.size(); i++) {
             final var playerScore = rankingList.get(i);
