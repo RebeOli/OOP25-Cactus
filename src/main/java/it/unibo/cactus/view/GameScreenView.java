@@ -187,16 +187,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         if (currentPower.isEmpty()) return;
         final SpecialPower power = currentPower.get();
-        /*  aggiunto io per prova poteri
-        powerActivated = true;
-        if (power instanceof PeekPower) {
-            message.setText("Seleziona una tua carta da spiare");
-        } else if (power instanceof RevealPower) {
-            message.setText("Seleziona una carta qualsiasi da girare");
-        } else if (power instanceof SwapPower) {
-            message.setText("Seleziona la tua carta da scambiare");
-        }
-        */
         
         final Optional<Integer> playerIdx = tableView.getSelectedPlayerIndex();
         final Optional<Integer> cardIdx = tableView.getSelectedCardIndex();
@@ -204,15 +194,17 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             if (cardIdx.isEmpty()) {
                 return;
             }
-
+            message.setText("Seleziona una tua carta da spiare");
             listener.onPeekPowerRequested(cardIdx.get());
+            tableView.peekPlayerCard(playerIdx.get(), cardIdx.get());
         }
         else if (power instanceof RevealPower) {
             if (playerIdx.isEmpty() || cardIdx.isEmpty()) {
                 return;
             }
-
+            message.setText("Seleziona una carta qualsiasi da girare");
             listener.onRevealPowerRequested(playerIdx.get(), cardIdx.get());
+            tableView.peekPlayerCard(playerIdx.get(), cardIdx.get());
         }
         else if (power instanceof SwapPower) {
             handleSwapPhase(playerIdx, cardIdx);
@@ -224,11 +216,13 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             return;
         }
         if(currSwapPhase == SwapPhase.NO_SELECTION){
+            message.setText("Seleziona la prima carta da scambiare");
             firstSwapPlayerIdx = playerIndx.get();
             firstSwapCardIdx = cardInx.get();
             currSwapPhase = SwapPhase.FIRST_SELECTED;
         }
         else if(currSwapPhase == SwapPhase.FIRST_SELECTED){
+            message.setText("Seleziona la seconda carta da scambiare");
             listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, 
                 playerIndx.get(), cardInx.get());
 
