@@ -68,11 +68,6 @@ public final class ActionPanelView extends HBox {
      */
     public void update(final List<RoundAction> availableActions, final boolean isHumanTurn,
         final Optional<SpecialPower> currentPower) {
-        /*btnActivePower.setOnAction(e -> {
-            currentPower.isPresent(power -> {
-                //TO DO
-            });
-        });*/
         if (!isHumanTurn) {
             btnCactus.setDisable(true);
             btnEndTurn.setDisable(true);

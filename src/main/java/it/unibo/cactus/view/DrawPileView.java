@@ -43,7 +43,6 @@ public final class DrawPileView extends StackPane {
      */
     public void update(final int remainingCards, final boolean isHumanTurn) {
         this.countLabel.setText(String.valueOf(remainingCards));
-
         if (isHumanTurn) {
             this.getStyleClass().remove(CSS_PILE_DISABLED);
         } else {
