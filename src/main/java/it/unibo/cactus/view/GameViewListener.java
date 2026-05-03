@@ -26,7 +26,9 @@ public interface GameViewListener {
 
     void onDiscardDrawnCardRequested();
 
-    void onSwapWithDrawnCardRequested(int cardIndex);
+    void onSwapWithDrawnCardRequested(final int cardIndex);
+
+    void onUpdateStats(final String playerName);
 
     void onPauseRequested();
 

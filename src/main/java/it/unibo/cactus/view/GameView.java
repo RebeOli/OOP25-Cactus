@@ -6,6 +6,7 @@ import java.util.Map;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
+import it.unibo.cactus.model.statistics.PlayerStats;
 
 public interface GameView {
 
@@ -28,5 +29,7 @@ public interface GameView {
     void showEndScreen(final Map<Player, Integer> finalsScores);
 
     void setActionListener(GameViewListener listener);
+
+    void updateStats(final String playerName, final PlayerStats playerStats);
 
 }
