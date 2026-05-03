@@ -24,7 +24,7 @@ public record ActivatePowerAction(PowerTarget target) implements RoundAction {
         if (this.target == null) {
             throw new IllegalStateException("Missing target for ActivatePowerAction");
         }
-        round.getDrawnCard()
+        round.getDiscardTopCard()
                 .flatMap(Card::getSpecialPower)
                 .ifPresent(power -> power.activate(round.getCurrentPlayer(), target));
         round.advancePhase();
