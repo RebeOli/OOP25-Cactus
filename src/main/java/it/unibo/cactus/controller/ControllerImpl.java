@@ -300,15 +300,28 @@ public class ControllerImpl implements Controller, GameViewListener {
         .orElseThrow();
     }
 
-    private String getRoundMessage(final Round round){
-        return switch (round.getPhase()) {
-            case DRAW -> "Pesca una carta dal mazzo";
-            case DECISION -> "Sostituisci una tua carta o scarta quella pescata";
-            case SPECIAL_POWER -> "Attiva il potere speciale o saltalo";
-            case END_TURN -> "Fine turno: chiama Cactus! o passa";
-            case SIMULTANEOUS_DISCARD -> "Scarto simultaneo! Vuoi scartare una carta?";
-            case ENDED -> "";
-        };
+    private String getRoundMessage(final Round round) {
+        final String botName = game.getCurrentPlayer().getName();
+        if(game.getCurrentPlayer().isHuman()) {
+            return switch (round.getPhase()) {
+                case DRAW -> "Draw a card from the pile";
+                case DECISION -> "Swap one of your cards or discard the drawn one";
+                case SPECIAL_POWER -> "Activate the special power or skip it";
+                case END_TURN -> "End of turn: call Cactus or pass";
+                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
+                case ENDED -> "";
+            };
+        }
+        else {
+            return switch (round.getPhase()) {
+                case DRAW -> botName + " is drawing a card";
+                case DECISION -> botName + " is playing the drawn card";
+                case SPECIAL_POWER -> botName + " is deciding whether to use the special power";
+                case END_TURN -> botName + " is ending their turn";
+                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
+                case ENDED -> "";
+            };
+        }
     }
 
     @Override
