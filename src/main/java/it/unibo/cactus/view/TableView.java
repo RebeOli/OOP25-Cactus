@@ -2,6 +2,7 @@ package it.unibo.cactus.view;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.PlayerHand;
@@ -36,6 +37,8 @@ public class TableView extends BorderPane {
     private Optional<Integer> selectedPlayerIndex = Optional.empty();
     private Optional<Integer> selectedCardIndex = Optional.empty();
     private boolean selectionEnabled = false;
+    private BiConsumer<Integer, Integer> onCardClickedCallback;
+
 
     /**
      * Constructs the game table, setting up the players and the layout.
@@ -212,6 +215,10 @@ public class TableView extends BorderPane {
         if (card != null) {
             card.setHighlight(true);
         }
+
+        if (onCardClickedCallback != null) {
+            onCardClickedCallback.accept(playerIndex, cardIndex);
+        }
     }
 
     private void clearSelection() {
@@ -230,5 +237,9 @@ public class TableView extends BorderPane {
         bot1Hand.updateHand(hands.get(1));
         bot2Hand.updateHand(hands.get(2));
         bot3Hand.updateHand(hands.get(3));
+    }
+
+    public void setOnCardClicked(final BiConsumer<Integer, Integer> callback) {
+        this.onCardClickedCallback = callback;
     }
 }

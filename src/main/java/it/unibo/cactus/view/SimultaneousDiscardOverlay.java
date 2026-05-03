@@ -22,8 +22,8 @@ import javafx.util.Duration;
  */
 public final class SimultaneousDiscardOverlay extends StackPane {
     private static final int CONTAINER_SPACING = 20;
-    private static final int CONTAINER_MAX_WIDTH = 400;
-    private static final int CONTAINER_MAX_HEIGHT = 450;
+    //private static final int CONTAINER_MAX_WIDTH = 400;
+    //private static final int CONTAINER_MAX_HEIGHT = 450;
     private static final double DISCARD_CARD_HEIGHT = 0.25;
     private static final double SLOT_CARD_HEIGHT = 0.15;
 
@@ -52,7 +52,10 @@ public final class SimultaneousDiscardOverlay extends StackPane {
         cardContainer.getStyleClass().add("overlayCard");
         cardContainer.setAlignment(Pos.CENTER);
         cardContainer.setSpacing(CONTAINER_SPACING);
-        cardContainer.setMaxSize(CONTAINER_MAX_WIDTH, CONTAINER_MAX_HEIGHT); // Dimensioni fisse del pop-up
+
+        cardContainer.maxWidthProperty().bind(this.widthProperty().multiply(0.5));
+        cardContainer.maxHeightProperty().bind(this.heightProperty().multiply(0.7));
+        //cardContainer.setMaxSize(CONTAINER_MAX_WIDTH, CONTAINER_MAX_HEIGHT); // Dimensioni fisse del pop-up
 
         titleLabel = new Label("Simulateous discard!");
         titleLabel.getStyleClass().add("overlayTitle");

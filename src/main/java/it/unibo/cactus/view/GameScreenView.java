@@ -8,6 +8,9 @@ import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.SwapPower;
+import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.actions.DrawAction;
+import it.unibo.cactus.model.rounds.actions.SwapAction;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -40,6 +43,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private int firstSwapPlayerIdx;
     private int firstSwapCardIdx;
     private boolean simultaneousAnswered = false;
+    private List<RoundAction> currentAvailableActions;
+    //private boolean powerActivated = false;
 
     private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
@@ -61,8 +66,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         this.turnLabel.setId("turnLabel");
 
         tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
-
         tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
+        tableView.setOnCardClicked((playerIndex, cardIndex) -> {
+            final boolean canSwap = currentAvailableActions.stream()
+                .anyMatch(a -> a instanceof SwapAction);
+            if (playerIndex == 0 && canSwap) {
+            listener.onSwapWithDrawnCardRequested(cardIndex);
+            }
+        });
         //tableView.getHumanHand().setOnSwapAction(() -> listener.onSwapWithDrawnCardRequested(0));
 
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
@@ -76,15 +87,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
-
-        // top, senza titolo in alto
-        /*final Button btnMenu = new Button("Menu");
-        btnMenu.getStyleClass().add("btnMenu");
-        btnMenu.setOnAction(e -> menuOverlay.show());
-        final HBox topBar = new HBox(btnMenu);
-        topBar.setAlignment(Pos.TOP_RIGHT);
-        topBar.setPadding(new Insets(20, 20, 0, 0));
-        gameLayout.setTop(topBar);*/
 
         //con titolo in alto. 
         final Button btnMenu = new Button("Menu");
@@ -138,34 +140,39 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
         this.currentPower = data.currentPower();
         this.currSwapPhase = SwapPhase.NO_SELECTION;
+        this.currentAvailableActions = data.availableActions();
         tableView.setSelectionEnabled(data.isHumanTurn());
         
         if(!data.allHands().isEmpty()) {
             tableView.updateAllHands(data.allHands());
         }
 
-        tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
-        //tableView.getDiscardPile().update(data.discardCard().getSuit(), data.discardCard().getValue(), data.isSimultaneous());
-        
+        //tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
+        final boolean canDraw = data.isHumanTurn() && data.availableActions().stream()
+            .anyMatch(a -> a instanceof DrawAction);
+        tableView.getDrawPile().update(data.remainingCards(), canDraw);
+
         // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
-            // 1. Se stiamo pescando, mostra la carta pescata
-            tableView.showDrawnCard(data.drawnCard());
+            if(!data.isHumanTurn()) {
+                tableView.hideDrawnCard(); //disattivo la visualizzazione della carta pescata nel turno dei bot
+            } else {
+                // 1. Se stiamo pescando, mostra la carta pescata
+                tableView.showDrawnCard(data.drawnCard());
+            }
         } else if (data.topCard() != null) {
             // 2. Altrimenti, mostra lo scarto in cima (utile per lo scarto simultaneo dei bot!)
-            tableView.showDrawnCard(data.topCard());
+            tableView.getDiscardPile().update(data.topCard().getSuit(), data.topCard().getValue(), data.isSimultaneous());
+            tableView.hideDrawnCard();
         } else {
             // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
         }
-        // -------------------------------------------------
 
-        //tableView.getDiscardPile().update(data.discardCard().get().getSuit(), data.discardCard().get().getValue(), data.isSimultaneous());
-        
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
         
-        if (data.isSimultaneous()) {
+        if (data.isSimultaneous() && data.playerHand().size()<6) {
             if (!this.simultaneousAnswered && !overlay.isVisible()) {
                 showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
             }
@@ -178,11 +185,19 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     @Override
     public void onActivatePowerClicked(){
 
-        if (currentPower.isEmpty()) {
-            return;
-        }
-
+        if (currentPower.isEmpty()) return;
         final SpecialPower power = currentPower.get();
+        /*  aggiunto io per prova poteri
+        powerActivated = true;
+        if (power instanceof PeekPower) {
+            message.setText("Seleziona una tua carta da spiare");
+        } else if (power instanceof RevealPower) {
+            message.setText("Seleziona una carta qualsiasi da girare");
+        } else if (power instanceof SwapPower) {
+            message.setText("Seleziona la tua carta da scambiare");
+        }
+        */
+        
         final Optional<Integer> playerIdx = tableView.getSelectedPlayerIndex();
         final Optional<Integer> cardIdx = tableView.getSelectedCardIndex();
         if (power instanceof PeekPower) {
@@ -208,7 +223,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         if(playerIndx.isEmpty() || cardInx.isEmpty()) {
             return;
         }
-
         if(currSwapPhase == SwapPhase.NO_SELECTION){
             firstSwapPlayerIdx = playerIndx.get();
             firstSwapCardIdx = cardInx.get();
@@ -222,6 +236,27 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         }
     }
 
+    /*  aggiunto io per prova poteri
+    private void handlePowerTarget(final int playerIndex, final int cardIndex) {
+        final SpecialPower power = currentPower.get();
+        if (power instanceof PeekPower) {
+            if (playerIndex == 0) {
+                listener.onPeekPowerRequested(cardIndex);
+                powerActivated = false;
+            }
+        } else if (power instanceof RevealPower) {
+            listener.onRevealPowerRequested(playerIndex, cardIndex);
+            powerActivated = false;
+        } else if (power instanceof SwapPower) {
+            handleSwapPhase(Optional.of(playerIndex), Optional.of(cardIndex));
+            if (currSwapPhase == SwapPhase.FIRST_SELECTED) {
+                message.setText("Ora seleziona la carta del bot da scambiare");
+            } else {
+                powerActivated = false;
+            }
+        }
+    }
+    */
     @Override
     public void onSkipPowerClicked(){
         listener.onSkipPowerRequested();
