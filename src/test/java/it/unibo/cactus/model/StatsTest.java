@@ -44,18 +44,18 @@ final class StatsTest {
 
         this.result = new ArrayList<>();
 
-        final Map<Player, Integer> scores1 = new HashMap<>();
-        final Map<Player, Integer> scores2 = new HashMap<>();
-        final Map<Player, Integer> scores3 = new HashMap<>();
+        final Map<String, Integer> scores1 = new HashMap<>();
+        final Map<String, Integer> scores2 = new HashMap<>();
+        final Map<String, Integer> scores3 = new HashMap<>();
 
-        scores1.put(player1, SCORE_4);
-        scores1.put(player2, SCORE_1);
+        scores1.put(player1.getName(), SCORE_4);
+        scores1.put(player2.getName(), SCORE_1);
 
-        scores2.put(player1, SCORE_3);
-        scores2.put(player2, SCORE_4);
+        scores2.put(player1.getName(), SCORE_3);
+        scores2.put(player2.getName(), SCORE_4);
 
-        scores3.put(player1, SCORE_2);
-        scores3.put(player2, SCORE_1);
+        scores3.put(player1.getName(), SCORE_2);
+        scores3.put(player2.getName(), SCORE_1);
 
         this.result.add(new GameResult(scores1, ROUNDS_3));
         this.result.add(new GameResult(scores2, ROUNDS_2));
