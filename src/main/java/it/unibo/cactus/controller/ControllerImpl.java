@@ -52,6 +52,8 @@ public class ControllerImpl implements Controller, GameViewListener {
     private final HistoryManager historyManager;
     private boolean humanWindowExpired;
     private final Random random;
+    private boolean isPaused = false;
+    private long pauseStartTime = 0;
 
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
@@ -76,7 +78,9 @@ public class ControllerImpl implements Controller, GameViewListener {
     // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
-        if (game == null || game.isFinished()) return;
+        if (game == null || game.isFinished() || isPaused) {
+            return;
+        }
 
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             if (simultaneousDiscardStartTime == 0) {
@@ -315,13 +319,15 @@ public class ControllerImpl implements Controller, GameViewListener {
             drawnCard = round.getDrawnCard().get();
         }
 
+        boolean cactusCalled = game.getCurrentRound().isLastRound();
+
         // Card discardCard = null;
         // if (game.getDiscardPile().getTopCard().isPresent()) { 
         //     drawnCard = game.getDiscardPile().getTopCard().get();
         // }
 
         return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName());
+            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
     }
 
     private Player getHumanPlayer(){
@@ -331,15 +337,28 @@ public class ControllerImpl implements Controller, GameViewListener {
         .orElseThrow();
     }
 
-    private String getRoundMessage(final Round round){
-        return switch (round.getPhase()) {
-            case DRAW -> "Pesca una carta dal mazzo";
-            case DECISION -> "Sostituisci una tua carta o scarta quella pescata";
-            case SPECIAL_POWER -> "Attiva il potere speciale o saltalo";
-            case END_TURN -> "Fine turno: chiama Cactus! o passa";
-            case SIMULTANEOUS_DISCARD -> "Scarto simultaneo! Vuoi scartare una carta?";
-            case ENDED -> "";
-        };
+    private String getRoundMessage(final Round round) {
+        final String botName = game.getCurrentPlayer().getName();
+        if(game.getCurrentPlayer().isHuman()) {
+            return switch (round.getPhase()) {
+                case DRAW -> "Draw a card from the pile";
+                case DECISION -> "Swap one of your cards or discard the drawn one";
+                case SPECIAL_POWER -> "Activate the special power or skip it";
+                case END_TURN -> "End of turn: call Cactus or pass";
+                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
+                case ENDED -> "";
+            };
+        }
+        else {
+            return switch (round.getPhase()) {
+                case DRAW -> botName + " is drawing a card";
+                case DECISION -> botName + " is playing the drawn card";
+                case SPECIAL_POWER -> botName + " is deciding whether to use the special power";
+                case END_TURN -> botName + " is ending their turn";
+                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
+                case ENDED -> "";
+            };
+        }
     }
 
     @Override
@@ -355,6 +374,28 @@ public class ControllerImpl implements Controller, GameViewListener {
     @Override
     public void onSwapWithDrawnCardRequested(int cardIndex) {
         handleAction(new SwapAction(cardIndex));
+    }
+
+    @Override
+    public void onPauseRequested() {
+        if (!isPaused) {
+            isPaused = true;
+            pauseStartTime = System.currentTimeMillis();
+        }
+    }
+
+    @Override
+    public void onResumeRequested() {
+        if (isPaused) {
+            isPaused = false;
+            long pausedDuration = System.currentTimeMillis() - pauseStartTime; 
+            if (botStartTime != 0) {
+                botStartTime += pausedDuration;
+            }
+            if (simultaneousDiscardStartTime != 0) {
+                simultaneousDiscardStartTime += pausedDuration;
+            }
+        }
     }
 
     @Override

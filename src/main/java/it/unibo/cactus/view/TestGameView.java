@@ -60,7 +60,6 @@ public class TestGameView extends Application {
             null,
             tableView,
             () -> {},
-            () -> {},
             () -> {}
         );
         
@@ -95,7 +94,8 @@ public class TestGameView extends Application {
             List.of(),
             40,
             cartaTest,
-            ""
+            "",
+            false
         ));
     }
 

@@ -21,5 +21,6 @@ public record GameUpdateData(
     List<PlayerHand> allHands,
     int remainingCards,
     Card drawnCard,
-    String currentPlayerName
+    String currentPlayerName,
+    boolean cactusCalled
 ) {}

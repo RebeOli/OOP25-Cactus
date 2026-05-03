@@ -30,4 +30,8 @@ public interface GameViewListener {
 
     void onUpdateStats(final String playerName);
 
+    void onPauseRequested();
+
+    void onResumeRequested();
+
 }

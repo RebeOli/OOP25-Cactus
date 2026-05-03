@@ -26,14 +26,14 @@ public class PeekInitialCardsView extends VBox {
         this.setSpacing(SPACING);
         this.setPadding(new Insets(PADDING));
 
-        final Label subtitle = new Label("Spia 2 delle tue carte");
+        final Label subtitle = new Label("Spy two of your cards!!");
         subtitle.getStyleClass().add("subtitle");
         subtitle.setId("peekSubtitle");
 
         final HBox cardsContainer = new HBox(CARDS_CONT_SPACING);
         cardsContainer.setAlignment(Pos.CENTER);
 
-        final Button confirmButton = new Button("Conferma");
+        final Button confirmButton = new Button("Continue");
         confirmButton.getStyleClass().add("confirmButton");
         confirmButton.setId("peekConfirmBtn");
         confirmButton.setDisable(true);

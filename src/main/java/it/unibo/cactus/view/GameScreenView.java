@@ -38,6 +38,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private final GameViewListener listener;
     private final TableView tableView;
     private final Label turnLabel;
+    private final Button cactusCalledAvd;
     private Optional<SpecialPower> currentPower = Optional.empty();
     private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
     private int firstSwapPlayerIdx;
@@ -58,12 +59,16 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
      * @param onHome action to run on home
      */
     public GameScreenView(final GameViewListener listener, final TableView tableView,
-                          final Runnable onRestart, final Runnable onStats, final Runnable onHome) {
+                          final Runnable onRestart, final Runnable onStats) {
 
         this.listener = listener;
         this.tableView = tableView;
         this.turnLabel = new Label("");
         this.turnLabel.setId("turnLabel");
+        cactusCalledAvd = new Button("");
+        cactusCalledAvd.setDisable(true);
+        cactusCalledAvd.setVisible(false);
+        cactusCalledAvd.getStyleClass().add("btnCalledCactus");
 
         tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
         tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
@@ -82,8 +87,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             this.simultaneousAnswered = true; // <-- Ci segniamo che hai risposto!
             listener.onSimultaneousDiscardRequested(cardIndex);
          });
-        menuOverlay = new MenuOverlay(onRestart, onStats, onHome);
-        menuOverlay.setContinueAction(menuOverlay::hide);
+        menuOverlay = new MenuOverlay(onRestart, onStats);
+        menuOverlay.setContinueAction(() -> {
+            menuOverlay.hide();
+            listener.onResumeRequested();
+        });
+
+        final RulesOverlay rulesOverlay = new RulesOverlay();
+        menuOverlay.setOnRulesRequested(() -> rulesOverlay.show());
 
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
@@ -91,7 +102,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         //con titolo in alto. 
         final Button btnMenu = new Button("Menu");
         btnMenu.getStyleClass().add("btnMenu");
-        btnMenu.setOnAction(e -> menuOverlay.show());
+        btnMenu.setOnAction(e -> {
+            menuOverlay.show();
+            listener.onPauseRequested();
+        });
 
         final Label titleLabel = new Label("🌵 CACTUS 🌵");
         titleLabel.getStyleClass().add("titleLabel");
@@ -99,11 +113,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final HBox rightBox = new HBox(btnMenu);
         rightBox.setAlignment(Pos.CENTER_RIGHT);
 
-        final StackPane topBar = new StackPane(turnLabel, titleLabel, rightBox);
+        final HBox leftBox = new HBox(15, turnLabel, cactusCalledAvd);
+        leftBox.setAlignment(Pos.CENTER_LEFT);
+
+        final StackPane topBar = new StackPane(leftBox, titleLabel, rightBox);
         topBar.setPadding(new Insets(TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING, TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING));
         setAlignment(titleLabel, Pos.CENTER);
         setAlignment(rightBox, Pos.CENTER_RIGHT);
-        setAlignment(turnLabel, Pos.CENTER_LEFT);
+        setAlignment(leftBox, Pos.CENTER_LEFT); //  setAlignment(turnLabel, Pos.CENTER_LEFT);
         gameLayout.setTop(topBar);
 
         // bottom
@@ -121,7 +138,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         gameLayout.setCenter(tableView);
 
         // stack tutto insieme
-        super.getChildren().addAll(gameLayout, overlay, menuOverlay);
+        super.getChildren().addAll(gameLayout, overlay, menuOverlay, rulesOverlay);
     }
 
     /**
@@ -171,7 +188,12 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
-        
+
+        if (data.cactusCalled()) {
+            cactusCalledAvd.setText(data.currentPlayerName().toUpperCase() + " CALLED CACTUS");
+            cactusCalledAvd.setVisible(true);
+        }
+
         if (data.isSimultaneous() && data.playerHand().size()<6) {
             if (!this.simultaneousAnswered && !overlay.isVisible()) {
                 showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
@@ -180,6 +202,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             this.simultaneousAnswered = false;
             hideSimultaneousDiscardWindow();
         }
+
     }
 
     @Override
