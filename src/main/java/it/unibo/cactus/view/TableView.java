@@ -242,4 +242,13 @@ public class TableView extends BorderPane {
     public void setOnCardClicked(final BiConsumer<Integer, Integer> callback) {
         this.onCardClickedCallback = callback;
     }
+
+    public void peekPlayerCard(final int playerIndex, final int cardIndex) {
+        if(playerIndex >= 0 && playerIndex < hands.size()) {
+            final PlayerHandView playerhand = hands.get(playerIndex);
+            if(playerhand.getSlot(cardIndex) != null) {
+                playerhand.getSlot(cardIndex).setFaceUp(true);
+            }
+        }
+    }
 }
