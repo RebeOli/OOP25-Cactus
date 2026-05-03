@@ -110,7 +110,7 @@ public class HardBotStrategy extends AbstractBotStrategy {
         final int estimatedScore = memory.getKnownScore() + AVERAGE_UNKNOWN_SCORE * unknownCount;
 
         // Chiamo Cactus! se il punteggio stimato è sufficientemente basso e se non siamo già al turno finale
-        if (estimatedScore <= CACTUS_SCORE_THRESHOLD && !round.isLastRound()) {
+        if (estimatedScore <= CACTUS_SCORE_THRESHOLD && !round.isCactusCalled()) {
             return new CallCactusAction();
         }
 

@@ -106,7 +106,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
 
         // Chiamo Cactus! se il punteggio visibile è sufficientemente basso
         // e il turno finale non è già stato dichiarato da un altro giocatore
-        if (visibleScore <= CACTUS_SCORE_THRESHOLD && !round.isLastRound()) {
+        if (visibleScore <= CACTUS_SCORE_THRESHOLD && !round.isCactusCalled()) {
             return new CallCactusAction();
         }
 

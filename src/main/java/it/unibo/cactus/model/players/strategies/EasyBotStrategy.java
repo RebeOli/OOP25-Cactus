@@ -49,7 +49,7 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
     @Override
     protected RoundAction chooseEndTurn(final Round round) {
         roundsPlayed++;
-        if (!round.isLastRound()
+        if (!round.isCactusCalled()
                 && roundsPlayed >= MIN_ROUNDS_BEFORE_CACTUS
                 && random.nextDouble() < CACTUS_PROBABILITY) {
             return new CallCactusAction();
