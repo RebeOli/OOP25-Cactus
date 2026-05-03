@@ -22,7 +22,7 @@ public final class StatsCalculator {
      */
     public int countWins(final List<GameResult> results, final String playerName) { //quante volte un giocatore ha vinto
         return (int) results.stream()
-            .filter(r -> r.getWinner().getName().equals(playerName))
+            .filter(r -> r.getWinner().equals(playerName))
             .count();
     }
 
@@ -39,7 +39,7 @@ public final class StatsCalculator {
     public Map<String, Integer> generalRanking(final List<GameResult> results) {
         return results.stream()
             .collect(Collectors.groupingBy(
-                r -> r.getWinner().getName(),
+                r -> r.getWinner(),
                 Collectors.summingInt(r -> 1) //summingInt permette di non dover convertire il Long in int
             ));
     }
