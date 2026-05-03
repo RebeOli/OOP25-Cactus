@@ -64,7 +64,11 @@ final class ScoreTest {
 
     @Test
     void testGetWinner() {
-        final GameResult result = new GameResult(scores, ROUNDS);
-        assertEquals(player2, result.getWinner());
+        final Map<String, Integer> stringScores = new HashMap<>();
+        for (final var entry : scores.entrySet()) {
+            stringScores.put(entry.getKey().getName(), entry.getValue());
+        }
+        final GameResult result = new GameResult(stringScores, ROUNDS);
+        assertEquals(player2.getName(), result.getWinner());
     }
 }

@@ -1,12 +1,14 @@
 package it.unibo.cactus.view;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
+import it.unibo.cactus.model.statistics.PlayerStats;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -30,6 +32,9 @@ public class GameViewImpl implements GameView {
     private final Stage primaryStage;
     private GameViewListener listener;
     private GameScreenView gameScreen;
+    private StatsView statsView;
+    private String humanPlayerName;
+    private List<String> playersNames;
 
     /**
      * Constructs the main view manager.
@@ -61,6 +66,8 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
+        this.humanPlayerName = humanName;
+        this.playersNames = new ArrayList<>(List.of(humanName, bot1Name, bot2Name, bot3Name));
         final TableView tableView = new TableView(humanName, bot1Name, bot2Name, bot3Name);
         this.gameScreen = new GameScreenView(listener, tableView, this::showConfigScreen, this::showStatsScreen, this::showConfigScreen);
         switchScreen(gameScreen);
@@ -133,7 +140,17 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatsScreen() {
-        final StatsView statsView = new StatsView();
+        statsView = new StatsView(playersNames, () -> switchScreen(gameScreen));
+        statsView.setOnPlayerSelected(selectedName -> {
+            listener.onUpdateStats(selectedName);
+        });
         switchScreen(statsView);
+        listener.onUpdateStats(humanPlayerName); //lascio di default prima che venga effettivamente cliccato qualcosa
     }
+
+    @Override
+    public void updateStats(String playerName, PlayerStats playerStats) {
+        statsView.showStats(playerName, playerStats);
+    }
+
 }
