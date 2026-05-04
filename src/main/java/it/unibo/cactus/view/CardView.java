@@ -197,4 +197,8 @@ public class CardView extends StackPane {
             action.run();
         });
     }
+
+    public boolean isFaceUp() {
+        return this.isFaceUp;
+    }
 }
