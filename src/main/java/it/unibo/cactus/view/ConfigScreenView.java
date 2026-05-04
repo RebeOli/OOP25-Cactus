@@ -84,9 +84,13 @@ public class ConfigScreenView extends StackPane {
 
         startButton.setOnAction(e -> {
             final String name = nameField.getText();
+            
             if (name == null || name.isBlank()) {
                 errorLbl.setText("Please enter your name to get started.");
-            } 
+            }
+            else if (name.length() > 18) {
+                errorLbl.setText("Please enter your name no longer than 18 characters.");
+            }
             else {
                 errorLbl.setText("");
                 listener.onGameStartRequested(name, difficultyCombobox.getValue());
