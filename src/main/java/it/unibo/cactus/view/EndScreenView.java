@@ -83,7 +83,7 @@ public final class EndScreenView extends StackPane {
             .sorted(Map.Entry.comparingByValue())
             .toList();
 
-        this.winnerLabel.setText(rankingList.getFirst().getKey().getName() + " WON!");
+        this.winnerLabel.setText(rankingList.getFirst().getKey().getName() + " WON\n" + "with " + rankingList.getFirst().getValue() + " points");
 
         for (int i = 1; i < rankingList.size(); i++) {
             final var playerScore = rankingList.get(i);
