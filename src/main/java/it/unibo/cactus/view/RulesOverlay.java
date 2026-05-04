@@ -26,10 +26,10 @@ public class RulesOverlay extends StackPane {
             "SETUP\n" +
             "4 player and 40 card deck. Each player starts with 4 face-down cards." +
             "Before the game begins, each player may look at exactly 2 of their own cards — once only. " +
-            "The player with the lowest score from their cards wins\n\n" +
+            "The player with the lowest score from their cards wins.\n\n" +
             "CARD VALUES\n" +
-            "    1-9 worth their face value\n" +
-            "    10 worth 0 points - the best card in the game\n\n" +
+            "    1-9 worth their number value.\n" +
+            "    10 worth 0 points - the best card in the game.\n\n" +
             "YOUR TURN\n" +
             "    Draw a card from the face-down deck. You may:\n" + 
             "        • Swap: exchange it with one of your face-down cards (the replaced card goes to the discard pile).\n" + 
@@ -42,12 +42,10 @@ public class RulesOverlay extends StackPane {
             "When a player discards a card, anyone who believes they hold a card of the same value may immediately try to discard it too.\n" +
             "     correct :) You lose that card — great!\n" +
             "     wrong :( You receive a penalty card from the deck. If you reach the limit of 6 cards in your hand " +
-            "you can no longer perform simultaneous discard\n\n" +
+            "you can no longer perform simultaneous discard.\n\n" +
             "ENDING GAME\n" +
             "    Call Cactus - If you think you have the lowest score, call Cactus! All other players get one final turn, then scores are counted.\n" +
             "    Empty - If a player runs out of cards, the game ends immediately with the player's win."
-
-
         );
         rulesText.setWrapText(true);
         rulesText.getStyleClass().add("endScore");
