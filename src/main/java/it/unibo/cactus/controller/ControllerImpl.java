@@ -54,6 +54,8 @@ public class ControllerImpl implements Controller, GameViewListener {
     private final Random random;
     private boolean isPaused = false;
     private long pauseStartTime = 0;
+    private boolean gameEndHandled = false;
+    private boolean isGameOver = false;
 
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
@@ -65,6 +67,8 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void startGame(final String playerName, BotDifficulty difficulty) {
+        this.gameEndHandled = false;
+        this.isGameOver = false;
         this.game = GameFactory.createGame(playerName, difficulty);
         game.addObserver(this); //perchè come observer passiamo il controller
         view.showPeekScreen(getHumanPlayer().getHand());
@@ -78,7 +82,11 @@ public class ControllerImpl implements Controller, GameViewListener {
     // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
-        if (game == null || game.isFinished() || isPaused) {
+        if (game == null || isPaused) {
+            return;
+        }
+
+        if (checkGameEnd()) {
             return;
         }
 
@@ -191,6 +199,10 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void onGameFinished() {
+        if (gameEndHandled) {
+            return;
+        }
+        gameEndHandled = true;
         final ScoreCalculator calculator = new ScoreCalculator();
         var scores = calculator.calculateScores(game.getPlayers());
 
@@ -227,11 +239,13 @@ public class ControllerImpl implements Controller, GameViewListener {
     @Override
     public void onRoundAdvanced() {
         this.view.updateGame(buildUpdateData());
+        checkGameEnd();
     }
 
     @Override
     public void onGameStateChanged() {
         view.updateGame(buildUpdateData());
+        checkGameEnd();
     }
 
     @Override
@@ -325,9 +339,11 @@ public class ControllerImpl implements Controller, GameViewListener {
         // if (game.getDiscardPile().getTopCard().isPresent()) { 
         //     drawnCard = game.getDiscardPile().getTopCard().get();
         // }
+        boolean isHumanTurn = !isGameOver && game.getCurrentPlayer().isHuman();
+        boolean isSimultaneous = !isGameOver && round.isSimultaneousDiscardPhase();
 
-        return new GameUpdateData(round.getAvailableActions(), game.getCurrentPlayer().isHuman(), getRoundMessage(round), currSpecialPower, 
-            discardTopCard, round.isSimultaneousDiscardPhase(), cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
+        return new GameUpdateData(round.getAvailableActions(), isHumanTurn, getRoundMessage(round), currSpecialPower, 
+            discardTopCard, isSimultaneous, cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
     }
 
     private Player getHumanPlayer(){
@@ -407,6 +423,24 @@ public class ControllerImpl implements Controller, GameViewListener {
             System.out.println("an error occurs while reading from the history file");
         }
         view.updateStats(playerName, playerStats);
+    }
+
+    private boolean checkGameEnd() {
+        if (game == null) {
+            return false;
+        }
+
+        // Controlliamo esplicitamente se qualcuno ha 0 carte!
+        boolean someoneHasZeroCards = game.getPlayers().stream()
+                .anyMatch(p -> p.getHand().size() == 0);
+
+        // Se il Model ha finito OPPURE qualcuno ha 0 carte, dichiariamo la fine
+        if (game.isFinished() || someoneHasZeroCards) {
+            this.isGameOver = true;
+            onGameFinished(); 
+            return true;
+        }
+        return false;
     }
 
 }
