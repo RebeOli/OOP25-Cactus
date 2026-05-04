@@ -24,7 +24,7 @@ public class RulesOverlay extends StackPane {
 
         final Label rulesText = new Label(
             "SETUP\n" +
-            "4 player and 40 card deck. Each player starts with 4 face-down cards." +
+            "4 player and 40 card deck. Each player starts with 4 face-down cards. " +
             "Before the game begins, each player may look at exactly 2 of their own cards — once only. " +
             "The player with the lowest score from their cards wins.\n\n" +
             "CARD VALUES\n" +
