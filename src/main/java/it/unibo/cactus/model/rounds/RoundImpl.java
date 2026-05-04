@@ -65,7 +65,14 @@ public final class RoundImpl implements MutableRound {
                 yield actions;
             }
             case SPECIAL_POWER -> List.of(new ActivatePowerAction(), new SkipPowerAction());
-            case END_TURN -> List.of(new CallCactusAction(), new EndTurnAction());
+            case END_TURN -> { 
+                final List<RoundAction> actions = new ArrayList<>();
+                if (!game.isCactusCalled()) {
+                    actions.add(new CallCactusAction());
+                }
+                actions.add(new EndTurnAction());
+                yield actions;
+            }
             case SIMULTANEOUS_DISCARD -> {
                 final List<RoundAction> actions = new ArrayList<>();
                 game.getPlayers().stream()

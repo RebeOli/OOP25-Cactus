@@ -173,4 +173,9 @@ public final class GameImpl implements Game {
         advancePlayer();
     }
 
+    @Override
+    public boolean isCactusCalled() {
+        return cactusCalledBy.isPresent();
+    }
+
 }

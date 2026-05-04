@@ -97,4 +97,6 @@ public interface Game {
      * Ends the simultaneous discard phase and advances to the next player.
      */
     void endSimultaneousDiscard();
+
+    boolean isCactusCalled();
 }
