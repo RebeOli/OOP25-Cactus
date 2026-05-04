@@ -1,5 +1,6 @@
 package it.unibo.cactus.view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -276,7 +277,15 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     };
 
     public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {
-        overlay.show(topCard, playerHand);
+        List<Boolean> faceUpStates = new ArrayList<>();
+        PlayerHandView humanView = tableView.getHumanHand();
+        for (int i = 0; i < 6; i++) {
+            CardView slot = humanView.getSlot(i);
+            if (slot != null && i < playerHand.size()) {
+                faceUpStates.add(slot.isFaceUp());
+            }
+        }
+        overlay.show(topCard, playerHand, faceUpStates);
     }
 
     public void hideSimultaneousDiscardWindow() {

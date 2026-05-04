@@ -95,7 +95,7 @@ public final class SimultaneousDiscardOverlay extends StackPane {
      * @param playerHand the human player's hand
      * @param player the human player
      */
-    public void show(final Card topCard, final List<Card> playerHand) {
+    public void show(final Card topCard, final List<Card> playerHand, final List<Boolean> isFaceUpList) {
         this.actionSent = false;
         
         // 1. Svuotiamo gli slot vecchi prima di crearne di nuovi
@@ -115,7 +115,16 @@ public final class SimultaneousDiscardOverlay extends StackPane {
                 slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
                 
                 slot.setCardData(playerHand.get(i));
-                slot.setFaceUp(false); // Le carte nello scarto simultaneo partono coperte
+                boolean isCardRevealed = false;
+                if (isFaceUpList != null && i < isFaceUpList.size()) {
+                    isCardRevealed = isFaceUpList.get(i);
+                }
+                
+                slot.setFaceUp(isCardRevealed); 
+                
+                if (isCardRevealed) {
+                    slot.setPermanentlyRevealed();
+                }
                 
                 slotCards.add(slot);
                 slotsBox.getChildren().add(slot);
