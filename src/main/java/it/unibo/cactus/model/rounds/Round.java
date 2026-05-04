@@ -73,4 +73,10 @@ public interface Round {
      */
     Optional<Card> getDiscardTopCard();
 
+    /**
+     * Returns whether a player has already called "Cactus!" in this game.
+     * 
+     * @return true if Cactus has been called, false otherwise.
+     */
+    boolean isCactusCalled();
 }

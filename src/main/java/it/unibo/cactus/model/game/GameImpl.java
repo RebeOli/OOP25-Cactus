@@ -111,7 +111,7 @@ public final class GameImpl implements Game {
             throw new IllegalStateException("the game is already finished");
         }
         totalTurns++;
-        if (currentRound.isLastRound()) {
+        if (currentRound.isLastRound() && cactusCalledBy.isEmpty()) {
             cactusCalledBy = Optional.of(getCurrentPlayer());
         }
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -171,6 +171,11 @@ public final class GameImpl implements Game {
     public void endSimultaneousDiscard() {
         ((MutableRound) currentRound).endSimultaneousDiscard(); // SIMULTANEOUS_DISCARD -> ENDED
         advancePlayer();
+    }
+
+    @Override
+    public boolean isCactusCalled() {
+        return cactusCalledBy.isPresent();
     }
 
 }
