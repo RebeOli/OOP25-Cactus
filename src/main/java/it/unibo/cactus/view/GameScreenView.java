@@ -216,13 +216,13 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final SpecialPower power = currentPower.get();
 
         if (power instanceof PeekPower) {
-            message.setText("Seleziona una tua carta da spiare");
+            message.setText("Select a card to spy");
         }
         else if (power instanceof RevealPower) {
-            message.setText("Seleziona una carta qualsiasi da girare");
+            message.setText("Select a card to reveal");
         }
         else if (power instanceof SwapPower) {
-            message.setText("Seleziona la prima carta da scambiare");
+            message.setText("Select a card to swap");
         }
     };
 
@@ -234,14 +234,14 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             firstSwapPlayerIdx = playerIndx.get();
             firstSwapCardIdx = cardInx.get();
             currSwapPhase = SwapPhase.FIRST_SELECTED;
-            message.setText("Seleziona la seconda carta da scambiare");
+            message.setText("Select the second card to swap");
         }
         else if(currSwapPhase == SwapPhase.FIRST_SELECTED){
             listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, 
                 playerIndx.get(), cardInx.get());
 
             currSwapPhase = SwapPhase.NO_SELECTION;
-            message.setText("Scambio avvenuto.");
+            message.setText("Swap completeded successfully!.");
         }
     }
 

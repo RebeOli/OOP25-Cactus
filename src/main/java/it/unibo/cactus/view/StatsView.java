@@ -18,8 +18,8 @@ import javafx.scene.layout.VBox;
  */
 public final class StatsView extends StackPane {
 
-    private static final double BOX_HEIGHT = 700;
-    private static final double BOX_WIDTH = 600;
+    private static final double BOX_HEIGHT = 450;
+    private static final double BOX_WIDTH = 400;
     private static final int STATS_BOX_SPACING = 20;
     private static final int RANKING_BOX_SPACING = 5;
     private static final String CSS_OVERLAY_SUBTITLE = "overlaySubtitle";

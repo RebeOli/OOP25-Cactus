@@ -16,8 +16,8 @@ import javafx.scene.layout.VBox;
 public final class EndScreenView extends StackPane {
 
     private static final int BUTTON_SPACING = 20;
-    private static final double CARD_MAX_HEIGHT = 450;
-    private static final double CARD_MAX_WIDTH = 400;
+    private static final double BOX_HEIGHT = 450;
+    private static final double BOX_WIDTH = 400;
     private static final int BOX_SPACING = 15;
     private final Label winnerLabel;
     private final Label winnerScoreLabel;
@@ -33,7 +33,7 @@ public final class EndScreenView extends StackPane {
 
         final VBox endBox = new VBox(BOX_SPACING);
         endBox.setAlignment(Pos.CENTER);
-        endBox.setMaxSize(CARD_MAX_WIDTH, CARD_MAX_HEIGHT);
+        endBox.setMaxSize(BOX_WIDTH, BOX_HEIGHT);
         endBox.getStyleClass().add("overlayCard");
 
         final Label titleLabel = new Label("GAME OVER!");
