@@ -11,6 +11,7 @@ import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.cards.SwapPower;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.DrawAction;
+import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -191,7 +192,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
         }
-
         message.setText(data.completeMessage());
         turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
 
@@ -247,6 +247,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     }
 
     private void handlePowerTarget(final int playerIndex, final int cardIndex) {
+        //aggiunto io 
+        final boolean powerStillAvailable = currentAvailableActions.stream()
+            .anyMatch(a -> a instanceof SkipPowerAction);
+        if (!powerStillAvailable) return;
         final SpecialPower power = currentPower.get();
         if (power instanceof PeekPower) {
             if (playerIndex == 0) {
@@ -263,6 +267,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     
     @Override
     public void onSkipPowerClicked(){
+        message.setText("Power skipped");
         listener.onSkipPowerRequested();
     };
 
