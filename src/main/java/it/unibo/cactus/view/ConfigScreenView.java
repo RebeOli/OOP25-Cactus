@@ -88,8 +88,8 @@ public class ConfigScreenView extends StackPane {
             if (name == null || name.isBlank()) {
                 errorLbl.setText("Please enter your name to get started.");
             }
-            else if (name.length() > 18) {
-                errorLbl.setText("Please enter your name no longer than 18 characters.");
+            else if (name.length() > 15) {
+                errorLbl.setText("Please enter your name no longer than 15 characters.");
             }
             else {
                 errorLbl.setText("");
