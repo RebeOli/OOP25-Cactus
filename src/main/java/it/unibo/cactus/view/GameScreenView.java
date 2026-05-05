@@ -242,7 +242,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
                 playerIndx.get(), cardInx.get());
 
             currSwapPhase = SwapPhase.NO_SELECTION;
-            message.setText("Swap completeded successfully!.");
+            message.setText("Swap completed successfully!.");
         }
     }
 

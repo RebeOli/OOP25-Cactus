@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
