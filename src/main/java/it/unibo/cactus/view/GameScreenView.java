@@ -267,7 +267,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     
     @Override
     public void onSkipPowerClicked(){
-        message.setText("Power skipped");
         listener.onSkipPowerRequested();
     };
 
