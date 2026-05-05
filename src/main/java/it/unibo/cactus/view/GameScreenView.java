@@ -114,7 +114,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             listener.onPauseRequested();
         });
 
-        final Label titleLabel = new Label("🌵 CACTUS 🌵");
+        final Label titleLabel = new Label("🌵CACTUS🌵");
         titleLabel.getStyleClass().add("titleLabel");
 
         final HBox rightBox = new HBox(btnMenu);
@@ -193,10 +193,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             tableView.hideDrawnCard();
         }
         message.setText(data.completeMessage());
-        turnLabel.setText("▶ " + data.currentPlayerName() + " is playing");
+        turnLabel.setText("▶ " + data.currentPlayerName());
 
         if (data.cactusCalled()) {
-            cactusCalledAvd.setText(data.currentPlayerName().toUpperCase() + " CALLED CACTUS");
+            cactusCalledAvd.setText(data.currentPlayerName().toUpperCase() + "\nCALLED CACTUS");
             cactusCalledAvd.setVisible(true);
         }
 

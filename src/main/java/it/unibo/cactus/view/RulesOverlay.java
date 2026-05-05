@@ -55,7 +55,7 @@ public class RulesOverlay extends StackPane {
         scrollPane.getStyleClass().add("transparent-scroll-pane");
         scrollPane.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
-        final Button backButton = new Button("BACK");
+        final Button backButton = new Button("Close");
         backButton.getStyleClass().add("btnPlayAgain");
         backButton.setOnAction(e -> this.hide());
 

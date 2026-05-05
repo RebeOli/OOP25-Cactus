@@ -177,7 +177,7 @@
 
 #turnLabel {
     -fx-font-family: "Georgia";
-    -fx-font-size: 18px;
+    -fx-font-size: 14px;
     -fx-text-fill: #3d2b10;          /* Il tuo marrone scuro */
     -fx-background-color: #E2DFD2;   /* Lo sfondo chiaro della tua gameTable */
     -fx-border-color: #8C8471;       /* Il tuo colore dei bordi */
