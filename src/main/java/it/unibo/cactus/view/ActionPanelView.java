@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
@@ -23,7 +22,7 @@ public final class ActionPanelView extends HBox {
 
     private final Button btnCactus;
     private final Button btnEndTurn;
-    private final Button btnActivePower;
+    //private final Button btnActivePower;
     private final Button btnSkipPower;
 
     /**
@@ -35,9 +34,11 @@ public final class ActionPanelView extends HBox {
         //Inizializzo i bottoni
         btnCactus = new Button("Call Cactus!");
         btnEndTurn = new Button("End Turn");
-        btnActivePower = new Button("Active Power");
+        //btnActivePower = new Button("Active Power");
         btnSkipPower = new Button("Skip Power");
-        final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
+        final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnSkipPower);
+        //final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
+
 
         for (final Button btn : allButtons) {
             setHgrow(btn, Priority.ALWAYS); // Occupa lo spazio extra nel contenitore
@@ -48,7 +49,7 @@ public final class ActionPanelView extends HBox {
         this.getStyleClass().add("actionPanel");
         btnCactus.getStyleClass().add("btnCactus");
         btnEndTurn.getStyleClass().add(BTN_ACTION_STYLE);
-        btnActivePower.getStyleClass().add(BTN_ACTION_STYLE);
+        //btnActivePower.getStyleClass().add(BTN_ACTION_STYLE);
         btnSkipPower.getStyleClass().add(BTN_ACTION_STYLE);
         this.setSpacing(10);
         super.getChildren().addAll(allButtons);
@@ -56,7 +57,7 @@ public final class ActionPanelView extends HBox {
         btnCactus.setOnAction(e -> listener.onCallCactusClicked());
         btnEndTurn.setOnAction(e -> listener.onEndTurnClicked());
         btnSkipPower.setOnAction(e -> listener.onSkipPowerClicked());
-        btnActivePower.setOnAction(e -> listener.onActivatePowerClicked());
+        //btnActivePower.setOnAction(e -> listener.onActivatePowerClicked());
     }
 
     /**
@@ -71,13 +72,13 @@ public final class ActionPanelView extends HBox {
         if (!isHumanTurn) {
             btnCactus.setDisable(true);
             btnEndTurn.setDisable(true);
-            btnActivePower.setDisable(true);
+            //btnActivePower.setDisable(true);
             btnSkipPower.setDisable(true);
             return;
         }
         btnCactus.setDisable(availableActions.stream().noneMatch(a -> a instanceof CallCactusAction));
         btnEndTurn.setDisable(availableActions.stream().noneMatch(a -> a instanceof EndTurnAction));
-        btnActivePower.setDisable(availableActions.stream().noneMatch(a -> a instanceof ActivatePowerAction));
+        //btnActivePower.setDisable(availableActions.stream().noneMatch(a -> a instanceof ActivatePowerAction));
         btnSkipPower.setDisable(availableActions.stream().noneMatch(a -> a instanceof SkipPowerAction));
     }
 
