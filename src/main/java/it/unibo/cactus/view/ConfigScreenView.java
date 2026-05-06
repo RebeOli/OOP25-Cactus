@@ -22,6 +22,7 @@ public class ConfigScreenView extends StackPane {
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setSpacing(SPACING);
         mainContent.setPadding(new Insets(PADDING));
+        this.getStyleClass().add("gameTable");
         
         final Label titleLbl = new Label("CACTUS!");
         titleLbl.getStyleClass().add("title");
@@ -42,7 +43,7 @@ public class ConfigScreenView extends StackPane {
         errorLbl.setId("confScreenErrorLbl");
 
         final ComboBox<BotDifficulty> difficultyCombobox = new ComboBox<>();
-        difficultyCombobox.getStyleClass().add("configCombobox");
+        difficultyCombobox.getStyleClass().add("btnCalledCactus");
         difficultyCombobox.setId("configScreenDifficultyCb");
         difficultyCombobox.getItems().addAll(BotDifficulty.values());
         difficultyCombobox.setValue(BotDifficulty.EASY);
@@ -79,7 +80,7 @@ public class ConfigScreenView extends StackPane {
         startButton.setId("confScreenStartBtn");
 
         final Button rulesButton = new Button("Rules");
-        rulesButton.getStyleClass().add("startButton");
+        rulesButton.getStyleClass().add("btnMenu");
         rulesButton.setOnAction(e -> rulesOverlay.show());
 
         startButton.setOnAction(e -> {

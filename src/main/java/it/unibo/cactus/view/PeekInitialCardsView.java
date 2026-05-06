@@ -25,6 +25,7 @@ public class PeekInitialCardsView extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(SPACING);
         this.setPadding(new Insets(PADDING));
+        this.getStyleClass().add("gameTable");
 
         final Label subtitle = new Label("Spy two of your cards!!");
         subtitle.getStyleClass().add("subtitle");
