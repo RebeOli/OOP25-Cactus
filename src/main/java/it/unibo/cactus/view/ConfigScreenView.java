@@ -43,7 +43,7 @@ public class ConfigScreenView extends StackPane {
         errorLbl.setId("confScreenErrorLbl");
 
         final ComboBox<BotDifficulty> difficultyCombobox = new ComboBox<>();
-        difficultyCombobox.getStyleClass().add("configCombobox");
+        difficultyCombobox.getStyleClass().add("btnCalledCactus");
         difficultyCombobox.setId("configScreenDifficultyCb");
         difficultyCombobox.getItems().addAll(BotDifficulty.values());
         difficultyCombobox.setValue(BotDifficulty.EASY);
