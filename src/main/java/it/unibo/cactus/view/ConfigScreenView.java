@@ -22,6 +22,7 @@ public class ConfigScreenView extends StackPane {
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setSpacing(SPACING);
         mainContent.setPadding(new Insets(PADDING));
+        this.getStyleClass().add("gameTable");
         
         final Label titleLbl = new Label("CACTUS!");
         titleLbl.getStyleClass().add("title");
