@@ -117,17 +117,20 @@ public final class StatsView extends StackPane {
             this.titleLabel.setText(playerName + "'s Statistics");
             this.winsLabel.setText("Your wins: " + stats.wins());
             final var rounds = stats.averageRounds();
-            this.avRoundsLabel.setText(String.format("Average Rounds: %.2f", rounds));
 
             this.rankingBox.getChildren().clear(); //svuota vecchia classifica
 
             stats.generalRanking().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(10)
                 .forEach(e -> {
                     final Label playerRankLabel = new Label("Player: " + e.getKey() + " - Wins:" + e.getValue());
                     playerRankLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
                     this.rankingBox.getChildren().add(playerRankLabel);
                 });
+            
+            this.avRoundsLabel.setText(String.format("Average Rounds: %.2f", rounds));
+
         }
     }
 
