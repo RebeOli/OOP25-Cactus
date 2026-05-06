@@ -12,7 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.PeekPower;
+import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.SpecialPower;
+import it.unibo.cactus.model.cards.SwapPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.cards.target.RevealTarget;
 import it.unibo.cactus.model.cards.target.SwapTarget;
@@ -353,13 +356,24 @@ public class ControllerImpl implements Controller, GameViewListener {
         .orElseThrow();
     }
 
-    private String getRoundMessage(final Round round) {
+    /*private String getRoundMessage(final Round round) {
         final String botName = game.getCurrentPlayer().getName();
         if(game.getCurrentPlayer().isHuman()) {
             return switch (round.getPhase()) {
-                case DRAW -> "Draw a card from the pile";
+                case DRAW -> game.getCurrentPlayer().isHuman() ? "Draw a card from the pile" : botName + " is drawing a card";
                 case DECISION -> "Swap one of your cards or discard the drawn one";
-                case SPECIAL_POWER -> "Activate the special power or skip it";
+                case SPECIAL_POWER -> {
+                    if (game.getCurrentPlayer().isHuman()) {
+                        final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
+                        if (power.isPresent()) {
+                            if (power.get() instanceof PeekPower) yield "Select a card to spy or skip the power";
+                            if (power.get() instanceof RevealPower) yield "Select a card to reveal or skip the power";
+                            if (power.get() instanceof SwapPower) yield "Select your card to swap or skip the power";
+                        }
+                        yield "Activate the special power or skip it";
+                    }
+                    yield botName + " is deciding whether to use the special power";
+                } //"Activate the special power or skip it";
                 case END_TURN -> "End of turn: call Cactus or pass";
                 case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
                 case ENDED -> "";
@@ -375,6 +389,29 @@ public class ControllerImpl implements Controller, GameViewListener {
                 case ENDED -> "";
             };
         }
+    }*/
+
+    private String getRoundMessage(final Round round) {
+        final String botName = game.getCurrentPlayer().getName();
+        return switch (round.getPhase()) {
+                case DRAW -> game.getCurrentPlayer().isHuman() ? "Draw a card from the pile" : botName + " is drawing a card";
+                case DECISION -> game.getCurrentPlayer().isHuman() ? "Swap one of your cards or discard the drawn one" : botName + " is playing the drawn card";
+                case SPECIAL_POWER -> {
+                    if (game.getCurrentPlayer().isHuman()) {
+                        final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
+                        if (power.isPresent()) {
+                            if (power.get() instanceof PeekPower) yield "Select a card to spy or skip the power";
+                            if (power.get() instanceof RevealPower) yield "Select a card to reveal or skip the power";
+                            if (power.get() instanceof SwapPower) yield "Select your card to swap or skip the power";
+                        }
+                        yield "Activate the special power or skip it";
+                    }
+                    yield botName + " is deciding whether to use the special power";
+                } //"Activate the special power or skip it";
+                case END_TURN -> game.getCurrentPlayer().isHuman() ? "End of turn: call Cactus or pass" : botName + " is ending their turn";
+                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
+                case ENDED -> "";
+        };
     }
 
     @Override
