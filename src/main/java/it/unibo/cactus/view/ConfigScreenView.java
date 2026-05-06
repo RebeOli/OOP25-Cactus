@@ -80,7 +80,7 @@ public class ConfigScreenView extends StackPane {
         startButton.setId("confScreenStartBtn");
 
         final Button rulesButton = new Button("Rules");
-        rulesButton.getStyleClass().add("startButton");
+        rulesButton.getStyleClass().add("btnMenu");
         rulesButton.setOnAction(e -> rulesOverlay.show());
 
         startButton.setOnAction(e -> {
