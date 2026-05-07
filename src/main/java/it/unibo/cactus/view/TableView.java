@@ -6,6 +6,7 @@ import java.util.function.BiConsumer;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.PlayerHand;
+import javafx.beans.binding.DoubleBinding;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.BorderPane;
@@ -25,6 +26,7 @@ public class TableView extends BorderPane {
     private static final double PILE_HEIGHT_RATIO = 0.20;
     private static final double CARD_WIDTH_RATIO = 0.71;
     private static final double ZOOMED_CARD_RATIO = 0.25;
+    private static final double SIDE_CARD_HEIGHT_RATIO = 0.11;
     private final PlayerHandView humanHand;
     private final PlayerHandView bot1Hand;
     private final PlayerHandView bot2Hand;
@@ -49,12 +51,20 @@ public class TableView extends BorderPane {
      * @param bot3Name the name of the third bot
      */
     public TableView(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
+        this.setMinSize(0, 0);
+
         this.getStyleClass().add("gameTable");
         this.setPadding(new Insets(PADDING_STANDARD, PADDING_STANDARD, PADDING_BOTTOM, PADDING_STANDARD));
         this.humanHand = new PlayerHandView(humanName, PlayerHandView.Position.BOTTOM);
         this.bot1Hand = new PlayerHandView(bot1Name, PlayerHandView.Position.LEFT);
         this.bot2Hand = new PlayerHandView(bot2Name, PlayerHandView.Position.TOP);
         this.bot3Hand = new PlayerHandView(bot3Name, PlayerHandView.Position.RIGHT);
+
+        bot1Hand.setMaxHeight(Double.MAX_VALUE);
+        bot3Hand.setMaxHeight(Double.MAX_VALUE);
+        BorderPane.setAlignment(bot1Hand, Pos.CENTER);
+        BorderPane.setAlignment(bot3Hand, Pos.CENTER);
+
         this.hands = List.of(humanHand, bot1Hand, bot2Hand, bot3Hand);
         this.setBottom(humanHand);
         this.setLeft(bot1Hand);
@@ -62,8 +72,8 @@ public class TableView extends BorderPane {
         this.setRight(bot3Hand);
         setAlignment(humanHand, Pos.BOTTOM_CENTER);
         setAlignment(bot2Hand, Pos.TOP_CENTER);
-        setAlignment(bot1Hand, Pos.CENTER_LEFT);
-        setAlignment(bot3Hand, Pos.CENTER_RIGHT);
+        setAlignment(bot1Hand, Pos.CENTER);
+        setAlignment(bot3Hand, Pos.CENTER);
         setMargin(humanHand, new Insets(0, 0, PADDING_STANDARD, 0));
         this.drawPile = new DrawPileView();
         this.discardPile = new DiscardPileView();
@@ -81,9 +91,30 @@ public class TableView extends BorderPane {
     }
 
     private void setupResponsiveSizes() {
-        final javafx.beans.binding.DoubleBinding standardCardHeight = this.heightProperty().multiply(CARD_HEIGHT_RATIO);
-        hands.forEach(p -> { p.bindCardsHeight(standardCardHeight); });
-        final javafx.beans.binding.DoubleBinding pileHeight = this.heightProperty().multiply(PILE_HEIGHT_RATIO);
+        // TOP e BOTTOM: invariato
+        final DoubleBinding standardCardHeight = this.heightProperty().multiply(CARD_HEIGHT_RATIO);
+        humanHand.bindCardsHeight(standardCardHeight);
+        bot2Hand.bindCardsHeight(standardCardHeight);
+    
+        // LEFT e RIGHT: basato sull'altezza del tavolo
+        final DoubleBinding sideCardHeight = this.heightProperty().multiply(SIDE_CARD_HEIGHT_RATIO);
+        bot1Hand.bindCardsHeight(sideCardHeight);
+        bot3Hand.bindCardsHeight(sideCardHeight);
+    
+        // CHIAVE: limita l'altezza massima delle mani laterali al 75% del tavolo
+        // così non escono mai dai bordi
+        bot1Hand.maxHeightProperty().bind(this.heightProperty().multiply(0.75));
+        bot3Hand.maxHeightProperty().bind(this.heightProperty().multiply(0.75));
+        bot1Hand.setMinHeight(0);
+        bot3Hand.setMinHeight(0);
+    
+        // Larghezza massima per non rubare spazio al centro
+        final DoubleBinding sideHandWidth = this.heightProperty().multiply(CARD_HEIGHT_RATIO * 1.5);
+        bot1Hand.maxWidthProperty().bind(sideHandWidth);
+        bot3Hand.maxWidthProperty().bind(sideHandWidth);
+    
+        // Pile: invariato
+        final DoubleBinding pileHeight = this.heightProperty().multiply(PILE_HEIGHT_RATIO);
         drawPile.prefHeightProperty().bind(pileHeight);
         drawPile.maxHeightProperty().bind(pileHeight);
         drawPile.prefWidthProperty().bind(pileHeight.multiply(CARD_WIDTH_RATIO));
@@ -92,7 +123,7 @@ public class TableView extends BorderPane {
         discardPile.maxHeightProperty().bind(pileHeight);
         discardPile.prefWidthProperty().bind(pileHeight.multiply(CARD_WIDTH_RATIO));
         discardPile.maxWidthProperty().bind(pileHeight.multiply(CARD_WIDTH_RATIO));
-
+    
         zoomedDrawnCard.bindHeight(this.heightProperty().multiply(ZOOMED_CARD_RATIO));
     }
     
