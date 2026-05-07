@@ -77,9 +77,9 @@ public final class StatsView extends StackPane {
             this.titleLabel,
             this.playerSelector,
             this.winsLabel,
-            this.avRoundsLabel,
             rankingLabel,
             this.rankingBox,
+            this.avRoundsLabel,
             this.closeButton
         );
 
@@ -94,6 +94,7 @@ public final class StatsView extends StackPane {
             }
         });
     }
+
     /**
      * Updates and displays the statistics for a specific player.
      *
@@ -123,11 +124,13 @@ public final class StatsView extends StackPane {
 
             stats.generalRanking().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(10)
                 .forEach(e -> {
                     final Label playerRankLabel = new Label("Player: " + e.getKey() + " - Wins:" + e.getValue());
                     playerRankLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
                     this.rankingBox.getChildren().add(playerRankLabel);
                 });
+
         }
     }
 
