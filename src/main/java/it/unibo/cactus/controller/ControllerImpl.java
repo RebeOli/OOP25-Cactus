@@ -72,6 +72,11 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void startGame(final String playerName, BotDifficulty difficulty) {
         this.gameEndHandled = false;
         this.isGameOver = false;
+        //cosi quando si fa restart parte da un nuovo stato pulito.
+        this.botStartTime = 0;
+        this.simultaneousDiscardStartTime = 0;
+        this.humanWindowExpired = false;
+        this.isPaused = false;
         this.game = GameFactory.createGame(playerName, difficulty);
         game.addObserver(this); //perchè come observer passiamo il controller
         view.showPeekScreen(getHumanPlayer().getHand());
