@@ -400,9 +400,9 @@ public class ControllerImpl implements Controller, GameViewListener {
                     if (game.getCurrentPlayer().isHuman()) {
                         final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
                         if (power.isPresent()) {
-                            if (power.get() instanceof PeekPower) yield "Select a card to spy or skip the power";
+                            if (power.get() instanceof PeekPower) yield "Select your card to spy or skip the power";
                             if (power.get() instanceof RevealPower) yield "Select a card to reveal or skip the power";
-                            if (power.get() instanceof SwapPower) yield "Select your card to swap or skip the power";
+                            if (power.get() instanceof SwapPower) yield "Select a card to swap or skip the power";
                         }
                         yield "Activate the special power or skip it";
                     }

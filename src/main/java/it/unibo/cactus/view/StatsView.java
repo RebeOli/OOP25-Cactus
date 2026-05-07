@@ -77,9 +77,9 @@ public final class StatsView extends StackPane {
             this.titleLabel,
             this.playerSelector,
             this.winsLabel,
-            this.avRoundsLabel,
             rankingLabel,
             this.rankingBox,
+            this.avRoundsLabel,
             this.closeButton
         );
 
@@ -94,6 +94,7 @@ public final class StatsView extends StackPane {
             }
         });
     }
+
     /**
      * Updates and displays the statistics for a specific player.
      *
@@ -117,6 +118,7 @@ public final class StatsView extends StackPane {
             this.titleLabel.setText(playerName + "'s Statistics");
             this.winsLabel.setText("Your wins: " + stats.wins());
             final var rounds = stats.averageRounds();
+            this.avRoundsLabel.setText(String.format("Average Rounds: %.2f", rounds));
 
             this.rankingBox.getChildren().clear(); //svuota vecchia classifica
 
@@ -128,8 +130,6 @@ public final class StatsView extends StackPane {
                     playerRankLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
                     this.rankingBox.getChildren().add(playerRankLabel);
                 });
-            
-            this.avRoundsLabel.setText(String.format("Average Rounds: %.2f", rounds));
 
         }
     }
