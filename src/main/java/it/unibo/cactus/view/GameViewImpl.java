@@ -99,6 +99,9 @@ public class GameViewImpl implements GameView {
         endGameScreen.showResults(finalsScores);
         endGameScreen.setOnPlayAgainRequested(this::showConfigScreen);
         endGameScreen.setOnCloseRequested(primaryStage::close);
+        endGameScreen.setOnFinalStatsRequested(() -> {
+            showStatsScreen(() -> switchScreen(endGameScreen));
+        });
         switchScreen(endGameScreen);
     }
 
@@ -140,12 +143,18 @@ public class GameViewImpl implements GameView {
 
     @Override
     public void showStatsScreen() {
-        statsView = new StatsView(playersNames, () -> switchScreen(gameScreen));
+        showStatsScreen(() -> switchScreen(gameScreen));
+    }
+
+    //metodo per decidere dove tornare con showstats
+    @Override
+    public void showStatsScreen(final Runnable onBack) {
+        statsView = new StatsView(playersNames, onBack);
         statsView.setOnPlayerSelected(selectedName -> {
             listener.onUpdateStats(selectedName);
         });
         switchScreen(statsView);
-        listener.onUpdateStats(humanPlayerName); //lascio di default prima che venga effettivamente cliccato qualcosa
+        listener.onUpdateStats(humanPlayerName);
     }
 
     @Override

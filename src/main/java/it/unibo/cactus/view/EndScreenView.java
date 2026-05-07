@@ -3,6 +3,7 @@ package it.unibo.cactus.view;
 import java.util.Map;
 
 import it.unibo.cactus.model.players.Player;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,6 +25,7 @@ public final class EndScreenView extends StackPane {
     private final VBox rankingBox;
     private final Button playAgainButton;
     private final Button closeButton;
+    private final Button statsButton;
 
     /**
      * Constructs a new EndScreenView.
@@ -50,14 +52,17 @@ public final class EndScreenView extends StackPane {
         this.rankingBox.setAlignment(Pos.CENTER);
 
         final HBox buttonBox = new HBox(BUTTON_SPACING);
-        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setAlignment(Pos.BOTTOM_CENTER);
 
         this.playAgainButton = new Button("PLAY AGAIN");
         this.playAgainButton.getStyleClass().add("btnPlayAgain");
         this.closeButton = new Button("QUIT");
         this.closeButton.getStyleClass().add("btnPlayAgain");
+        this.statsButton = new Button("STATS");
+        this.statsButton.getStyleClass().add("btnPlayAgain");
 
-        buttonBox.getChildren().addAll(this.playAgainButton, this.closeButton);
+        buttonBox.getChildren().addAll(this.statsButton, this.playAgainButton, this.closeButton);
+        VBox.setMargin(buttonBox, new Insets(40, 0, 0, 0));
 
         endBox.getChildren().addAll(
             titleLabel,
@@ -118,6 +123,12 @@ public final class EndScreenView extends StackPane {
     public void setOnPlayAgainRequested(final Runnable action) {
         this.playAgainButton.setOnAction(e -> {
             this.setVisible(false);
+            action.run();
+        });
+    }
+
+    public void setOnFinalStatsRequested(final Runnable action) {
+        this.statsButton.setOnAction(e -> {
             action.run();
         });
     }

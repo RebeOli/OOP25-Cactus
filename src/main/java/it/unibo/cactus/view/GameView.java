@@ -32,4 +32,6 @@ public interface GameView {
 
     void updateStats(final String playerName, final PlayerStats playerStats);
 
+    void showStatsScreen(final Runnable onBack);
+
 }
