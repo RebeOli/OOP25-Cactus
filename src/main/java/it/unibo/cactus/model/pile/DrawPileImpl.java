@@ -47,7 +47,7 @@ public final class DrawPileImpl implements DrawPile {
         return this.drawPile.isEmpty();
     }
 
-    @Override //da togliere!
+    @Override
     public int size() {
         return this.drawPile.size();
     }
