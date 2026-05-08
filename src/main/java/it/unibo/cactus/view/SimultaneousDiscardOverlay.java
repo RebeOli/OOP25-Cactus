@@ -22,10 +22,10 @@ import javafx.util.Duration;
  */
 public final class SimultaneousDiscardOverlay extends StackPane {
     private static final int CONTAINER_SPACING = 20;
-    //private static final int CONTAINER_MAX_WIDTH = 400;
-    //private static final int CONTAINER_MAX_HEIGHT = 450;
     private static final double DISCARD_CARD_HEIGHT = 0.25;
     private static final double SLOT_CARD_HEIGHT = 0.15;
+    private static final double CONTAINER_MAX_HEIGHT = 0.7;
+    private static final double CONTAINER_MAX_WIDTH = 0.5;
 
     private final ProgressBar progressBar;
     private final Label titleLabel;
@@ -33,14 +33,14 @@ public final class SimultaneousDiscardOverlay extends StackPane {
     private final HBox slotsBox;
     private final List<CardView> slotCards = new ArrayList<>();
     private final CardView discardedCardView;
-    private boolean actionSent = false;
+    private boolean actionSent;
 
     private final java.util.function.IntConsumer onCardChosen;
 
     /**
      * Creates the simultaneous discard overlay.
      * 
-     * @param controller the game controller
+     * @param onCardChosen the callback invoked with the index of the card chosen by the player
      */
     public SimultaneousDiscardOverlay(final IntConsumer onCardChosen) {
         this.onCardChosen = onCardChosen;
@@ -53,8 +53,8 @@ public final class SimultaneousDiscardOverlay extends StackPane {
         cardContainer.setAlignment(Pos.CENTER);
         cardContainer.setSpacing(CONTAINER_SPACING);
 
-        cardContainer.maxWidthProperty().bind(this.widthProperty().multiply(0.5));
-        cardContainer.maxHeightProperty().bind(this.heightProperty().multiply(0.7));
+        cardContainer.maxWidthProperty().bind(this.widthProperty().multiply(CONTAINER_MAX_WIDTH));
+        cardContainer.maxHeightProperty().bind(this.heightProperty().multiply(CONTAINER_MAX_HEIGHT));
         //cardContainer.setMaxSize(CONTAINER_MAX_WIDTH, CONTAINER_MAX_HEIGHT); // Dimensioni fisse del pop-up
 
         titleLabel = new Label("Simulateous discard!");
@@ -93,39 +93,32 @@ public final class SimultaneousDiscardOverlay extends StackPane {
      * 
      * @param topCard the top card of the discard pile
      * @param playerHand the human player's hand
-     * @param player the human player
+     * @param isFaceUpList the list of boolean values indicating whether each card in the hand is face up
      */
     public void show(final Card topCard, final List<Card> playerHand, final List<Boolean> isFaceUpList) {
         this.actionSent = false;
-        
         // 1. Svuotiamo gli slot vecchi prima di crearne di nuovi
         slotsBox.getChildren().clear();
         slotCards.clear();
-
         if (topCard != null) {
             discardedCardView.setCardData(topCard);
             discardedCardView.setFaceUp(true);
-            
             // 2. Creiamo dinamicamente uno slot per ogni carta che hai in mano!
             for (int i = 0; i < playerHand.size(); i++) {
                 final CardView slot = new CardView();
                 slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
-                
                 final int slotIndex = i;
                 slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
-                
                 slot.setCardData(playerHand.get(i));
                 boolean isCardRevealed = false;
                 if (isFaceUpList != null && i < isFaceUpList.size()) {
                     isCardRevealed = isFaceUpList.get(i);
                 }
-                
                 slot.setFaceUp(isCardRevealed); 
-                
+
                 if (isCardRevealed) {
                     slot.setPermanentlyRevealed();
                 }
-                
                 slotCards.add(slot);
                 slotsBox.getChildren().add(slot);
             }

@@ -32,6 +32,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private static final int TOP_BAR_SIDE_PADDING = 20;
     private static final int BOTTOM_SPACING = 15;
     private static final int BOTTOM_PADDING = 20;
+    private static final int MAX_HAND_SIZE = 6;
 
     private final ActionPanelView actionPanel;
     private final Label message;
@@ -45,7 +46,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private SwapPhase currSwapPhase = SwapPhase.NO_SELECTION;
     private int firstSwapPlayerIdx;
     private int firstSwapCardIdx;
-    private boolean simultaneousAnswered = false;
+    private boolean simultaneousAnswered;
     private List<RoundAction> currentAvailableActions;
     //private boolean powerActivated = false;
 
@@ -54,11 +55,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     /**
      * Creates the main game screen.
      * 
-     * @param controller the game controller
+     * @param listener a GameViewListener
      * @param tableView the table view
      * @param onRestart action to run on restart
      * @param onStats action to run on stats
-     * @param onHome action to run on home
      */
     public GameScreenView(final GameViewListener listener, final TableView tableView,
                           final Runnable onRestart, final Runnable onStats) {
@@ -76,13 +76,12 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
         tableView.setOnCardClicked((playerIndex, cardIndex) -> {
             final boolean canSwap = currentAvailableActions.stream()
-                .anyMatch(a -> a instanceof SwapAction);            
+                .anyMatch(a -> a instanceof SwapAction);
             final boolean isSpecialPowerPhase = !currentPower.isEmpty();
 
             if (playerIndex == 0 && canSwap) {
                 listener.onSwapWithDrawnCardRequested(cardIndex);
-            }
-            else if(isSpecialPowerPhase) {
+            } else if (isSpecialPowerPhase) {
                 handlePowerTarget(playerIndex, cardIndex);
             }
         });
@@ -154,14 +153,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     /**
      * Updates the view based on the current game state.
      * 
-     * @param availableActions the list of actions the current player can perform
-     * @param isHumanTurn true if it is the human player's turn
-     * @param completeMessage the status message to display
-     * @param currentPower the current special power
-     * @param topCard the top card of the discard pile
-     * @param isSimultaneous true if the simultaneous discard phase is active
-     * @param playerHand the human player's hand
-     * @param player the human player
+     * @param data all the datas needed for the update. 
      */
     public void update(final GameUpdateData data) {
         actionPanel.update(data.availableActions(), data.isHumanTurn(), data.currentPower());
@@ -169,11 +161,9 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         this.currSwapPhase = SwapPhase.NO_SELECTION;
         this.currentAvailableActions = data.availableActions();
         tableView.setSelectionEnabled(data.isHumanTurn());
-        
-        if(!data.allHands().isEmpty()) {
+        if (!data.allHands().isEmpty()) {
             tableView.updateAllHands(data.allHands());
         }
-
         //tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
         final boolean canDraw = data.isHumanTurn() && data.availableActions().stream()
             .anyMatch(a -> a instanceof DrawAction);
@@ -181,7 +171,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
         // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
-            if(!data.isHumanTurn()) {
+            if (!data.isHumanTurn()) {
                 tableView.hideDrawnCard(); //disattivo la visualizzazione della carta pescata nel turno dei bot
             } else {
                 // 1. Se stiamo pescando, mostra la carta pescata
@@ -203,7 +193,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             cactusCalledAvd.setVisible(true);
         }
 
-        if (data.isSimultaneous() && data.playerHand().size()<6) {
+        if (data.isSimultaneous() && data.playerHand().size() < MAX_HAND_SIZE) {
             if (!this.simultaneousAnswered && !overlay.isVisible()) {
                 showSimultaneousDiscardWindow(data.topCard(), data.playerHand());
             }
@@ -211,39 +201,34 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             this.simultaneousAnswered = false;
             hideSimultaneousDiscardWindow();
         }
-
     }
 
     @Override
-    public void onActivatePowerClicked(){
-        if (currentPower.isEmpty()) return;
-        final SpecialPower power = currentPower.get();
-
-        if (power instanceof PeekPower) {
-            message.setText("Select a card to spy");
-        }
-        else if (power instanceof RevealPower) {
-            message.setText("Select a card to reveal");
-        }
-        else if (power instanceof SwapPower) {
-            message.setText("Select a card to swap");
-        }
-    };
-
-    private void handleSwapPhase (final Optional<Integer> playerIndx, final Optional<Integer> cardInx) {
-        if(playerIndx.isEmpty() || cardInx.isEmpty()) {
+    public void onActivatePowerClicked() {
+        if (currentPower.isEmpty()) {
             return;
         }
-        if(currSwapPhase == SwapPhase.NO_SELECTION){
+        final SpecialPower power = currentPower.get();
+        if (power instanceof PeekPower) {
+            message.setText("Select a card to spy");
+        } else if (power instanceof RevealPower) {
+            message.setText("Select a card to reveal");
+        } else if (power instanceof SwapPower) {
+            message.setText("Select a card to swap");
+        }
+    }
+
+    private void handleSwapPhase(final Optional<Integer> playerIndx, final Optional<Integer> cardInx) {
+        if (playerIndx.isEmpty() || cardInx.isEmpty()) {
+            return;
+        }
+        if (currSwapPhase == SwapPhase.NO_SELECTION) {
             firstSwapPlayerIdx = playerIndx.get();
             firstSwapCardIdx = cardInx.get();
             currSwapPhase = SwapPhase.FIRST_SELECTED;
             message.setText("Select the second card to swap");
-        }
-        else if(currSwapPhase == SwapPhase.FIRST_SELECTED){
-            listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, 
-                playerIndx.get(), cardInx.get());
-
+        } else if (currSwapPhase == SwapPhase.FIRST_SELECTED) {
+            listener.onSwapPowerRequested(firstSwapPlayerIdx, firstSwapCardIdx, playerIndx.get(), cardInx.get());
             currSwapPhase = SwapPhase.NO_SELECTION;
             message.setText("Swap completed successfully!.");
         }
@@ -253,7 +238,9 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         //aggiunto io 
         final boolean powerStillAvailable = currentAvailableActions.stream()
             .anyMatch(a -> a instanceof SkipPowerAction);
-        if (!powerStillAvailable) return;
+        if (!powerStillAvailable) {
+            return;
+        }
         final SpecialPower power = currentPower.get();
         if (power instanceof PeekPower) {
             if (playerIndex == 0) {
@@ -267,27 +254,33 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             handleSwapPhase(Optional.of(playerIndex), Optional.of(cardIndex));
         }
     }
-    
+
     @Override
-    public void onSkipPowerClicked(){
+    public void onSkipPowerClicked() {
         listener.onSkipPowerRequested();
-    };
+    }
 
     @Override
-    public void onCallCactusClicked(){
+    public void onCallCactusClicked() {
         listener.onCallCactusRequested();
-    };
+    }
 
     @Override
-    public void onEndTurnClicked(){
+    public void onEndTurnClicked() {
         listener.onEndTurnRequested();
-    };
+    }
 
+    /**
+     * Shows the simultaneous discard overlay window.
+     *
+     * @param topCard the top card of the discard pile
+     * @param playerHand the list of cards in the human player's hand
+     */
     public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {
-        List<Boolean> faceUpStates = new ArrayList<>();
-        PlayerHandView humanView = tableView.getHumanHand();
-        for (int i = 0; i < 6; i++) {
-            CardView slot = humanView.getSlot(i);
+        final List<Boolean> faceUpStates = new ArrayList<>();
+        final PlayerHandView humanView = tableView.getHumanHand();
+        for (int i = 0; i < MAX_HAND_SIZE; i++) {
+            final CardView slot = humanView.getSlot(i);
             if (slot != null && i < playerHand.size()) {
                 faceUpStates.add(slot.isFaceUp());
             }
@@ -295,8 +288,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         overlay.show(topCard, playerHand, faceUpStates);
     }
 
+    /**
+     * Hides the simultaneous discard overlay window.
+     */
     public void hideSimultaneousDiscardWindow() {
         overlay.hide();
     }
-
 }

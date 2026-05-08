@@ -99,7 +99,9 @@ public interface Game {
     void endSimultaneousDiscard();
 
     /**
-     * Returns whether a player has already called "Cactus!"
+     * Returns whether a player has already called "Cactus!".
+     * 
+     * @return true if cactus is called from any player.
      */
     boolean isCactusCalled();
 }

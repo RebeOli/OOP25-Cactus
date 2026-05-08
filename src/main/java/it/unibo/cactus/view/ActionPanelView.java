@@ -28,7 +28,7 @@ public final class ActionPanelView extends HBox {
     /**
      * Creates the action panel and binds each button to the controller.
      * 
-     * @param controller the game controller
+     * @param listener an ActionPanelListener
      */
     public ActionPanelView(final ActionPanelListener listener) {
         //Inizializzo i bottoni
@@ -38,7 +38,6 @@ public final class ActionPanelView extends HBox {
         btnSkipPower = new Button("Skip Power");
         final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnSkipPower);
         //final List<Button> allButtons = List.of(btnCactus, btnEndTurn, btnActivePower, btnSkipPower);
-
 
         for (final Button btn : allButtons) {
             setHgrow(btn, Priority.ALWAYS); // Occupa lo spazio extra nel contenitore
