@@ -139,10 +139,8 @@ public class MediumBotStrategy extends AbstractBotStrategy {
         }
 
         // Salto lo scarto se tutte le carte sono scoperte o randomicamente o la mano è piena        
-        //TO-DO:
-        //Sostituire il magic number con una chiamata più parlante come !hand.isFull()
         if (hiddenIndices.isEmpty() || random.nextBoolean()
-        || self.getHand().size() >= 6) {
+        || self.getHand().isFull()) {
             return new SkipSimultaneousDiscardAction();
         }
 
