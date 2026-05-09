@@ -14,19 +14,18 @@ public final class PlayerHandImpl implements PlayerHand {
 
     /**
      * Constructs a new player's hand with the specified initial cards.
-     * All initial cards are automatically placed face-down (hidden).
      *
      * @param initialCards the list of cards to initially populate the hand
      * @throws IllegalArgumentException if the list is null or contains null cards
      */
     public PlayerHandImpl(final List<Card> initialCards) {
         if (initialCards == null) {
-            throw new IllegalArgumentException("Initial cards list cannot be null!");
+            throw new IllegalArgumentException("Initial cards list cannot be null");
         }
         this.slots = new ArrayList<>();
         for (final Card c : initialCards) {
             if (c == null) {
-                throw new IllegalArgumentException("Cannot add a null card to the player's hand!");
+                throw new IllegalArgumentException("Cannot add a null card to the player's hand");
             }
             this.slots.add(new Slot(c, true)); 
         }
@@ -45,7 +44,7 @@ public final class PlayerHandImpl implements PlayerHand {
     @Override
     public Card replace(final int index, final Card newCard) {
         if (newCard == null) {
-            throw new IllegalArgumentException("The new card cannot be null!");
+            throw new IllegalArgumentException("The new card cannot be null");
         }
         final Slot slot = slots.get(index);
         final Card oldCard = slot.card;
