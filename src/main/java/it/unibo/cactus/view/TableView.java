@@ -27,6 +27,8 @@ public class TableView extends BorderPane {
     private static final double CARD_WIDTH_RATIO = 0.71;
     private static final double ZOOMED_CARD_RATIO = 0.25;
     private static final double SIDE_CARD_HEIGHT_RATIO = 0.11;
+    private static final double MAX_HEIGHT_RATIO = 0.75;
+    private static final int MAX_CARDS = 6;
     private final PlayerHandView humanHand;
     private final PlayerHandView bot1Hand;
     private final PlayerHandView bot2Hand;
@@ -38,9 +40,8 @@ public class TableView extends BorderPane {
     private final List<PlayerHandView> hands;
     private Optional<Integer> selectedPlayerIndex = Optional.empty();
     private Optional<Integer> selectedCardIndex = Optional.empty();
-    private boolean selectionEnabled = false;
+    private boolean selectionEnabled;
     private BiConsumer<Integer, Integer> onCardClickedCallback;
-
 
     /**
      * Constructs the game table, setting up the players and the layout.
@@ -91,29 +92,19 @@ public class TableView extends BorderPane {
     }
 
     private void setupResponsiveSizes() {
-        // TOP e BOTTOM: invariato
         final DoubleBinding standardCardHeight = this.heightProperty().multiply(CARD_HEIGHT_RATIO);
         humanHand.bindCardsHeight(standardCardHeight);
         bot2Hand.bindCardsHeight(standardCardHeight);
-    
-        // LEFT e RIGHT: basato sull'altezza del tavolo
         final DoubleBinding sideCardHeight = this.heightProperty().multiply(SIDE_CARD_HEIGHT_RATIO);
         bot1Hand.bindCardsHeight(sideCardHeight);
         bot3Hand.bindCardsHeight(sideCardHeight);
-    
-        // CHIAVE: limita l'altezza massima delle mani laterali al 75% del tavolo
-        // così non escono mai dai bordi
-        bot1Hand.maxHeightProperty().bind(this.heightProperty().multiply(0.75));
-        bot3Hand.maxHeightProperty().bind(this.heightProperty().multiply(0.75));
+        bot1Hand.maxHeightProperty().bind(this.heightProperty().multiply(MAX_HEIGHT_RATIO));
+        bot3Hand.maxHeightProperty().bind(this.heightProperty().multiply(MAX_HEIGHT_RATIO));
         bot1Hand.setMinHeight(0);
         bot3Hand.setMinHeight(0);
-    
-        // Larghezza massima per non rubare spazio al centro
         final DoubleBinding sideHandWidth = this.heightProperty().multiply(CARD_HEIGHT_RATIO * 1.5);
         bot1Hand.maxWidthProperty().bind(sideHandWidth);
         bot3Hand.maxWidthProperty().bind(sideHandWidth);
-    
-        // Pile: invariato
         final DoubleBinding pileHeight = this.heightProperty().multiply(PILE_HEIGHT_RATIO);
         drawPile.prefHeightProperty().bind(pileHeight);
         drawPile.maxHeightProperty().bind(pileHeight);
@@ -123,10 +114,9 @@ public class TableView extends BorderPane {
         discardPile.maxHeightProperty().bind(pileHeight);
         discardPile.prefWidthProperty().bind(pileHeight.multiply(CARD_WIDTH_RATIO));
         discardPile.maxWidthProperty().bind(pileHeight.multiply(CARD_WIDTH_RATIO));
-    
         zoomedDrawnCard.bindHeight(this.heightProperty().multiply(ZOOMED_CARD_RATIO));
     }
-    
+
     /**
      * Shows the drawn card in the center of the table.
      *
@@ -145,12 +135,18 @@ public class TableView extends BorderPane {
         zoomedDrawnCard.setVisible(false);
     }
 
+    /**
+     * Enables or disables the ability to select cards on the table.
+     *
+     * @param enabled true to allow selection, false to clear and prevent selection
+     */
     public void setSelectionEnabled(final boolean enabled) {
         this.selectionEnabled = enabled;
         if (!enabled) {
             clearSelection();
         }
     }
+
     /**
      * Returns the view of the human player's hand.
      *
@@ -214,10 +210,20 @@ public class TableView extends BorderPane {
         return zoomedDrawnCard;
     }
 
+    /**
+     * Gets the index of the currently selected player, if any.
+     *
+     * @return an {@link Optional} containing the index of the selected player, or empty if none
+     */
     public Optional<Integer> getSelectedPlayerIndex() {
         return selectedPlayerIndex;
     }
 
+    /**
+     * Gets the index of the currently selected card, if any.
+     *
+     * @return an {@link Optional} containing the index of the selected card, or empty if none
+     */
     public Optional<Integer> getSelectedCardIndex() {
         return selectedCardIndex;
     }
@@ -225,7 +231,7 @@ public class TableView extends BorderPane {
     private void setupHandlers() {
         for (int p = 0; p < hands.size(); p++) {
             final int pi = p;
-            for (int s = 0; s < 6; s++) {
+            for (int s = 0; s < MAX_CARDS; s++) {
                 final int si = s;
                 final CardView slot = hands.get(p).getSlot(s);
                 if (slot != null) {
@@ -261,23 +267,39 @@ public class TableView extends BorderPane {
         }
         selectedPlayerIndex = Optional.empty();
         selectedCardIndex = Optional.empty();
-    }    
-
-    public void updateAllHands(final List<PlayerHand> hands) {
-        humanHand.updateHand(hands.get(0));
-        bot1Hand.updateHand(hands.get(1));
-        bot2Hand.updateHand(hands.get(2));
-        bot3Hand.updateHand(hands.get(3));
     }
 
+    /**
+     * Updates the visual representation of all players' hands on the table.
+     *
+     * @param modelHands a list of the player hands from the model
+     */
+    public void updateAllHands(final List<PlayerHand> modelHands) {
+        humanHand.updateHand(modelHands.get(0));
+        bot1Hand.updateHand(modelHands.get(1));
+        bot2Hand.updateHand(modelHands.get(2));
+        bot3Hand.updateHand(modelHands.get(3));
+    }
+
+    /**
+     * Sets the callback to be executed when a card is clicked.
+     *
+     * @param callback the action to execute, receiving player index and card index
+     */
     public void setOnCardClicked(final BiConsumer<Integer, Integer> callback) {
         this.onCardClickedCallback = callback;
     }
 
+    /**
+     * Visually reveals a specific card of a specific player on the table.
+     *
+     * @param playerIndex the index of the player whose card to peek
+     * @param cardIndex   the index of the card to peek
+     */
     public void peekPlayerCard(final int playerIndex, final int cardIndex) {
-        if(playerIndex >= 0 && playerIndex < hands.size()) {
+        if (playerIndex >= 0 && playerIndex < hands.size()) {
             final PlayerHandView playerhand = hands.get(playerIndex);
-            if(playerhand.getSlot(cardIndex) != null) {
+            if (playerhand.getSlot(cardIndex) != null) {
                 playerhand.getSlot(cardIndex).setFaceUp(true);
             }
         }
