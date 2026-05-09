@@ -65,7 +65,7 @@ public final class PlayerHandImpl implements PlayerHand {
     }
 
     @Override
-    public void addCard(Card newCard) {
+    public void addCard(final Card newCard) {
         if (newCard == null) {
             throw new IllegalArgumentException("A new card cannot be null");
         }
@@ -76,13 +76,14 @@ public final class PlayerHandImpl implements PlayerHand {
     }
 
     @Override
-    public Card removeCard(int index) {
+    public Card removeCard(final int index) {
         if (this.slots.isEmpty()) {
             throw new IllegalStateException("Cannot remove a card: the hand is completely empty!");
         }
         final Slot removedSlot = this.slots.remove(index);
         return removedSlot.card;
     }
+
     private static class Slot {
         private Card card;
         private boolean hidden;
