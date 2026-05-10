@@ -42,7 +42,7 @@ public class EasyBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final FakeRound round = new FakeRound(TurnPhase.DRAW, null, null, 
-            false, false, null);        
+            false, false, null, List.of());        
         final RoundAction action = easyBotStr.chooseAction(round);
         assertInstanceOf(DrawAction.class, action);
     }
@@ -52,7 +52,7 @@ public class EasyBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.DECISION, HIGH_CARD, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = easyBotStr.chooseAction(round);
         assertTrue(action instanceof DiscardAction || action instanceof SwapAction);
     }
@@ -62,7 +62,7 @@ public class EasyBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final FakeRound round = new FakeRound(TurnPhase.SPECIAL_POWER, null, null, 
-            false, false, null); 
+            false, false, null, List.of()); 
         final RoundAction action = easyBotStr.chooseAction(round);   
         assertInstanceOf(SkipPowerAction.class, action);
     }
@@ -72,7 +72,7 @@ public class EasyBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = easyBotStr.chooseAction(round);  
         assertInstanceOf(EndTurnAction.class, action);
     }
@@ -82,7 +82,7 @@ public class EasyBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.SIMULTANEOUS_DISCARD, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = easyBotStr.chooseAction(round);
         assertTrue(action instanceof SkipSimultaneousDiscardAction || action instanceof SimultaneousDiscardAction);
     }

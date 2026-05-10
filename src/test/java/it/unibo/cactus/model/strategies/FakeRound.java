@@ -27,15 +27,17 @@ public class FakeRound implements Round {
     private final boolean lastRound;
     private final boolean cactusCalled;
     private final Player currentPlayer;
+    private final List<Player> allPlayers;
 
     FakeRound(final TurnPhase phase, final Card drawnCard, final Card discardTopCard,
-              final boolean isLastRound, final boolean isCactusCalled, final Player currentPlayer) {
+              final boolean isLastRound, final boolean isCactusCalled, final Player currentPlayer, final List<Player> allPlayers) {
         this.phase = phase;
         this.drawnCard = Optional.ofNullable(drawnCard);
         this.discardTopCard = Optional.ofNullable(discardTopCard);
         this.lastRound = isLastRound;
         this.cactusCalled = isCactusCalled;
         this.currentPlayer = currentPlayer;
+        this.allPlayers = allPlayers;
     }
 
 
@@ -105,6 +107,12 @@ public class FakeRound implements Round {
     @Override
     public boolean isCactusCalled() {
         return this.cactusCalled;
+    }
+
+
+    @Override
+    public List<Player> getAllPlayers() {
+        return this.allPlayers;
     }
 
 

@@ -45,7 +45,7 @@ public class MediumBotStrategyTest {
         final Player player = playerWithHand(List.of(HIGH_CARD, HIGH_CARD, HIGH_CARD, HIGH_CARD));
         final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.DECISION, HIGH_CARD, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = mediumBotStr.chooseAction(round); 
         assertInstanceOf(DiscardAction.class, action);
     }
@@ -56,7 +56,7 @@ public class MediumBotStrategyTest {
         player.getHand().revealCard(0);
         final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.DECISION, LOW_CARD, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = mediumBotStr.chooseAction(round);
         assertInstanceOf(SwapAction.class, action);
     }
@@ -69,7 +69,7 @@ public class MediumBotStrategyTest {
         player.getHand().revealCard(2);
         final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = mediumBotStr.chooseAction(round); 
         assertInstanceOf(SkipPowerAction.class, action);
     }
@@ -79,7 +79,7 @@ public class MediumBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, PEEK_CARD, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = mediumBotStr.chooseAction(round); 
         assertInstanceOf(ActivatePowerAction.class, action);
     }
@@ -93,7 +93,7 @@ public class MediumBotStrategyTest {
         player1.getHand().revealCard(3);
         final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player1);
         final Round round1 = new FakeRound(TurnPhase.END_TURN, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action1 = mediumBotStr.chooseAction(round1); 
         assertInstanceOf(CallCactusAction.class, action1);
 
@@ -104,7 +104,7 @@ public class MediumBotStrategyTest {
         player2.getHand().revealCard(3);
         final MediumBotStrategy mediumBotStr2 = new MediumBotStrategy(player2);
         final Round round2 = new FakeRound(TurnPhase.END_TURN, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action2 = mediumBotStr2.chooseAction(round2); 
         assertInstanceOf(EndTurnAction.class, action2);
     }
@@ -115,7 +115,7 @@ public class MediumBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final MediumBotStrategy strategy = new MediumBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.SIMULTANEOUS_DISCARD, null, discardTop, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = strategy.chooseAction(round);
         assertTrue(action instanceof SkipSimultaneousDiscardAction || action instanceof SimultaneousDiscardAction);
     }

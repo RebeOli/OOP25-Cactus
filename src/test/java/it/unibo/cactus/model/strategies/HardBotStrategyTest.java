@@ -57,7 +57,7 @@ class HardBotStrategyTest {
         final SelfBotMemory memory = new SelfBotMemory();
         final HardBotStrategy hardBotStr = new HardBotStrategy(player, memory);
         final FakeRound round = new FakeRound(TurnPhase.DECISION, LOW_CARD, null, 
-            false, false, null);
+            false, false, null, List.of());
         memory.rememberCard(0, HIGH_CARD);
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(SwapAction.class, action);
@@ -71,12 +71,12 @@ class HardBotStrategyTest {
         final HardBotStrategy hardBotStr = new HardBotStrategy(player, memory);
 
         final FakeRound round = new FakeRound(TurnPhase.DECISION, LOW_CARD, null, 
-            false, false, null);
+            false, false, null, List.of());
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(DiscardAction.class, action);
         
         final FakeRound round2 = new FakeRound(TurnPhase.DECISION, HIGH_CARD, null, 
-            false, false, null);
+            false, false, null, List.of());
         memory.rememberCard(0, LOW_CARD);
         final RoundAction action2 = hardBotStr.chooseAction(round2);
         assertInstanceOf(DiscardAction.class, action2);
@@ -92,7 +92,7 @@ class HardBotStrategyTest {
         memory.rememberCard(3, LOW_CARD);
         final HardBotStrategy hardBotStr = new HardBotStrategy(player, memory);
         final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, PEEK_CARD, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(SkipPowerAction.class, action);
     }
@@ -103,7 +103,7 @@ class HardBotStrategyTest {
         final SelfBotMemory memory = new SelfBotMemory();
         final HardBotStrategy hardBotStr = new HardBotStrategy(player, memory);
         final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(EndTurnAction.class, action);
     }
@@ -118,7 +118,7 @@ class HardBotStrategyTest {
         memory.rememberCard(3, KING_CARD);
         final HardBotStrategy hardBotStr = new HardBotStrategy(player, memory);
         final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(CallCactusAction.class, action);
     }
@@ -130,7 +130,7 @@ class HardBotStrategyTest {
         final SelfBotMemory memory = new SelfBotMemory();
         final HardBotStrategy hardBotStr = new HardBotStrategy(player, memory);
         final Round round = new FakeRound(TurnPhase.SIMULTANEOUS_DISCARD, null, discardTop, false, 
-            false, null);
+            false, null, List.of());
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(SkipSimultaneousDiscardAction.class, action);
     }
