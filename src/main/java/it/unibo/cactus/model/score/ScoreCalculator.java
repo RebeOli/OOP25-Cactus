@@ -33,4 +33,17 @@ public final class ScoreCalculator {
                     .sum()
         ));
     }
+
+    public Player getWinner(final Map<Player, Integer> scores) {
+        return scores.entrySet().stream()
+            .min((e1, e2) -> {
+                int scoreCompare = e1.getValue().compareTo(e2.getValue());
+                if (scoreCompare != 0) {
+                    return scoreCompare;
+                }
+                return Integer.compare(e1.getKey().getHand().size(), e2.getKey().getHand().size());
+            })
+            .map(Map.Entry::getKey)
+            .orElseThrow();
+    }
 }

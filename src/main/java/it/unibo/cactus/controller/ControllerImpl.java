@@ -213,6 +213,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         gameEndHandled = true;
         final ScoreCalculator calculator = new ScoreCalculator();
         var scores = calculator.calculateScores(game.getPlayers());
+        var winner = calculator.getWinner(scores);
 
         // nuova mappa per il salvataggio
         final Map<String, Integer> saveScores = new HashMap<>();
@@ -221,13 +222,12 @@ public class ControllerImpl implements Controller, GameViewListener {
             saveScores.put(entry.getKey().getName(), entry.getValue());
         }
 
-        final GameResult result = new GameResult(saveScores, game.getCompletedRounds());
+        final GameResult result = new GameResult(saveScores, game.getCompletedRounds(), winner.getName());
 
         try {
             historyManager.save(result);
         } catch (final IOException e) {
             LOGGER.log(Level.SEVERE, "Impossible saving game result's on JSON", e);
-            //view.showError("Attention: it was not possible to save statistics.");
         }
 
         final Map<Player, PlayerStats> stats = new HashMap<>();

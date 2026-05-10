@@ -57,9 +57,9 @@ final class StatsTest {
         scores3.put(player1.getName(), SCORE_2);
         scores3.put(player2.getName(), SCORE_1);
 
-        this.result.add(new GameResult(scores1, ROUNDS_3));
-        this.result.add(new GameResult(scores2, ROUNDS_2));
-        this.result.add(new GameResult(scores3, ROUNDS_1));
+        this.result.add(new GameResult(scores1, ROUNDS_3, player2.getName()));
+        this.result.add(new GameResult(scores2, ROUNDS_2, player1.getName()));
+        this.result.add(new GameResult(scores3, ROUNDS_1, player2.getName()));
 
         this.calculator = new StatsCalculator();
     }

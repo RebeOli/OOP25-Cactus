@@ -37,11 +37,11 @@ final class ScoreTest {
     private Player player1;
     private Player player2;
     private Map<Player, Integer> scores;
+    private Player winner;
 
     @BeforeEach
     void setUp() {
 
-        final ScoreCalculator calculator;
         final PlayerHand hand1 = new PlayerHandImpl(List.of(CARD_1, CARD_3));
         final PlayerHand hand2 = new PlayerHandImpl(List.of(CARD_2, CARD_4));
 
@@ -50,8 +50,10 @@ final class ScoreTest {
         player2 = new HumanPlayer("Marta");
         player2.setHand(hand2);
 
+        final ScoreCalculator calculator;
         calculator = new ScoreCalculator();
         scores = calculator.calculateScores(List.of(player1, player2));
+        winner = calculator.getWinner(scores);
     }
 
     @Test
@@ -68,7 +70,32 @@ final class ScoreTest {
         for (final var entry : scores.entrySet()) {
             stringScores.put(entry.getKey().getName(), entry.getValue());
         }
-        final GameResult result = new GameResult(stringScores, ROUNDS);
-        assertEquals(player2.getName(), result.getWinner());
+        final GameResult result = new GameResult(stringScores, ROUNDS, winner.getName());
+        assertEquals(player2.getName(), result.winner());
+    }
+
+    @Test
+    void testTieBreaker() {
+        final Card tieCard1 = new CardImpl(Suit.BASTONI, 2, 2, null);
+        final Card tieCard2 = new CardImpl(Suit.SPADE, 3, 3, null);
+        final PlayerHand tieHand1 = new PlayerHandImpl(List.of(tieCard1, tieCard2));
+
+        final Card tieCard3 = new CardImpl(Suit.COPPE, 5, 5, null);
+        final PlayerHand tieHand2 = new PlayerHandImpl(List.of(tieCard3));
+
+        final Player tiePlayer1 = new BotPlayer("Marco");
+        tiePlayer1.setHand(tieHand1);
+        
+        final Player tiePlayer2 = new HumanPlayer("Elisa");
+        tiePlayer2.setHand(tieHand2);
+
+        final ScoreCalculator tieCalculator = new ScoreCalculator();
+        final Map<Player, Integer> tieScores = tieCalculator.calculateScores(List.of(tiePlayer1, tiePlayer2));
+
+        assertEquals(5, tieScores.get(tiePlayer1));
+        assertEquals(5, tieScores.get(tiePlayer2));
+
+        final Player tieWinner = tieCalculator.getWinner(tieScores);
+        assertEquals(tiePlayer2, tieWinner);
     }
 }
