@@ -2,6 +2,7 @@ package it.unibo.cactus.view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
@@ -72,8 +73,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         cactusCalledAvd.setVisible(false);
         cactusCalledAvd.getStyleClass().add("btnCalledCactus");
 
-        tableView.getDrawPile().setOnDrawAction(() -> listener.onDrawCardRequest());
-        tableView.getZoomedDrawnCard().setOnDiscardAction(() -> listener.onDiscardDrawnCardRequested());
+        tableView.getDrawPile().setOnDrawAction(listener::onDrawCardRequest);
+        tableView.getZoomedDrawnCard().setOnDiscardAction(listener::onDiscardDrawnCardRequested);
         tableView.setOnCardClicked((playerIndex, cardIndex) -> {
             final boolean canSwap = currentAvailableActions.stream()
                 .anyMatch(a -> a instanceof SwapAction);
@@ -100,7 +101,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         });
 
         final RulesOverlay rulesOverlay = new RulesOverlay();
-        menuOverlay.setOnRulesRequested(() -> rulesOverlay.show());
+        menuOverlay.setOnRulesRequested(rulesOverlay::show);
 
         // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
@@ -189,7 +190,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         turnLabel.setText("▶ " + data.currentPlayerName());
 
         if (data.cactusCalled()) {
-            cactusCalledAvd.setText(data.currentPlayerName().toUpperCase() + "\nCALLED CACTUS");
+            cactusCalledAvd.setText(data.currentPlayerName().toUpperCase(Locale.ROOT) + "\nCALLED CACTUS");
             cactusCalledAvd.setVisible(true);
         }
 

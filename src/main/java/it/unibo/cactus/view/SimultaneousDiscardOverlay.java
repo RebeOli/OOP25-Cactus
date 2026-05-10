@@ -35,7 +35,7 @@ public final class SimultaneousDiscardOverlay extends StackPane {
     private final CardView discardedCardView;
     private boolean actionSent;
 
-    private final java.util.function.IntConsumer onCardChosen;
+    private final IntConsumer onCardChosen;
 
     /**
      * Creates the simultaneous discard overlay.
