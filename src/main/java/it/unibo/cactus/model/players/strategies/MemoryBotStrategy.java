@@ -4,12 +4,15 @@ import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
+import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
+import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
@@ -90,5 +93,27 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
             return new SimultaneousDiscardAction(self, bestIndex);
         }
         return new SkipSimultaneousDiscardAction();
+    }
+
+    protected RoundAction handlePeekPower() {
+        final PlayerHand hand = self.getHand();
+
+        // Cerco il primo slot ancora sconosciuto in memoria per spiare la carta
+        for (int i = 0; i < hand.size(); i++) {
+            if (!memory.isKnownCardAtIndex(i)) {
+                // Memorizzo la carta di quello slot e attivo il potere Peek
+                memory.rememberCard(i, hand.getCard(i));
+                return new ActivatePowerAction(new PeekTarget(i));
+            }
+        }
+
+        // Se tutte le carte sono già note, salto
+        return new SkipPowerAction();
+    }
+
+    protected int estimatedOwnScore() {
+        // Stimo il punteggio totale (sommo le carte note e valore medio per quelle sconosciute)
+        final int unknownCount = self.getHand().size() - memory.getAllKnownCards().size();
+        return memory.getKnownScore() + AVERAGE_UNKNOWN_SCORE * unknownCount;
     }
 }

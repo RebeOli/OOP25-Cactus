@@ -58,6 +58,7 @@ public class ConfigScreenView extends StackPane {
                     case EASY -> "Easy";
                     case MEDIUM -> "Medium";
                     case HARD -> "Hard";
+                    case VERY_HARD -> "Very Hard";
                 };
             }
 

@@ -6,5 +6,6 @@ package it.unibo.cactus.model.players;
 public enum BotDifficulty {
     EASY,
     MEDIUM,
-    HARD
+    HARD,
+    VERY_HARD
 }

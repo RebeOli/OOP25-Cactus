@@ -4,12 +4,9 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
-import it.unibo.cactus.model.cards.target.PeekTarget;
 import it.unibo.cactus.model.players.Player;
-import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
-import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
@@ -35,27 +32,12 @@ public class HardBotStrategy extends MemoryBotStrategy {
             return new SkipPowerAction();
         }
 
-        final PlayerHand hand = self.getHand();
-
-        // Cerco il primo slot ancora sconosciuto in memoria per spiare la carta
-        for (int i = 0; i < hand.size(); i++) {
-            if (!memory.isKnownCardAtIndex(i)) {
-                // Memorizzo la carta di quello slot e attivo il potere Peek
-                memory.rememberCard(i, hand.getCard(i));
-                return new ActivatePowerAction(new PeekTarget(i));
-            }
-        }
-
-        // Se tutte le carte sono già note, salto
-        return new SkipPowerAction();
+        return handlePeekPower();
     }
 
     @Override
     protected RoundAction chooseEndTurn(final Round round) {
-
-        // Stimo il punteggio totale (sommo le carte note e valore medio per quelle sconosciute)
-        final int unknownCount = self.getHand().size() - memory.getAllKnownCards().size();
-        final int estimatedScore = memory.getKnownScore() + AVERAGE_UNKNOWN_SCORE * unknownCount;
+        final int estimatedScore = estimatedOwnScore();
 
         // Chiamo Cactus! se il punteggio stimato è sufficientemente basso e se non siamo già al turno finale
         if (estimatedScore <= CACTUS_SCORE_THRESHOLD && !round.isCactusCalled()) {
