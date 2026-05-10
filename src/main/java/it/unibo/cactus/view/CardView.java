@@ -15,7 +15,7 @@ import javafx.util.Duration;
 /**
  * Represents the visual component of a single playing card.
  */
-public class CardView extends StackPane {
+public final class CardView extends StackPane {
 
     private static final double HIGHLIGHT_SPREAD = 0.6;
     private static final int HIGHLIGHT_RADIUS = 15;
@@ -63,7 +63,7 @@ public class CardView extends StackPane {
      *
      * @param card the card model containing suit and value
      */
-    public final void setCardData(final Card card) {
+    public void setCardData(final Card card) {
         if (card != null) {
             this.frontImage = ImageLoader.getCardImage(card.getSuit(), card.getValue());
             this.imageView.setVisible(true);
@@ -192,12 +192,22 @@ public class CardView extends StackPane {
         }
     }
 
+    /**
+     * Sets the action to be performed when the card is clicked to be discarded.
+     *
+     * @param action the action to execute on discard
+     */
     public void setOnDiscardAction(final Runnable action) {
         this.setOnMouseClicked(event -> {
             action.run();
         });
     }
 
+    /**
+     * Checks whether the card is currently face up.
+     *
+     * @return true if the front of the card is visible, false otherwise
+     */
     public boolean isFaceUp() {
         return this.isFaceUp;
     }

@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * Utility class functioning as a Factory to generate the complete deck 
- * of 40 cards for the "Cactus!" game.
+ * of 40 cards for the game.
  */
 public final class DeckFactory {
 
@@ -18,8 +18,7 @@ public final class DeckFactory {
     }
 
     /**
-     * Generates a standard deck of 40 cards, automatically assigning 
-     * the correct scores and special powers based on the game rules.
+     * Generates a standard deck of 40 cards.
      *
      * @return a complete {@link List} containing 40 {@link Card} objects.
      */
