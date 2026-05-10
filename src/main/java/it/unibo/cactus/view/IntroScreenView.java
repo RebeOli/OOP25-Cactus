@@ -10,7 +10,7 @@ import javafx.scene.media.MediaView;
 /**
  * Intro Screen.
  */
-public class IntroScreenView extends VBox {
+public final class IntroScreenView extends VBox {
 
     private static final int VIDEO_WIDTH = 800;
 
@@ -32,11 +32,11 @@ public class IntroScreenView extends VBox {
             mediaView.setFitWidth(VIDEO_WIDTH);
             mediaView.setPreserveRatio(true);
             mediaPlayer.setCycleCount(1);
-            mediaPlayer.setOnEndOfMedia(() -> onPlayClicked.run());
+            mediaPlayer.setOnEndOfMedia(onPlayClicked::run);
             mediaPlayer.play();
         } catch (final MediaException e) {
             onPlayClicked.run(); 
         }
-        this.getChildren().add(mediaView);
+        super.getChildren().add(mediaView);
     }
 }

@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 /**
  * Represents the view of the game table.
  */
-public class TableView extends BorderPane {
+public final class TableView extends BorderPane {
 
     private static final int PADDING_STANDARD = 10;
     private static final int PADDING_BOTTOM = 80;
@@ -52,7 +52,7 @@ public class TableView extends BorderPane {
      * @param bot3Name the name of the third bot
      */
     public TableView(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
-        this.setMinSize(0, 0);
+        super.setMinSize(0, 0);
 
         this.getStyleClass().add("gameTable");
         this.setPadding(new Insets(PADDING_STANDARD, PADDING_STANDARD, PADDING_BOTTOM, PADDING_STANDARD));
@@ -63,8 +63,8 @@ public class TableView extends BorderPane {
 
         bot1Hand.setMaxHeight(Double.MAX_VALUE);
         bot3Hand.setMaxHeight(Double.MAX_VALUE);
-        BorderPane.setAlignment(bot1Hand, Pos.CENTER);
-        BorderPane.setAlignment(bot3Hand, Pos.CENTER);
+        setAlignment(bot1Hand, Pos.CENTER);
+        setAlignment(bot3Hand, Pos.CENTER);
 
         this.hands = List.of(humanHand, bot1Hand, bot2Hand, bot3Hand);
         this.setBottom(humanHand);

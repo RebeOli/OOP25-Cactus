@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 /**
  * Overlay component that displays the rules of the game.
  */
-public class RulesOverlay extends StackPane {
+public final class RulesOverlay extends StackPane {
     private static final double CARD_MAX_HEIGHT = 600;
     private static final double CARD_MAX_WIDTH = 450;
     private static final int BOX_SPACING = 10;
@@ -71,7 +71,7 @@ public class RulesOverlay extends StackPane {
 
         rulesBox.getChildren().addAll(titleLabel, scrollPane, backButton);
 
-        this.getChildren().add(rulesBox);
+        super.getChildren().add(rulesBox);
         this.setVisible(false);
     }
 
