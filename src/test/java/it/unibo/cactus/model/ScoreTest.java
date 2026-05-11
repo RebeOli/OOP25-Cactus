@@ -18,10 +18,10 @@ import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.players.PlayerHandImpl;
 import it.unibo.cactus.model.score.GameResult;
-import it.unibo.cactus.model.score.ScoreCalculator;
+import it.unibo.cactus.model.score.ScoreCalculatorImpl;
 
 /**
- * Test suite for {@link ScoreCalculator} and {@link GameResult}.
+ * Test suite for {@link ScoreCalculatorImpl} and {@link GameResult}.
  * Verifies the correct behaviour of score calculator in the "Cactus!" card game,
  * including calculating scores and determining the winner.
  */
@@ -50,8 +50,8 @@ final class ScoreTest {
         player2 = new HumanPlayer("Marta");
         player2.setHand(hand2);
 
-        final ScoreCalculator calculator;
-        calculator = new ScoreCalculator();
+        final ScoreCalculatorImpl calculator;
+        calculator = new ScoreCalculatorImpl();
         scores = calculator.calculateScores(List.of(player1, player2));
         winner = calculator.getWinner(scores);
     }
@@ -89,7 +89,7 @@ final class ScoreTest {
         final Player tiePlayer2 = new HumanPlayer("Elisa");
         tiePlayer2.setHand(tieHand2);
 
-        final ScoreCalculator tieCalculator = new ScoreCalculator();
+        final ScoreCalculatorImpl tieCalculator = new ScoreCalculatorImpl();
         final Map<Player, Integer> tieScores = tieCalculator.calculateScores(List.of(tiePlayer1, tiePlayer2));
 
         assertEquals(5, tieScores.get(tiePlayer1));

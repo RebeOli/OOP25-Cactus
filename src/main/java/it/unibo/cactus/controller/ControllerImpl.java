@@ -36,7 +36,7 @@ import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.score.GameResult;
-import it.unibo.cactus.model.score.ScoreCalculator;
+import it.unibo.cactus.model.score.ScoreCalculatorImpl;
 import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.view.GameUpdateData;
@@ -211,7 +211,7 @@ public class ControllerImpl implements Controller, GameViewListener {
             return;
         }
         gameEndHandled = true;
-        final ScoreCalculator calculator = new ScoreCalculator();
+        final ScoreCalculatorImpl calculator = new ScoreCalculatorImpl();
         var scores = calculator.calculateScores(game.getPlayers());
         var winner = calculator.getWinner(scores);
 
