@@ -5,7 +5,12 @@ import java.util.Map;
 
 import it.unibo.cactus.model.players.Player;
 
+/**
+ * Calculates the final scores of all players at the end of a "Cactus!" game
+ *  and determine the winner of the game.
+ */
 public interface ScoreCalculator {
+
     /**
      * Calculates the final score for each player in the game.
      * The score of a player is computed as the sum of the scores
@@ -20,5 +25,13 @@ public interface ScoreCalculator {
      */
     Map<Player, Integer> calculateScores(final List<Player> players);
 
+    /**
+     * Determine the winning player as the one with the lowest score.
+     * In case of a tie, the player with the fewest cards wins.
+     * 
+     * @param scores a {@link Map} associating each {@link Player} with their
+     *         final score as an {@link Integer}.
+     * @return the {@link Player} who wins the game.
+     */
     Player getWinner(final Map<Player, Integer> scores);
 }

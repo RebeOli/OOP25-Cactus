@@ -7,8 +7,12 @@ import com.google.common.math.Stats;
 
 import it.unibo.cactus.model.score.GameResult;
 
+/**
+ * Computes statistics from the history of completed games in "Cactus!".
+ */
 public interface StatsCalculator {
-        /**
+
+    /**
      * Counts the number of games won by the player with the given name.
      *
      * @param results the {@link List} of {@link GameResult} to search through;

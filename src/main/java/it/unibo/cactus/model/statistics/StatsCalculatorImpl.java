@@ -11,31 +11,14 @@ import it.unibo.cactus.model.score.GameResult;
  */
 public final class StatsCalculatorImpl implements StatsCalculator {
 
-    /**
-     * Counts the number of games won by the player with the given name.
-     *
-     * @param results the {@link List} of {@link GameResult} to search through;
-     *                must not be null.
-     * @param playerName the name of the player whose wins are counted;
-     *                   must not be null.
-     * @return the total number of games won by the specified player.
-     */
+    @Override
     public int countWins(final List<GameResult> results, final String playerName) { //quante volte un giocatore ha vinto
         return (int) results.stream()
             .filter(r -> r.winner().equals(playerName))
             .count();
     }
 
-    /**
-     * Computes the general ranking of all players based on their total wins.
-     * Each player who has won at least one game appears in the ranking,
-     * associated with their total number of victories.
-     *
-     * @param results the {@link List} of {@link GameResult} to process;
-     *                must not be null.
-     * @return a {@link Map} associating each player's name with their
-     *         total number of wins across all provided game results.
-     */
+    @Override
     public Map<String, Integer> generalRanking(final List<GameResult> results) {
         return results.stream()
             .collect(Collectors.groupingBy(
@@ -44,14 +27,7 @@ public final class StatsCalculatorImpl implements StatsCalculator {
             ));
     }
 
-    /**
-     * Computes the average number of rounds across all provided game results.
-     * Uses Guava's {@link Stats} class for efficient numerical computation.
-     *
-     * @param results the {@link List} of {@link GameResult} to process;
-     *                must not be null and must contain at least one element.
-     * @return the average number of completed rounds as a {@code double}.
-     */
+    @Override
     public double averageRounds(final List<GameResult> results) {
         if (results.isEmpty()) {
             return 0.0;

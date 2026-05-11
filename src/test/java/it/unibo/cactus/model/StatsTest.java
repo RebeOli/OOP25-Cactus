@@ -15,6 +15,7 @@ import it.unibo.cactus.model.players.HumanPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.PlayerStats;
+import it.unibo.cactus.model.statistics.StatsCalculator;
 import it.unibo.cactus.model.statistics.StatsCalculatorImpl;
 
 /**
@@ -34,7 +35,7 @@ final class StatsTest {
     private static final int ROUNDS_3 = 6;
 
     private List<GameResult> result;
-    private StatsCalculatorImpl calculator;
+    private StatsCalculator calculator;
 
     private final Player player1 = new BotPlayer("Mario");
     private final Player player2 = new HumanPlayer("Marta");

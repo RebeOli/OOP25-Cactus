@@ -36,6 +36,7 @@ import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 import it.unibo.cactus.model.score.GameResult;
+import it.unibo.cactus.model.score.ScoreCalculator;
 import it.unibo.cactus.model.score.ScoreCalculatorImpl;
 import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
@@ -178,40 +179,13 @@ public class ControllerImpl implements Controller, GameViewListener {
         //view.updateGame(game);
     }
 
-    // @Override
-    // public void onGameFinished() {
-    //     final ScoreCalculator calculator = new ScoreCalculator();
-    //     var scores = calculator.calculateScores(game.getPlayers());
-
-    //     final GameResult result = new GameResult(scores, game.getCompletedRounds());
-
-    //     try {
-    //         historyManager.save(result);
-    //     } catch (final IOException e) {
-    //         LOGGER.log(Level.SEVERE, "Impossible saving game result's on JSON", e);
-    //         //view.showError("Attention: it was not possible to save statistics.");
-    //     }
-
-    //     final Map<Player, PlayerStats> stats = new HashMap<>();
-    //     for (final Player player : game.getPlayers()) {
-    //         try {
-    //             stats.put(player, historyManager.getStats(player.getName()));
-    //         } catch (final IOException e) {
-    //             LOGGER.log(Level.SEVERE, "Impossible load game results's from JSON", e);
-    //         }
-    //     }
-
-    //     view.showEndScreen(scores);
-    //     view.updateGame(buildUpdateData());
-    // }
-
     @Override
     public void onGameFinished() {
         if (gameEndHandled) {
             return;
         }
         gameEndHandled = true;
-        final ScoreCalculatorImpl calculator = new ScoreCalculatorImpl();
+        final ScoreCalculator calculator = new ScoreCalculatorImpl();
         var scores = calculator.calculateScores(game.getPlayers());
         var winner = calculator.getWinner(scores);
 
