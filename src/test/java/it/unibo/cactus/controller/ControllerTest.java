@@ -20,7 +20,7 @@ import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.HistoryManagerImpl;
 import it.unibo.cactus.model.statistics.HistoryRepository;
 import it.unibo.cactus.model.statistics.PlayerStats;
-import it.unibo.cactus.model.statistics.StatsCalculator;
+import it.unibo.cactus.model.statistics.StatsCalculatorImpl;
 import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
 import it.unibo.cactus.view.GameViewListener;
@@ -35,7 +35,7 @@ public class ControllerTest {
     void setUp() {
         fakeView = new FakeView();
         fakeHistoryRepository = new FakeHistoryRepository();
-        controller = new ControllerImpl(fakeView, new HistoryManagerImpl(fakeHistoryRepository,new StatsCalculator()));
+        controller = new ControllerImpl(fakeView, new HistoryManagerImpl(fakeHistoryRepository,new StatsCalculatorImpl()));
     }
 
     private static final class FakeHistoryRepository implements HistoryRepository {

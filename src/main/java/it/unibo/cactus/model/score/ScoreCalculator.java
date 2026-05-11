@@ -2,15 +2,14 @@ package it.unibo.cactus.model.score;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import it.unibo.cactus.model.players.Player;
 
 /**
- * Calculates the final scores of all players at the end of a "Cactus!" game.
+ * Calculates the final scores of all players at the end of a "Cactus!" game
+ * and determine the winner of the game.
  */
-public final class ScoreCalculator {
+public interface ScoreCalculator {
 
     /**
      * Calculates the final score for each player in the game.
@@ -24,13 +23,15 @@ public final class ScoreCalculator {
      * @return a {@link Map} associating each {@link Player} with their
      *         final score as an {@link Integer}.
      */
-    public Map<Player, Integer> calculateScores(final List<Player> players) {
-        return players.stream()
-            .collect(Collectors.toMap(
-                player -> player,
-                player -> IntStream.range(0, player.getHand().size())
-                    .map(i -> player.getHand().getCard(i).getScore())
-                    .sum()
-        ));
-    }
+    Map<Player, Integer> calculateScores(final List<Player> players);
+
+    /**
+     * Determine the winning player as the one with the lowest score.
+     * In case of a tie, the player with the fewest cards wins.
+     * 
+     * @param scores a {@link Map} associating each {@link Player} with their
+     *         final score as an {@link Integer}.
+     * @return the {@link Player} who wins the game.
+     */
+    Player getWinner(final Map<Player, Integer> scores);
 }

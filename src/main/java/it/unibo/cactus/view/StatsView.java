@@ -32,6 +32,9 @@ public final class StatsView extends StackPane {
 
     /**
      * Constructs a new StatsView.
+     * 
+     * @param playersNames
+     * @param onBack
      */
     public StatsView(final List<String> playersNames, final Runnable onBack) {
         //strato sotto oscuramento
@@ -86,6 +89,11 @@ public final class StatsView extends StackPane {
         this.getChildren().add(statsBox);
     }
 
+    /**
+     * Sets the action to be performed when the player is selected.
+     * 
+     * @param action the action to run
+     */
     public void setOnPlayerSelected(final Consumer<String> action) {
         this.playerSelector.setOnAction(event -> {
             final String selectedPlayer = this.playerSelector.getValue();
@@ -113,7 +121,6 @@ public final class StatsView extends StackPane {
             final Label noRankingLabel = new Label("No ranking available.");
             noRankingLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
             this.rankingBox.getChildren().add(noRankingLabel);
-            
         } else {
             this.titleLabel.setText(playerName + "'s Statistics");
             this.winsLabel.setText("Your wins: " + stats.wins());
@@ -130,7 +137,6 @@ public final class StatsView extends StackPane {
                     playerRankLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
                     this.rankingBox.getChildren().add(playerRankLabel);
                 });
-
         }
     }
 

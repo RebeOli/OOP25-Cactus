@@ -52,6 +52,11 @@ public final class DrawPileView extends StackPane {
         }
     }
 
+    /**
+     * Set the action to run when the player clicks on the draw pile.
+     *
+     * @param action the action to execute when drawing a card
+     */
     public void setOnDrawAction(final Runnable action) {
         this.setOnMouseClicked(event -> {
             if (!this.getStyleClass().contains(CSS_PILE_DISABLED)) {
