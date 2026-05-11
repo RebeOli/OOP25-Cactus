@@ -8,7 +8,9 @@ import java.util.stream.IntStream;
 import it.unibo.cactus.model.players.Player;
 
 /**
- * Calculates the final scores of all players at the end of a "Cactus!" game.
+ * Implementation of the {@link ScoreCalculator} interface.
+ * Calculates the final scores of all players at the end of a "Cactus!" game
+ * and determine the winner of the game.
  */
 public final class ScoreCalculatorImpl implements ScoreCalculator{
 
@@ -27,7 +29,7 @@ public final class ScoreCalculatorImpl implements ScoreCalculator{
     public Player getWinner(final Map<Player, Integer> scores) {
         return scores.entrySet().stream()
             .min((e1, e2) -> {
-                int scoreCompare = e1.getValue().compareTo(e2.getValue());
+                final int scoreCompare = e1.getValue().compareTo(e2.getValue());
                 if (scoreCompare != 0) {
                     return scoreCompare;
                 }

@@ -7,6 +7,7 @@ import com.google.common.math.Stats;
 import it.unibo.cactus.model.score.GameResult;
 
 /**
+ * Implementation of the {@link StatsCalculator} interface.
  * Computes statistics from the history of completed games in "Cactus!".
  */
 public final class StatsCalculatorImpl implements StatsCalculator {

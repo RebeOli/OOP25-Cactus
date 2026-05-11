@@ -7,7 +7,7 @@ import it.unibo.cactus.model.players.Player;
 
 /**
  * Calculates the final scores of all players at the end of a "Cactus!" game
- *  and determine the winner of the game.
+ * and determine the winner of the game.
  */
 public interface ScoreCalculator {
 
