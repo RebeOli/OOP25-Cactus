@@ -21,7 +21,7 @@ public interface StatsCalculator {
      *                   must not be null.
      * @return the total number of games won by the specified player.
      */
-    int countWins(List<GameResult> results, final String playerName);
+    int countWins(List<GameResult> results, String playerName);
 
     /**
      * Creates a ranking of players based on their total wins.
