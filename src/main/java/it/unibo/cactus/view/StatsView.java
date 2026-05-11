@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * View representing the statistics overlay.
- * Shows player-specific stats and the general game ranking.
+ * Shows player-specific stats, average rounds and the general game ranking.
  */
 public final class StatsView extends StackPane {
 
@@ -33,14 +33,12 @@ public final class StatsView extends StackPane {
     /**
      * Constructs a new StatsView.
      * 
-     * @param playersNames
-     * @param onBack
+     * @param playersNames the name of the players.
+     * @param onBack a {@link Runnable} action to be executed when the "Close" button is clicked.
      */
     public StatsView(final List<String> playersNames, final Runnable onBack) {
-        //strato sotto oscuramento
         this.getStyleClass().add("overlayBackground");
 
-        //strato sopra finestra
         final VBox statsBox = new VBox(STATS_BOX_SPACING);
         statsBox.setAlignment(Pos.TOP_CENTER);
         statsBox.setMaxSize(BOX_WIDTH, BOX_HEIGHT);
@@ -50,12 +48,11 @@ public final class StatsView extends StackPane {
         this.titleLabel = new Label("Cactus! Statistics");
         this.titleLabel.getStyleClass().add("overlayTitle");
 
-        //menù a tendina
         this.playerSelector = new ComboBox<>();
         this.playerSelector.getItems().addAll(playersNames);
         this.playerSelector.getStyleClass().add("overlayCard");
         if (!playersNames.isEmpty()) {
-            this.playerSelector.getSelectionModel().select(0); // Seleziona il primo di default
+            this.playerSelector.getSelectionModel().select(0);
         }
 
         this.winsLabel = new Label();
@@ -64,10 +61,8 @@ public final class StatsView extends StackPane {
         this.avRoundsLabel = new Label();
         this.avRoundsLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
 
-        //classifica generale
         final Label rankingLabel = new Label("Cactus! General Ranking");
         rankingLabel.getStyleClass().add("overlayTitle");
-        //rankingLabel.setStyle("-fx-font-size: 14px; -fx-padding: 15 0 5 0;"); // Un po' di spazio
 
         this.rankingBox = new VBox(RANKING_BOX_SPACING);
         this.rankingBox.setAlignment(Pos.CENTER);
@@ -92,7 +87,7 @@ public final class StatsView extends StackPane {
     /**
      * Sets the action to be performed when the player is selected.
      * 
-     * @param action the action to run
+     * @param action the action to run.
      */
     public void setOnPlayerSelected(final Consumer<String> action) {
         this.playerSelector.setOnAction(event -> {
@@ -106,18 +101,16 @@ public final class StatsView extends StackPane {
     /**
      * Updates and displays the statistics for a specific player.
      *
-     * @param playerName the name of the player
-     * @param stats the statistics data to display
+     * @param playerName the name of the player.
+     * @param stats the statistics data to display.
      */
     public void showStats(final String playerName, final PlayerStats stats) {
         if (stats == null || stats.generalRanking().isEmpty()) {
-            // 2. Comportamento se non ci sono statistiche
             this.winsLabel.setText("No statistics yet.");
-            this.avRoundsLabel.setText(""); // Lascia vuota l'etichetta dei round
+            this.avRoundsLabel.setText("");
 
             this.rankingBox.getChildren().clear();
 
-            // Opzionale: puoi aggiungere un'etichetta anche per la classifica generale vuota
             final Label noRankingLabel = new Label("No ranking available.");
             noRankingLabel.getStyleClass().add(CSS_OVERLAY_SUBTITLE);
             this.rankingBox.getChildren().add(noRankingLabel);
@@ -127,7 +120,7 @@ public final class StatsView extends StackPane {
             final var rounds = stats.averageRounds();
             this.avRoundsLabel.setText(String.format("Average Rounds: %.2f", rounds));
 
-            this.rankingBox.getChildren().clear(); //svuota vecchia classifica
+            this.rankingBox.getChildren().clear();
 
             stats.generalRanking().entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())

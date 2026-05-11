@@ -12,7 +12,7 @@ import it.unibo.cactus.model.players.Player;
  * Calculates the final scores of all players at the end of a "Cactus!" game
  * and determine the winner of the game.
  */
-public final class ScoreCalculatorImpl implements ScoreCalculator{
+public final class ScoreCalculatorImpl implements ScoreCalculator {
 
     @Override
     public Map<Player, Integer> calculateScores(final List<Player> players) {

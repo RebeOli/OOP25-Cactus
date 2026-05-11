@@ -13,7 +13,7 @@ import it.unibo.cactus.model.score.GameResult;
 public final class StatsCalculatorImpl implements StatsCalculator {
 
     @Override
-    public int countWins(final List<GameResult> results, final String playerName) { //quante volte un giocatore ha vinto
+    public int countWins(final List<GameResult> results, final String playerName) {
         return (int) results.stream()
             .filter(r -> r.winner().equals(playerName))
             .count();
@@ -23,8 +23,8 @@ public final class StatsCalculatorImpl implements StatsCalculator {
     public Map<String, Integer> generalRanking(final List<GameResult> results) {
         return results.stream()
             .collect(Collectors.groupingBy(
-                r -> r.winner(),
-                Collectors.summingInt(r -> 1) //summingInt permette di non dover convertire il Long in int
+                GameResult::winner,
+                Collectors.summingInt(r -> 1)
             ));
     }
 

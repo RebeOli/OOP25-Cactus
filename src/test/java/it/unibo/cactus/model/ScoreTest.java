@@ -33,6 +33,7 @@ final class ScoreTest {
     private static final Card CARD_4 = new CardImpl(Suit.DENARI, 4, 4, null);
     private static final int SCORE_1 = 6;
     private static final int SCORE_2 = 4;
+    private static final int SCORE_3 = 5;
     private static final int ROUNDS = 1;
 
     private Player player1;
@@ -85,15 +86,15 @@ final class ScoreTest {
 
         final Player tiePlayer1 = new BotPlayer("Marco");
         tiePlayer1.setHand(tieHand1);
-        
+
         final Player tiePlayer2 = new HumanPlayer("Elisa");
         tiePlayer2.setHand(tieHand2);
 
         final ScoreCalculator tieCalculator = new ScoreCalculatorImpl();
         final Map<Player, Integer> tieScores = tieCalculator.calculateScores(List.of(tiePlayer1, tiePlayer2));
 
-        assertEquals(5, tieScores.get(tiePlayer1));
-        assertEquals(5, tieScores.get(tiePlayer2));
+        assertEquals(SCORE_3, tieScores.get(tiePlayer1));
+        assertEquals(SCORE_3, tieScores.get(tiePlayer2));
 
         final Player tieWinner = tieCalculator.getWinner(tieScores);
         assertEquals(tiePlayer2, tieWinner);
