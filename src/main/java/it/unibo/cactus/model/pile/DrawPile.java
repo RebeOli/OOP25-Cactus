@@ -45,6 +45,6 @@ public interface DrawPile {
     /**
      * @return the pile's size.
      */
-    int size(); //da togliere, non usare!!
+    int size();
 
 }

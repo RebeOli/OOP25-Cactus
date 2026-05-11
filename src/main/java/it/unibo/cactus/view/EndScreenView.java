@@ -16,6 +16,8 @@ import javafx.scene.layout.VBox;
  */
 public final class EndScreenView extends StackPane {
 
+    private static final int BOX_UPPER_MARGIN = 40;
+    private static final String CSS_BTN_PLAY_AGAIN = "btnPlayAgain";
     private static final int BUTTON_SPACING = 20;
     private static final double BOX_HEIGHT = 450;
     private static final double BOX_WIDTH = 400;
@@ -55,14 +57,14 @@ public final class EndScreenView extends StackPane {
         buttonBox.setAlignment(Pos.BOTTOM_CENTER);
 
         this.playAgainButton = new Button("PLAY AGAIN");
-        this.playAgainButton.getStyleClass().add("btnPlayAgain");
+        this.playAgainButton.getStyleClass().add(CSS_BTN_PLAY_AGAIN);
         this.closeButton = new Button("QUIT");
-        this.closeButton.getStyleClass().add("btnPlayAgain");
+        this.closeButton.getStyleClass().add(CSS_BTN_PLAY_AGAIN);
         this.statsButton = new Button("STATS");
-        this.statsButton.getStyleClass().add("btnPlayAgain");
+        this.statsButton.getStyleClass().add(CSS_BTN_PLAY_AGAIN);
 
         buttonBox.getChildren().addAll(this.statsButton, this.playAgainButton, this.closeButton);
-        VBox.setMargin(buttonBox, new Insets(40, 0, 0, 0));
+        VBox.setMargin(buttonBox, new Insets(BOX_UPPER_MARGIN, 0, 0, 0));
 
         endBox.getChildren().addAll(
             titleLabel,
@@ -88,7 +90,11 @@ public final class EndScreenView extends StackPane {
             .sorted(Map.Entry.comparingByValue())
             .toList();
 
-        this.winnerLabel.setText(rankingList.getFirst().getKey().getName() + " WON\n" + "with " + rankingList.getFirst().getValue() + " points");
+        this.winnerLabel.setText(rankingList.getFirst().getKey().getName()
+             + " WON\nwith " 
+             + rankingList.getFirst().getValue() 
+             + " points"
+            );
 
         for (int i = 1; i < rankingList.size(); i++) {
             final var playerScore = rankingList.get(i);
@@ -127,6 +133,11 @@ public final class EndScreenView extends StackPane {
         });
     }
 
+    /**
+     * Sets the action to be performed when the stats button is clicked.
+     *
+     * @param action the action to run
+     */
     public void setOnFinalStatsRequested(final Runnable action) {
         this.statsButton.setOnAction(e -> {
             action.run();

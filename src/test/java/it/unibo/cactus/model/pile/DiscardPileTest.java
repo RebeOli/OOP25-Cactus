@@ -11,7 +11,6 @@ import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.Suit;
 
-
 /**
  * Test suite for {@link DiscardPileImpl}.
  * Verifies the correct behaviour of the discard pile in the "Cactus!" card game,

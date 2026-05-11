@@ -20,14 +20,12 @@ public interface StatsCalculator {
     int countWins(final List<GameResult> results, final String playerName);
 
     /**
-     * Computes the general ranking of all players based on their total wins.
-     * Each player who has won at least one game appears in the ranking,
-     * associated with their total number of victories.
+     * Creates a ranking of players based on their total wins.
+     * Players are included only if they have won at least once.
      *
      * @param results the {@link List} of {@link GameResult} to process;
      *                must not be null.
-     * @return a {@link Map} associating each player's name with their
-     *         total number of wins across all provided game results.
+     * @return a {@link Map} connecting the player's name to their total wins.
      */
     Map<String, Integer> generalRanking(final List<GameResult> results);
 
@@ -35,9 +33,8 @@ public interface StatsCalculator {
      * Computes the average number of rounds across all provided game results.
      * Uses Guava's {@link Stats} class for efficient numerical computation.
      *
-     * @param results the {@link List} of {@link GameResult} to process;
-     *                must not be null and must contain at least one element.
-     * @return the average number of completed rounds as a {@code double}.
+     * @param results the {@link List} of {@link GameResult} (must not be null or empty).
+     * @return the average number of completed rounds.
      */
     double averageRounds(final List<GameResult> results);
 }
