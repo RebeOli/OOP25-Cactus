@@ -3,7 +3,7 @@ package it.unibo.cactus;
 import it.unibo.cactus.controller.ControllerImpl;
 import it.unibo.cactus.model.statistics.HistoryManagerImpl;
 import it.unibo.cactus.model.statistics.JSonHistoryRepository;
-import it.unibo.cactus.model.statistics.StatsCalculator;
+import it.unibo.cactus.model.statistics.StatsCalculatorImpl;
 import it.unibo.cactus.view.GameViewImpl;
 import it.unibo.cactus.view.ImageLoader;
 import javafx.animation.AnimationTimer;
@@ -21,7 +21,7 @@ public class Main extends Application {
 
         final GameViewImpl view = new GameViewImpl(primaryStage);
         final ControllerImpl controller = new ControllerImpl(view,
-            new HistoryManagerImpl(new JSonHistoryRepository(), new StatsCalculator())
+            new HistoryManagerImpl(new JSonHistoryRepository(), new StatsCalculatorImpl())
         );
         view.setActionListener(controller);
 

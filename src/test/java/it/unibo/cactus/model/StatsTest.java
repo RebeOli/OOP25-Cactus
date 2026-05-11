@@ -15,10 +15,10 @@ import it.unibo.cactus.model.players.HumanPlayer;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.PlayerStats;
-import it.unibo.cactus.model.statistics.StatsCalculator;
+import it.unibo.cactus.model.statistics.StatsCalculatorImpl;
 
 /**
- * Test suite for {@link StatsCalculator} and {@link PlayerStats}.
+ * Test suite for {@link StatsCalculatorImpl} and {@link PlayerStats}.
  * Verifies the correct behaviour of statistics calculator in the "Cactus!" card game,
  * including counting wins for each player, generating the general ranking
  * and counting the average number of rounds.
@@ -34,7 +34,7 @@ final class StatsTest {
     private static final int ROUNDS_3 = 6;
 
     private List<GameResult> result;
-    private StatsCalculator calculator;
+    private StatsCalculatorImpl calculator;
 
     private final Player player1 = new BotPlayer("Mario");
     private final Player player2 = new HumanPlayer("Marta");
@@ -61,7 +61,7 @@ final class StatsTest {
         this.result.add(new GameResult(scores2, ROUNDS_2, player1.getName()));
         this.result.add(new GameResult(scores3, ROUNDS_1, player2.getName()));
 
-        this.calculator = new StatsCalculator();
+        this.calculator = new StatsCalculatorImpl();
     }
 
     @Test
