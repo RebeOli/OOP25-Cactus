@@ -50,5 +50,4 @@ public interface DiscardPile {
      */
     boolean isEmpty();
 
-    //public boolean trySimultaneousDiscard(Card card);
 }
