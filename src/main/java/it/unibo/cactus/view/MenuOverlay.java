@@ -22,7 +22,6 @@ public final class MenuOverlay extends StackPane {
      * 
      * @param onRestart action to run when the player restarts the game
      * @param onStats action to run when the player opens statistics
-     * @param onHome action to run when the player returns to the home screen
      */
     public MenuOverlay(final Runnable onRestart, final Runnable onStats) {
         this.setVisible(false);
