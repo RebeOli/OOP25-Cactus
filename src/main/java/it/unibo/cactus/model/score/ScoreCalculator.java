@@ -23,7 +23,7 @@ public interface ScoreCalculator {
      * @return a {@link Map} associating each {@link Player} with their
      *         final score as an {@link Integer}.
      */
-    Map<Player, Integer> calculateScores(final List<Player> players);
+    Map<Player, Integer> calculateScores(List<Player> players);
 
     /**
      * Determine the winning player as the one with the lowest score.
@@ -33,5 +33,5 @@ public interface ScoreCalculator {
      *         final score as an {@link Integer}.
      * @return the {@link Player} who wins the game.
      */
-    Player getWinner(final Map<Player, Integer> scores);
+    Player getWinner(Map<Player, Integer> scores);
 }

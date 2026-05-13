@@ -21,7 +21,7 @@ public interface StatsCalculator {
      *                   must not be null.
      * @return the total number of games won by the specified player.
      */
-    int countWins(final List<GameResult> results, final String playerName);
+    int countWins(List<GameResult> results, String playerName);
 
     /**
      * Creates a ranking of players based on their total wins.
@@ -31,7 +31,7 @@ public interface StatsCalculator {
      *                must not be null.
      * @return a {@link Map} connecting the player's name to their total wins.
      */
-    Map<String, Integer> generalRanking(final List<GameResult> results);
+    Map<String, Integer> generalRanking(List<GameResult> results);
 
     /**
      * Computes the average number of rounds across all provided game results.
@@ -40,5 +40,5 @@ public interface StatsCalculator {
      * @param results the {@link List} of {@link GameResult} (must not be null or empty).
      * @return the average number of completed rounds.
      */
-    double averageRounds(final List<GameResult> results);
+    double averageRounds(List<GameResult> results);
 }
