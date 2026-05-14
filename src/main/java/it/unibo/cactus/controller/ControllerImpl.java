@@ -10,7 +10,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
@@ -44,11 +43,15 @@ import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
 import it.unibo.cactus.view.GameViewListener;
 
-public class ControllerImpl implements Controller, GameViewListener {
+/**
+ * Implementation of the Controller interface.
+ * Connects the Model (Game) with the View (GameView) and handles the game loop.
+ */
+public final class ControllerImpl implements Controller, GameViewListener {
     private static final int BOT_DELAY = 1500;
     private static final int SIMULTANEOUS_DISCARD_TIME = 4000;
+    private static final int MAX_CARDS = 6;
     private static final Logger LOGGER = Logger.getLogger(ControllerImpl.class.getName());
-
     private Game game;
     private final GameView view;
     private long botStartTime;
@@ -61,6 +64,12 @@ public class ControllerImpl implements Controller, GameViewListener {
     private boolean gameEndHandled;
     private boolean isGameOver;
 
+    /**
+     * Constructs a new ControllerImpl.
+     *
+     * @param view           the view interface to update
+     * @param historyManager the manager for saving and loading game history
+     */
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
         this.botStartTime = 0;
@@ -73,13 +82,12 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void startGame(final String playerName, final BotDifficulty difficulty) {
         this.gameEndHandled = false;
         this.isGameOver = false;
-        //cosi quando si fa restart parte da un nuovo stato pulito.
         this.botStartTime = 0;
         this.simultaneousDiscardStartTime = 0;
         this.humanWindowExpired = false;
         this.isPaused = false;
         this.game = GameFactory.createGame(playerName, difficulty);
-        game.addObserver(this); //perchè come observer passiamo il controller
+        game.addObserver(this);
         view.showPeekScreen(getHumanPlayer().getHand());
     }
 
@@ -88,38 +96,30 @@ public class ControllerImpl implements Controller, GameViewListener {
         game.performAction(action);
     }
 
-    // sistema scarto simultaneo dei bot.
     @Override
     public void tick() {
         if (game == null || isPaused) {
             return;
         }
-
         if (checkGameEnd()) {
             return;
         }
-
         if (game.getCurrentRound().isSimultaneousDiscardPhase()) {
             if (simultaneousDiscardStartTime == 0) {
                 simultaneousDiscardStartTime = System.currentTimeMillis();
                 humanWindowExpired = false;
-
                 final PlayerHand hand = getHumanPlayer().getHand();
-                if(hand.size()<6) {
+                if (hand.size() < MAX_CARDS) {
                     final List<Card> cards = new ArrayList<>();
-                    for(int i = 0; i < hand.size(); i++){
+                    for (int i = 0; i < hand.size(); i++) {
                         cards.add(hand.getCard(i));
                     }
-                view.showSimultaneousDiscardWindow(game.getDiscardPile().getTopCard().orElse(null), cards);
+                    view.showSimultaneousDiscardWindow(game.getDiscardPile().getTopCard().orElse(null), cards);
                 }
             }
-            
             if (!humanWindowExpired 
                 && System.currentTimeMillis() - simultaneousDiscardStartTime >= BOT_DELAY) {
                 humanWindowExpired = true;
-
-                //Raccolgo in una lista tutte le azioni di scarto simultaneo dei bot (SimultaneousDiscardAction).
-                //I bot che non vogliono scartare restituiscono SkipSimultaneousDiscardAction, che viene ignorata implicitamente
                 final List<SimultaneousDiscardAction> botActions = new ArrayList<>();
                 for (final Player player : game.getPlayers()) {
                     if (!player.isHuman() && player instanceof final BotPlayer bot) {
@@ -129,28 +129,22 @@ public class ControllerImpl implements Controller, GameViewListener {
                         }
                     }
                 }
-
-                // Se più bot vogliono scartare, ne scelgo uno randomicamente
                 if (!botActions.isEmpty()) {
                     final SimultaneousDiscardAction chosen = botActions.get(random.nextInt(botActions.size()));
                     handleSimultaneousDiscard(chosen);
                     return;
                 }
             }
-
-            //Se nessun giocatore ha scartato entro SIMULTANEOUS_DISCARD_TIME, chiudo la fase senza nessuno scarto
             if (game.getCurrentRound().isSimultaneousDiscardPhase() 
                 && System.currentTimeMillis() - simultaneousDiscardStartTime >= SIMULTANEOUS_DISCARD_TIME) {
                 closeSimultaneousDiscard();
             }
             return;
         }
-
-        
         final Player currentPlayer = game.getCurrentPlayer();
         if (currentPlayer instanceof BotPlayer currentBotPlayer) {
-            if(botStartTime == 0) {
-                botStartTime=System.currentTimeMillis();
+            if (botStartTime == 0) {
+                botStartTime = System.currentTimeMillis();
             }
             if (System.currentTimeMillis() - botStartTime >= BOT_DELAY) {
                 final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
@@ -158,7 +152,7 @@ public class ControllerImpl implements Controller, GameViewListener {
                 botStartTime = 0;
             }
         } else {
-            botStartTime=0;
+            botStartTime = 0;
         }
     }
 
@@ -178,7 +172,6 @@ public class ControllerImpl implements Controller, GameViewListener {
         }
         game.performAction(action);
         closeSimultaneousDiscard();
-        //view.updateGame(game);
     }
 
     @Override
@@ -193,19 +186,15 @@ public class ControllerImpl implements Controller, GameViewListener {
 
         // nuova mappa per il salvataggio
         final Map<String, Integer> saveScores = new HashMap<>();
-
         for (final var entry : scores.entrySet()) {
             saveScores.put(entry.getKey().getName(), entry.getValue());
         }
-
         final GameResult result = new GameResult(saveScores, game.getCompletedRounds(), winner.getName());
-
         try {
             historyManager.save(result);
         } catch (final IOException e) {
             LOGGER.log(Level.SEVERE, "Impossible saving game result's on JSON", e);
         }
-
         final Map<Player, PlayerStats> stats = new HashMap<>();
         for (final Player player : game.getPlayers()) {
             try {
@@ -214,11 +203,9 @@ public class ControllerImpl implements Controller, GameViewListener {
                 LOGGER.log(Level.SEVERE, "Impossible load game results's from JSON", e);
             }
         }
-
         view.showEndScreen(scores);
         view.updateGame(buildUpdateData());
     }
-
 
     @Override
     public void onRoundAdvanced() {
@@ -245,8 +232,8 @@ public class ControllerImpl implements Controller, GameViewListener {
             }
         }
         final List<String> botNames = new ArrayList<>();
-        for(final Player p : game.getPlayers()) {
-            if(!p.isHuman()) {
+        for (final Player p : game.getPlayers()) {
+            if (!p.isHuman()) {
                 botNames.add(p.getName());
             }
         }
@@ -255,37 +242,36 @@ public class ControllerImpl implements Controller, GameViewListener {
     }
 
     @Override
-    public void onSkipPowerRequested(){
+    public void onSkipPowerRequested() {
         handleAction(new SkipPowerAction());
     }
 
     @Override
-    public void onCallCactusRequested(){
+    public void onCallCactusRequested() {
         handleAction(new CallCactusAction());
     }
 
     @Override
-    public void onEndTurnRequested(){
+    public void onEndTurnRequested() {
         handleAction(new EndTurnAction());
     }
 
     @Override
-    public void onPeekPowerRequested(final int cardIndex){
+    public void onPeekPowerRequested(final int cardIndex) {
         handleAction(new ActivatePowerAction(new PeekTarget(cardIndex)));
     }
 
     @Override
-    public void onRevealPowerRequested(final int playerIndex, final int cardIndex){
+    public void onRevealPowerRequested(final int playerIndex, final int cardIndex) {
         final Player playerTarget = game.getPlayers().get(playerIndex);
         handleAction(new ActivatePowerAction(new RevealTarget(playerTarget, cardIndex)));
     }
 
     @Override
-    public void onSwapPowerRequested(final int playerAIndex, final int cardAIndex, final int playerBIndex, final int cardBIndex){
+    public void onSwapPowerRequested(final int playerAIndex, final int cardAIndex, final int playerBIndex, final int cardBIndex) {
         final Player playerATarget = game.getPlayers().get(playerAIndex);
         final Player playerBTarget = game.getPlayers().get(playerBIndex);
         handleAction(new ActivatePowerAction(new SwapTarget(playerATarget, cardAIndex, playerBTarget, cardBIndex)));
-
     }
 
     @Override
@@ -297,86 +283,42 @@ public class ControllerImpl implements Controller, GameViewListener {
     private GameUpdateData buildUpdateData() {
         final Player humanPlayer = getHumanPlayer();
         final Round round = game.getCurrentRound();
-
         final PlayerHand hand = humanPlayer.getHand();
         final List<Card> cards = new ArrayList<>();
-        for(int i = 0; i < hand.size(); i++){
+        for (int i = 0; i < hand.size(); i++) {
             cards.add(hand.getCard(i));
         }
-
         final Card discardTopCard = game.getDiscardPile().getTopCard().orElse(null);
         final Optional<SpecialPower> currSpecialPower = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
-
         final List<PlayerHand> allHands = new ArrayList<>();
-        for(final Player p : game.getPlayers()) {
+        for (final Player p : game.getPlayers()) {
             allHands.add(p.getHand());
         }
-
         Card drawnCard = null;
         if (round.getDrawnCard().isPresent()) { 
             drawnCard = round.getDrawnCard().get();
         }
-
         final boolean cactusCalled = game.getCurrentRound().isLastRound();
-
-        // Card discardCard = null;
-        // if (game.getDiscardPile().getTopCard().isPresent()) { 
-        //     drawnCard = game.getDiscardPile().getTopCard().get();
-        // }
         final boolean isHumanTurn = !isGameOver && game.getCurrentPlayer().isHuman();
         final boolean isSimultaneous = !isGameOver && round.isSimultaneousDiscardPhase();
-
         return new GameUpdateData(round.getAvailableActions(), isHumanTurn, getRoundMessage(round), currSpecialPower, 
-            discardTopCard, isSimultaneous, cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
+            discardTopCard, isSimultaneous, cards, humanPlayer, allHands, game.getDrawPile().size(), 
+            drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
     }
 
-    private Player getHumanPlayer(){
+    private Player getHumanPlayer() {
         return game.getPlayers().stream()
         .filter(Player::isHuman)
         .findFirst()
         .orElseThrow();
     }
 
-    /*private String getRoundMessage(final Round round) {
-        final String botName = game.getCurrentPlayer().getName();
-        if(game.getCurrentPlayer().isHuman()) {
-            return switch (round.getPhase()) {
-                case DRAW -> game.getCurrentPlayer().isHuman() ? "Draw a card from the pile" : botName + " is drawing a card";
-                case DECISION -> "Swap one of your cards or discard the drawn one";
-                case SPECIAL_POWER -> {
-                    if (game.getCurrentPlayer().isHuman()) {
-                        final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
-                        if (power.isPresent()) {
-                            if (power.get() instanceof PeekPower) yield "Select a card to spy or skip the power";
-                            if (power.get() instanceof RevealPower) yield "Select a card to reveal or skip the power";
-                            if (power.get() instanceof SwapPower) yield "Select your card to swap or skip the power";
-                        }
-                        yield "Activate the special power or skip it";
-                    }
-                    yield botName + " is deciding whether to use the special power";
-                } //"Activate the special power or skip it";
-                case END_TURN -> "End of turn: call Cactus or pass";
-                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
-                case ENDED -> "";
-            };
-        }
-        else {
-            return switch (round.getPhase()) {
-                case DRAW -> botName + " is drawing a card";
-                case DECISION -> botName + " is playing the drawn card";
-                case SPECIAL_POWER -> botName + " is deciding whether to use the special power";
-                case END_TURN -> botName + " is ending their turn";
-                case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
-                case ENDED -> "";
-            };
-        }
-    }*/
-
     private String getRoundMessage(final Round round) {
         final String botName = game.getCurrentPlayer().getName();
         return switch (round.getPhase()) {
                 case DRAW -> game.getCurrentPlayer().isHuman() ? "Draw a card from the pile" : botName + " is drawing a card";
-                case DECISION -> game.getCurrentPlayer().isHuman() ? "Swap one of your cards or discard the drawn one" : botName + " is playing the drawn card";
+                case DECISION -> game.getCurrentPlayer().isHuman() ? "Swap one of your cards or discard the drawn one" : botName 
+                + " is playing the drawn card";
                 case SPECIAL_POWER -> {
                     if (game.getCurrentPlayer().isHuman()) {
                         final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
@@ -394,8 +336,9 @@ public class ControllerImpl implements Controller, GameViewListener {
                         yield "Activate the special power or skip it";
                     }
                     yield botName + " is deciding whether to use the special power";
-                } //"Activate the special power or skip it";
-                case END_TURN -> game.getCurrentPlayer().isHuman() ? "End of turn: call Cactus or pass" : botName + " is ending their turn";
+                }
+                case END_TURN -> game.getCurrentPlayer().isHuman() ? "End of turn: call Cactus or pass" : botName 
+                + " is ending their turn";
                 case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
                 case ENDED -> "";
         };
@@ -453,12 +396,8 @@ public class ControllerImpl implements Controller, GameViewListener {
         if (game == null) {
             return false;
         }
-
-        // Controlliamo esplicitamente se qualcuno ha 0 carte!
         final boolean someoneHasZeroCards = game.getPlayers().stream()
                 .anyMatch(p -> p.getHand().size() == 0);
-
-        // Se il Model ha finito OPPURE qualcuno ha 0 carte, dichiariamo la fine
         if (game.isFinished() || someoneHasZeroCards) {
             this.isGameOver = true;
             onGameFinished(); 
@@ -466,5 +405,4 @@ public class ControllerImpl implements Controller, GameViewListener {
         }
         return false;
     }
-
 }
