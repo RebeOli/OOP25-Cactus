@@ -26,11 +26,6 @@ class PlayerHandTest {
     private static final int FOUR = 4;
     private static final int FIVE = 5;
 
-    /**
-     * Tests the correct initialization of a player's hand.
-     * Verifies that the hand size matches the number of provided cards
-     * and that all cards are initially set to a hidden (face-down) state.
-     */
     @Test
     void testHandInitialization() {
         final Card c1 = new CardImpl(Suit.COPPE, ONE, ONE, null);
@@ -41,11 +36,6 @@ class PlayerHandTest {
         assertTrue(hand.isHidden(ONE), "Card at index 1 should be initially hidden");
     }
 
-    /**
-     * Tests the logic for revealing a card in the hand.
-     * Verifies that invoking {@link PlayerHand revealCard(int)} successfully
-     * changes a specific card's state from hidden to visible.
-     */
     @Test
     void testRevealCardState() {
         final Card myCard = new CardImpl(Suit.DENARI, FIVE, FIVE, null);
@@ -55,12 +45,6 @@ class PlayerHandTest {
         assertFalse(hand.isHidden(0), "Card must be visible after calling revealCard()");
     }
 
-    /**
-     * Tests the replacement of a card within the hand.
-     * Verifies that the {@link PlayerHand replace(int, Card)} method returns the
-     * correct discarded card, inserts the new card at the specified index,
-     * and ensures the newly placed card is in a hidden state.
-     */
     @Test
     void testReplaceCard() {
         final Card oldCard = new CardImpl(Suit.BASTONI, THREE, THREE, null);
@@ -72,12 +56,6 @@ class PlayerHandTest {
         assertTrue(hand.isHidden(0), "A newly replaced card should be placed face-down (hidden)");
     }
 
-    /**
-     * Tests the defensive programming mechanisms of the hand.
-     * Ensures that an {@link IndexOutOfBoundsException} is properly thrown when
-     * attempting to access, reveal, or replace a card using an invalid index
-     * (e.g., negative indices or indices greater than/equal to the hand's size).
-     */
     @Test
     void testIndexOutOfBoundsExceptions() {
         final Card c1 = new CardImpl(Suit.COPPE, ONE, ONE, null);
