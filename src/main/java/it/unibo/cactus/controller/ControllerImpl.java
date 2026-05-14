@@ -183,6 +183,8 @@ public final class ControllerImpl implements Controller, GameViewListener {
         final ScoreCalculator calculator = new ScoreCalculatorImpl();
         final var scores = calculator.calculateScores(game.getPlayers());
         final var winner = calculator.getWinner(scores);
+
+        // nuova mappa per il salvataggio
         final Map<String, Integer> saveScores = new HashMap<>();
         for (final var entry : scores.entrySet()) {
             saveScores.put(entry.getKey().getName(), entry.getValue());
@@ -305,9 +307,9 @@ public final class ControllerImpl implements Controller, GameViewListener {
 
     private Player getHumanPlayer() {
         return game.getPlayers().stream()
-            .filter(p -> p.isHuman())
-            .findFirst()
-            .orElseThrow();
+        .filter(Player::isHuman)
+        .findFirst()
+        .orElseThrow();
     }
 
     private String getRoundMessage(final Round round) {
@@ -319,9 +321,15 @@ public final class ControllerImpl implements Controller, GameViewListener {
                     if (game.getCurrentPlayer().isHuman()) {
                         final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
                         if (power.isPresent()) {
-                            if (power.get() instanceof PeekPower) yield "Select your card to spy or skip the power";
-                            if (power.get() instanceof RevealPower) yield "Select a card to reveal or skip the power";
-                            if (power.get() instanceof SwapPower) yield "Select a card to swap or skip the power";
+                            if (power.get() instanceof PeekPower) {
+                                yield "Select your card to spy or skip the power";
+                            }
+                            if (power.get() instanceof RevealPower) {
+                                yield "Select a card to reveal or skip the power";
+                            }
+                            if (power.get() instanceof SwapPower) {
+                                yield "Select a card to swap or skip the power";
+                            }
                         }
                         yield "Activate the special power or skip it";
                     }
@@ -360,7 +368,7 @@ public final class ControllerImpl implements Controller, GameViewListener {
     public void onResumeRequested() {
         if (isPaused) {
             isPaused = false;
-            long pausedDuration = System.currentTimeMillis() - pauseStartTime; 
+            final long pausedDuration = System.currentTimeMillis() - pauseStartTime; 
             if (botStartTime != 0) {
                 botStartTime += pausedDuration;
             }
@@ -376,7 +384,7 @@ public final class ControllerImpl implements Controller, GameViewListener {
         try {
             playerStats = historyManager.getStats(playerName);
         } catch (final IOException e) {
-            System.out.println("an error occurs while reading from the history file");
+            LOGGER.log(Level.SEVERE, "an error occurs while reading from the history file", e);
         }
         view.updateStats(playerName, playerStats);
     }
@@ -385,7 +393,7 @@ public final class ControllerImpl implements Controller, GameViewListener {
         if (game == null) {
             return false;
         }
-        boolean someoneHasZeroCards = game.getPlayers().stream()
+        final boolean someoneHasZeroCards = game.getPlayers().stream()
                 .anyMatch(p -> p.getHand().size() == 0);
         if (game.isFinished() || someoneHasZeroCards) {
             this.isGameOver = true;
