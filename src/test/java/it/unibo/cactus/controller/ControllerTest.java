@@ -25,25 +25,52 @@ import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
 import it.unibo.cactus.view.GameViewListener;
 
-public class ControllerTest {
+/**
+ * Unit tests for the {@link Controller} implementation.
+ * It uses fake objects for the view and the repository to isolate the controller logic.
+ */
+public final class ControllerTest {
+    private static final String PLAYER_NAME = "Giulio";
     private Controller controller;
     private FakeView fakeView;
     private FakeHistoryRepository fakeHistoryRepository;
-
 
     @BeforeEach
     void setUp() {
         fakeView = new FakeView();
         fakeHistoryRepository = new FakeHistoryRepository();
-        controller = new ControllerImpl(fakeView, new HistoryManagerImpl(fakeHistoryRepository,new StatsCalculatorImpl()));
+        controller = new ControllerImpl(fakeView, new HistoryManagerImpl(fakeHistoryRepository, new StatsCalculatorImpl()));
+    }
+
+        @Test
+    void testStartGame() {
+        controller.startGame(PLAYER_NAME, BotDifficulty.EASY);
+        assertTrue(fakeView.peekScreenShown);
+    }
+
+    @Test
+    void testHandleAction() {
+        controller.startGame(PLAYER_NAME, BotDifficulty.EASY);
+        fakeView.updateGame = false;
+        controller.handleAction(new DrawAction());
+        assertTrue(fakeView.updateGame);
+    }
+
+    @Test
+    void testOnGameFinished() throws IOException {
+        controller.startGame(PLAYER_NAME, BotDifficulty.EASY);
+        fakeView.updateGame = false;
+        controller.onGameFinished();
+        assertTrue(fakeHistoryRepository.save);
+        assertEquals(1, fakeHistoryRepository.loadAll().size());
     }
 
     private static final class FakeHistoryRepository implements HistoryRepository {
-        private boolean save = false;
+        private boolean save;
         private List<GameResult> memory = new ArrayList<>();
 
         @Override
-        public void save(GameResult result) throws IOException {
+        public void save(final GameResult result) throws IOException {
             save = true;
             memory.add(result);
         }
@@ -56,8 +83,8 @@ public class ControllerTest {
     }
 
     private static final class FakeView implements GameView {
-        private boolean updateGame = false;
-        private boolean peekScreenShown = false;
+        private boolean updateGame;
+        private boolean peekScreenShown;
 
         @Override
         public void updateGame(final GameUpdateData data) {
@@ -65,71 +92,44 @@ public class ControllerTest {
         }
 
         @Override
-        public void showConfigScreen() {};
+        public void showConfigScreen() { }
 
         @Override
-        public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {};
+        public void showGameScreen(
+            final String humanName,
+            final String bot1Name,
+            final String bot2Name,
+            final String bot3Name
+        ) { }
 
         @Override
         public void showPeekScreen(final PlayerHand hand) {
             peekScreenShown = true;
-        };
+        }
 
         @Override
-        public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {};
+        public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) { }
 
         @Override
-        public void closeSimultaneousDiscardWindow() {};
+        public void closeSimultaneousDiscardWindow() { }
 
         @Override
-        public void showEndScreen(final Map<Player, Integer> scores) {};
+        public void showEndScreen(final Map<Player, Integer> scores) { }
 
         @Override
-        public void setActionListener(GameViewListener listener) {}
+        public void setActionListener(final GameViewListener listener) { }
 
         @Override
-        public void showStatsScreen() {}
+        public void showStatsScreen() { }
 
         @Override
-        public void showIntroScreen() {}
+        public void showStatsScreen(final Runnable onBack) { }
 
         @Override
-        public void updateStats(String playerName, PlayerStats playerStats) {}
+        public void showIntroScreen() { }
 
         @Override
-        public void showStatsScreen(Runnable onBack) {}
-
-        // @Override
-        // public void showIntroScreen() {}
-    }
-
-    @Test
-    void testStartGame() {
-        controller.startGame("Giulio", BotDifficulty.EASY);
-        assertTrue(fakeView.peekScreenShown);
-        //assertEquals(4,fakeView.lastGame.getPlayers().size());
-    }
-
-    @Test
-    void testHandleAction() {
-        controller.startGame("Giulio", BotDifficulty.EASY);
-        fakeView.updateGame = false;
-        controller.handleAction(new DrawAction());
-        assertTrue(fakeView.updateGame);
-        
-    }
-
-    @Test
-    void testOnGameFinished() throws IOException {
-        controller.startGame("Giulio", BotDifficulty.EASY);
-        fakeView.updateGame = false;
-        controller.onGameFinished();
-        /*assertTrue(fakeView.showRank);
-        assertTrue(fakeView.showStats);
-        assertTrue(fakeView.showWinner);
-        assertTrue(fakeView.showCompletedRounds);*/
-        assertTrue(fakeHistoryRepository.save);
-        assertEquals(1, fakeHistoryRepository.loadAll().size());
+        public void updateStats(final String playerName, final PlayerStats playerStats) { }
     }
 
 }
