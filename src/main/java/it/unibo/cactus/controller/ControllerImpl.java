@@ -301,8 +301,9 @@ public final class ControllerImpl implements Controller, GameViewListener {
         final boolean cactusCalled = game.getCurrentRound().isLastRound();
         final boolean isHumanTurn = !isGameOver && game.getCurrentPlayer().isHuman();
         final boolean isSimultaneous = !isGameOver && round.isSimultaneousDiscardPhase();
-        return new GameUpdateData(round.getAvailableActions(), isHumanTurn, getRoundMessage(round), currSpecialPower, discardTopCard, isSimultaneous, cards, 
-            humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
+        return new GameUpdateData(round.getAvailableActions(), isHumanTurn, getRoundMessage(round), currSpecialPower, 
+            discardTopCard, isSimultaneous, cards, humanPlayer, allHands, game.getDrawPile().size(), 
+            drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
     }
 
     private Player getHumanPlayer() {
@@ -316,7 +317,8 @@ public final class ControllerImpl implements Controller, GameViewListener {
         final String botName = game.getCurrentPlayer().getName();
         return switch (round.getPhase()) {
                 case DRAW -> game.getCurrentPlayer().isHuman() ? "Draw a card from the pile" : botName + " is drawing a card";
-                case DECISION -> game.getCurrentPlayer().isHuman() ? "Swap one of your cards or discard the drawn one" : botName + " is playing the drawn card";
+                case DECISION -> game.getCurrentPlayer().isHuman() ? "Swap one of your cards or discard the drawn one" : botName 
+                + " is playing the drawn card";
                 case SPECIAL_POWER -> {
                     if (game.getCurrentPlayer().isHuman()) {
                         final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
@@ -335,7 +337,8 @@ public final class ControllerImpl implements Controller, GameViewListener {
                     }
                     yield botName + " is deciding whether to use the special power";
                 }
-                case END_TURN -> game.getCurrentPlayer().isHuman() ? "End of turn: call Cactus or pass" : botName + " is ending their turn";
+                case END_TURN -> game.getCurrentPlayer().isHuman() ? "End of turn: call Cactus or pass" : botName 
+                + " is ending their turn";
                 case SIMULTANEOUS_DISCARD -> "Simultaneous discard! Do you have a matching card?";
                 case ENDED -> "";
         };
