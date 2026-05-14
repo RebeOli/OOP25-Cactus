@@ -56,10 +56,10 @@ public class ControllerImpl implements Controller, GameViewListener {
     private final HistoryManager historyManager;
     private boolean humanWindowExpired;
     private final Random random;
-    private boolean isPaused = false;
-    private long pauseStartTime = 0;
-    private boolean gameEndHandled = false;
-    private boolean isGameOver = false;
+    private boolean isPaused;
+    private long pauseStartTime;
+    private boolean gameEndHandled;
+    private boolean isGameOver;
 
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
@@ -70,7 +70,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     }
 
     @Override
-    public void startGame(final String playerName, BotDifficulty difficulty) {
+    public void startGame(final String playerName, final BotDifficulty difficulty) {
         this.gameEndHandled = false;
         this.isGameOver = false;
         //cosi quando si fa restart parte da un nuovo stato pulito.
@@ -173,7 +173,9 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     @Override
     public void handleSimultaneousDiscard(final SimultaneousDiscardAction action) {
-        if (game.isFinished()) return;
+        if (game.isFinished()) {
+            return;
+        }
         game.performAction(action);
         closeSimultaneousDiscard();
         //view.updateGame(game);
@@ -186,8 +188,8 @@ public class ControllerImpl implements Controller, GameViewListener {
         }
         gameEndHandled = true;
         final ScoreCalculator calculator = new ScoreCalculatorImpl();
-        var scores = calculator.calculateScores(game.getPlayers());
-        var winner = calculator.getWinner(scores);
+        final var scores = calculator.calculateScores(game.getPlayers());
+        final var winner = calculator.getWinner(scores);
 
         // nuova mappa per il salvataggio
         final Map<String, Integer> saveScores = new HashMap<>();
@@ -231,7 +233,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     }
 
     @Override
-    public void onGameStartRequested(String playerName, BotDifficulty difficulty) {
+    public void onGameStartRequested(final String playerName, final BotDifficulty difficulty) {
         startGame(playerName, difficulty);
     }
 
@@ -242,8 +244,8 @@ public class ControllerImpl implements Controller, GameViewListener {
                 botPlayer.performInitialPeek();
             }
         }
-        List<String> botNames = new ArrayList<>();
-        for(Player p : game.getPlayers()) {
+        final List<String> botNames = new ArrayList<>();
+        for(final Player p : game.getPlayers()) {
             if(!p.isHuman()) {
                 botNames.add(p.getName());
             }
@@ -255,36 +257,36 @@ public class ControllerImpl implements Controller, GameViewListener {
     @Override
     public void onSkipPowerRequested(){
         handleAction(new SkipPowerAction());
-    };
+    }
 
     @Override
     public void onCallCactusRequested(){
         handleAction(new CallCactusAction());
-    };
+    }
 
     @Override
     public void onEndTurnRequested(){
         handleAction(new EndTurnAction());
-    };
+    }
 
     @Override
-    public void onPeekPowerRequested(int cardIndex){
+    public void onPeekPowerRequested(final int cardIndex){
         handleAction(new ActivatePowerAction(new PeekTarget(cardIndex)));
-    };
+    }
 
     @Override
-    public void onRevealPowerRequested(int playerIndex, int cardIndex){
+    public void onRevealPowerRequested(final int playerIndex, final int cardIndex){
         final Player playerTarget = game.getPlayers().get(playerIndex);
         handleAction(new ActivatePowerAction(new RevealTarget(playerTarget, cardIndex)));
-    };
+    }
 
     @Override
-    public void onSwapPowerRequested(int playerAIndex, int cardAIndex, int playerBIndex, int cardBIndex){
+    public void onSwapPowerRequested(final int playerAIndex, final int cardAIndex, final int playerBIndex, final int cardBIndex){
         final Player playerATarget = game.getPlayers().get(playerAIndex);
         final Player playerBTarget = game.getPlayers().get(playerBIndex);
         handleAction(new ActivatePowerAction(new SwapTarget(playerATarget, cardAIndex, playerBTarget, cardBIndex)));
 
-    };
+    }
 
     @Override
     public void onSimultaneousDiscardRequested(final int cardIndex) {
@@ -315,14 +317,14 @@ public class ControllerImpl implements Controller, GameViewListener {
             drawnCard = round.getDrawnCard().get();
         }
 
-        boolean cactusCalled = game.getCurrentRound().isLastRound();
+        final boolean cactusCalled = game.getCurrentRound().isLastRound();
 
         // Card discardCard = null;
         // if (game.getDiscardPile().getTopCard().isPresent()) { 
         //     drawnCard = game.getDiscardPile().getTopCard().get();
         // }
-        boolean isHumanTurn = !isGameOver && game.getCurrentPlayer().isHuman();
-        boolean isSimultaneous = !isGameOver && round.isSimultaneousDiscardPhase();
+        final boolean isHumanTurn = !isGameOver && game.getCurrentPlayer().isHuman();
+        final boolean isSimultaneous = !isGameOver && round.isSimultaneousDiscardPhase();
 
         return new GameUpdateData(round.getAvailableActions(), isHumanTurn, getRoundMessage(round), currSpecialPower, 
             discardTopCard, isSimultaneous, cards, humanPlayer, allHands, game.getDrawPile().size(), drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
@@ -330,7 +332,7 @@ public class ControllerImpl implements Controller, GameViewListener {
 
     private Player getHumanPlayer(){
         return game.getPlayers().stream()
-        .filter(p -> p.isHuman())
+        .filter(Player::isHuman)
         .findFirst()
         .orElseThrow();
     }
@@ -379,9 +381,15 @@ public class ControllerImpl implements Controller, GameViewListener {
                     if (game.getCurrentPlayer().isHuman()) {
                         final Optional<SpecialPower> power = round.getDiscardTopCard().flatMap(Card::getSpecialPower);
                         if (power.isPresent()) {
-                            if (power.get() instanceof PeekPower) yield "Select your card to spy or skip the power";
-                            if (power.get() instanceof RevealPower) yield "Select a card to reveal or skip the power";
-                            if (power.get() instanceof SwapPower) yield "Select a card to swap or skip the power";
+                            if (power.get() instanceof PeekPower) {
+                                yield "Select your card to spy or skip the power";
+                            }
+                            if (power.get() instanceof RevealPower) {
+                                yield "Select a card to reveal or skip the power";
+                            }
+                            if (power.get() instanceof SwapPower) {
+                                yield "Select a card to swap or skip the power";
+                            }
                         }
                         yield "Activate the special power or skip it";
                     }
@@ -404,7 +412,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     }
 
     @Override
-    public void onSwapWithDrawnCardRequested(int cardIndex) {
+    public void onSwapWithDrawnCardRequested(final int cardIndex) {
         handleAction(new SwapAction(cardIndex));
     }
 
@@ -420,7 +428,7 @@ public class ControllerImpl implements Controller, GameViewListener {
     public void onResumeRequested() {
         if (isPaused) {
             isPaused = false;
-            long pausedDuration = System.currentTimeMillis() - pauseStartTime; 
+            final long pausedDuration = System.currentTimeMillis() - pauseStartTime; 
             if (botStartTime != 0) {
                 botStartTime += pausedDuration;
             }
@@ -436,7 +444,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         try {
             playerStats = historyManager.getStats(playerName);
         } catch (final IOException e) {
-            System.out.println("an error occurs while reading from the history file");
+            LOGGER.log(Level.SEVERE, "an error occurs while reading from the history file", e);
         }
         view.updateStats(playerName, playerStats);
     }
@@ -447,7 +455,7 @@ public class ControllerImpl implements Controller, GameViewListener {
         }
 
         // Controlliamo esplicitamente se qualcuno ha 0 carte!
-        boolean someoneHasZeroCards = game.getPlayers().stream()
+        final boolean someoneHasZeroCards = game.getPlayers().stream()
                 .anyMatch(p -> p.getHand().size() == 0);
 
         // Se il Model ha finito OPPURE qualcuno ha 0 carte, dichiariamo la fine
