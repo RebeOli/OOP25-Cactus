@@ -26,11 +26,6 @@ class CardTest {
     private static final int ELEVEN = 11;
     private static final int MINUSTWO = -2;
 
-    /**
-     * Tests the creation of a standard card without any special power.
-     * Verifies that the suit, value, and score are correctly assigned,
-     * and that the special power Optional is empty.
-     */
     @Test
     void testStandardCardCreation() {
         final Card standardCard = new CardImpl(Suit.COPPE, FIVE, FIVE, null);
@@ -40,10 +35,6 @@ class CardTest {
         assertTrue(standardCard.getSpecialPower().isEmpty(), "A card without powers should return an empty Optional");
     }
 
-    /**
-     * Tests the creation of a special card equipped with a {@link SpecialPower}.
-     * Verifies that the power is correctly wrapped in an Optional and is retrievable.
-     */
     @Test
     void testSpecialCardCreation() {
         final SpecialPower peekPower = new PeekPower();
@@ -52,20 +43,12 @@ class CardTest {
         assertEquals(peekPower, specialCard.getSpecialPower().get(), "The extracted power should match the assigned one");
     }
 
-    /**
-     * Tests the specific game rule where a King (value 10) has a score of 0.
-     */
     @Test
     void testCardValueTenHasScoreZero() {
         final Card card = new CardImpl(Suit.DENARI, TEN, 0, null);
         assertEquals(0, card.getScore(), "A King (value 10) should have a score of 0");
     }
 
-    /**
-     * Tests the constructor's validation logic for null and out-of-bounds values.
-     * Ensures that an {@link IllegalArgumentException} is thrown when providing
-     * invalid parameters such as a null suit, an out-of-bounds value, or a negative score.
-     */
     @Test
     void testConstructorExceptions() {
         assertThrows(IllegalArgumentException.class, () ->
@@ -82,10 +65,6 @@ class CardTest {
         );
     }
 
-    /**
-     * Tests the boundary values for the card value parameter.
-     * Verifies that values exactly at the boundaries (0 and 11) throw an exception.
-     */
     @Test
     void testValueBoundaries() {
         assertThrows(IllegalArgumentException.class, () ->
