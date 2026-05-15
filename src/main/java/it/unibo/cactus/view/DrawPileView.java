@@ -29,7 +29,7 @@ public final class DrawPileView extends StackPane {
 
         this.countLabel.getStyleClass().add("pileCount");
 
-        setAlignment(this.countLabel, Pos.BOTTOM_CENTER); //posiziona il numero in basso al centro
+        setAlignment(this.countLabel, Pos.BOTTOM_CENTER);
 
         this.getChildren().addAll(this.cardBackView, this.countLabel);
 
