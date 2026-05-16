@@ -55,7 +55,6 @@ public final class SimultaneousDiscardOverlay extends StackPane {
 
         cardContainer.maxWidthProperty().bind(this.widthProperty().multiply(CONTAINER_MAX_WIDTH));
         cardContainer.maxHeightProperty().bind(this.heightProperty().multiply(CONTAINER_MAX_HEIGHT));
-        //cardContainer.setMaxSize(CONTAINER_MAX_WIDTH, CONTAINER_MAX_HEIGHT); // Dimensioni fisse del pop-up
 
         titleLabel = new Label("Simulateous discard!");
         titleLabel.getStyleClass().add("overlayTitle");
@@ -73,14 +72,6 @@ public final class SimultaneousDiscardOverlay extends StackPane {
         slotsBox = new HBox();
         slotsBox.setAlignment(Pos.CENTER);
         slotsBox.setSpacing(10);
-        // for (int i = 0; i < 4; i++) {
-        //     final CardView slot = new CardView();
-        //     slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
-        //     final int slotIndex = i;
-        //     slot.setOnCardClicked(() -> onSlotClicked(slotIndex));
-        //     slotCards.add(slot);
-        //     slotsBox.getChildren().add(slot);
-        // }
 
         cardContainer.getChildren().addAll(titleLabel, subtitle, discardedCardView, progressBar, slotsBox);
 
@@ -97,13 +88,11 @@ public final class SimultaneousDiscardOverlay extends StackPane {
      */
     public void show(final Card topCard, final List<Card> playerHand, final List<Boolean> isFaceUpList) {
         this.actionSent = false;
-        // 1. Svuotiamo gli slot vecchi prima di crearne di nuovi
         slotsBox.getChildren().clear();
         slotCards.clear();
         if (topCard != null) {
             discardedCardView.setCardData(topCard);
             discardedCardView.setFaceUp(true);
-            // 2. Creiamo dinamicamente uno slot per ogni carta che hai in mano!
             for (int i = 0; i < playerHand.size(); i++) {
                 final CardView slot = new CardView();
                 slot.bindHeight(this.heightProperty().multiply(SLOT_CARD_HEIGHT));
