@@ -6,19 +6,6 @@
     -fx-padding: 20px;
 }
 
-.menuButton {
-    -fx-background-color: transparent;
-    -fx-border-color: black;
-    -fx-border-width: 2;
-    -fx-font-size: 20px;
-    -fx-padding: 5 10 5 10;
-    -fx-cursor: hand;
-}
-
-.menuButton:hover {
-    -fx-background-color: rgba(0,0,0,0.1);
-}
-
 #confScreenTitle {
     -fx-font-family: "Georgia";
     -fx-font-size: 36px;
@@ -37,12 +24,6 @@
     -fx-font-size: 11px;
     -fx-text-fill: #a03020;
     -fx-min-height: 16px;
-}
-
-#confScreenHintLbl {
-    -fx-font-family: "Georgia";
-    -fx-font-size: 12px;
-    -fx-text-fill: #5c4a1e;
 }
 
 #confScreenStartBtn, #peekConfirmBtn {
