@@ -39,6 +39,7 @@ public class Main extends Application {
         primaryStage.setMinHeight(768);
         view.showIntroScreen();
         primaryStage.setMaximized(true);
+        primaryStage.setOnCloseRequest(e -> loop.stop());
         primaryStage.show();
     }
 
