@@ -27,12 +27,17 @@ import it.unibo.cactus.model.cards.Card;
 public class MediumBotStrategy extends AbstractBotStrategy {
 
     private static final int CACTUS_SCORE_THRESHOLD = 5;
+    private static final double CACTUS_PROBABILITY = 0.20;
+    private static final int MIN_ROUNDS_BEFORE_CACTUS = 3;
+    protected static final int AVERAGE_UNKNOWN_SCORE = 5;
 
     private final Random random = new Random();
     private final Player self;
+    private int roundsPlayed;
 
     public MediumBotStrategy(final Player self) {
         this.self = self;
+        this.roundsPlayed = 0;
     }
 
     @Override
@@ -93,20 +98,23 @@ public class MediumBotStrategy extends AbstractBotStrategy {
     }
 
     @Override
-    protected RoundAction chooseEndTurn(final Round round) {        
+    protected RoundAction chooseEndTurn(final Round round) {    
+        this.roundsPlayed++;    
         final PlayerHand hand = self.getHand();
 
-        // Sommo i punteggi delle sole carte visibili
-        int visibleScore = 0;
+        int estimatedScore = 0;
         for (int i = 0; i < hand.size(); i++) {
-            if (!hand.isHidden(i)) {
-                visibleScore += hand.getCard(i).getScore();
+            if (hand.isHidden(i)) {
+                estimatedScore += AVERAGE_UNKNOWN_SCORE;
+            } else {
+                estimatedScore += hand.getCard(i).getScore();
             }
         }
 
-        // Chiamo Cactus! se il punteggio visibile è sufficientemente basso
-        // e il turno finale non è già stato dichiarato da un altro giocatore
-        if (visibleScore <= CACTUS_SCORE_THRESHOLD && !round.isCactusCalled()) {
+        // Chiamo Cactus! se ho giocato abbastanza round, il punteggio stimato è basso
+        // e con una certa probabilità
+        if (!round.isCactusCalled() && roundsPlayed >= MIN_ROUNDS_BEFORE_CACTUS
+                && estimatedScore <= CACTUS_SCORE_THRESHOLD && random.nextDouble() < CACTUS_PROBABILITY) {
             return new CallCactusAction();
         }
 
