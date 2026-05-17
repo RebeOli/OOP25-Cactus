@@ -20,12 +20,12 @@ import it.unibo.cactus.model.score.GameResult;
 import it.unibo.cactus.model.statistics.HistoryManagerImpl;
 import it.unibo.cactus.model.statistics.HistoryRepository;
 import it.unibo.cactus.model.statistics.PlayerStats;
-import it.unibo.cactus.model.statistics.StatsCalculator;
+import it.unibo.cactus.model.statistics.StatsCalculatorImpl;
 import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
 import it.unibo.cactus.view.GameViewListener;
 
-public class ControllerTest {
+class ControllerTest {
     private Controller controller;
     private FakeView fakeView;
     private FakeHistoryRepository fakeHistoryRepository;
@@ -35,15 +35,15 @@ public class ControllerTest {
     void setUp() {
         fakeView = new FakeView();
         fakeHistoryRepository = new FakeHistoryRepository();
-        controller = new ControllerImpl(fakeView, new HistoryManagerImpl(fakeHistoryRepository,new StatsCalculator()));
+        controller = new ControllerImpl(fakeView, new HistoryManagerImpl(fakeHistoryRepository,new StatsCalculatorImpl()));
     }
 
     private static final class FakeHistoryRepository implements HistoryRepository {
-        private boolean save = false;
-        private List<GameResult> memory = new ArrayList<>();
+        private boolean save;
+        private final List<GameResult> memory = new ArrayList<>();
 
         @Override
-        public void save(GameResult result) throws IOException {
+        public void save(final GameResult result) throws IOException {
             save = true;
             memory.add(result);
         }
@@ -56,8 +56,8 @@ public class ControllerTest {
     }
 
     private static final class FakeView implements GameView {
-        private boolean updateGame = false;
-        private boolean peekScreenShown = false;
+        private boolean updateGame;
+        private boolean peekScreenShown;
 
         @Override
         public void updateGame(final GameUpdateData data) {
@@ -65,24 +65,24 @@ public class ControllerTest {
         }
 
         @Override
-        public void showConfigScreen() {};
+        public void showConfigScreen() {}
 
         @Override
-        public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {};
+        public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {}
 
         @Override
         public void showPeekScreen(final PlayerHand hand) {
             peekScreenShown = true;
-        };
+        }
 
         @Override
-        public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {};
+        public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {}
 
         @Override
-        public void closeSimultaneousDiscardWindow() {};
+        public void closeSimultaneousDiscardWindow() {}
 
         @Override
-        public void showEndScreen(final Map<Player, Integer> scores) {};
+        public void showEndScreen(final Map<Player, Integer> scores) {}
 
         @Override
         public void setActionListener(GameViewListener listener) {}

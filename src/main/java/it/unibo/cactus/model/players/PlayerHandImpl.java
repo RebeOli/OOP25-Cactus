@@ -3,6 +3,7 @@ package it.unibo.cactus.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import it.unibo.cactus.model.cards.Card;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link PlayerHand} interface.
@@ -14,22 +15,22 @@ public final class PlayerHandImpl implements PlayerHand {
 
     /**
      * Constructs a new player's hand with the specified initial cards.
-     * All initial cards are automatically placed face-down (hidden).
      *
      * @param initialCards the list of cards to initially populate the hand
      * @throws IllegalArgumentException if the list is null or contains null cards
      */
     public PlayerHandImpl(final List<Card> initialCards) {
         if (initialCards == null) {
-            throw new IllegalArgumentException("Initial cards list cannot be null!");
+            throw new IllegalArgumentException("Initial cards list cannot be null");
         }
-        this.slots = new ArrayList<>();
-        for (final Card c : initialCards) {
-            if (c == null) {
-                throw new IllegalArgumentException("Cannot add a null card to the player's hand!");
-            }
-            this.slots.add(new Slot(c, true)); 
-        }
+        this.slots = initialCards.stream()
+            .map(c -> {
+                if (c == null) {
+                    throw new IllegalArgumentException("Cannot add a null card to the player's hand");
+                }
+                return new Slot(c, true);
+            })
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -45,7 +46,7 @@ public final class PlayerHandImpl implements PlayerHand {
     @Override
     public Card replace(final int index, final Card newCard) {
         if (newCard == null) {
-            throw new IllegalArgumentException("The new card cannot be null!");
+            throw new IllegalArgumentException("The new card cannot be null");
         }
         final Slot slot = slots.get(index);
         final Card oldCard = slot.card;
@@ -65,7 +66,7 @@ public final class PlayerHandImpl implements PlayerHand {
     }
 
     @Override
-    public void addCard(Card newCard) {
+    public void addCard(final Card newCard) {
         if (newCard == null) {
             throw new IllegalArgumentException("A new card cannot be null");
         }
@@ -76,13 +77,14 @@ public final class PlayerHandImpl implements PlayerHand {
     }
 
     @Override
-    public Card removeCard(int index) {
+    public Card removeCard(final int index) {
         if (this.slots.isEmpty()) {
             throw new IllegalStateException("Cannot remove a card: the hand is completely empty!");
         }
         final Slot removedSlot = this.slots.remove(index);
         return removedSlot.card;
     }
+
     private static class Slot {
         private Card card;
         private boolean hidden;

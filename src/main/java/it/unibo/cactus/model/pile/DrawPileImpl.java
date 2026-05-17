@@ -36,7 +36,7 @@ public final class DrawPileImpl implements DrawPile {
     }
 
     @Override
-    public void refill(List<Card> cards) {
+    public void refill(final List<Card> cards) {
         final var cardsList = new ArrayList<>(cards);
         Collections.shuffle(cardsList);
         this.drawPile.addAll(cardsList);
@@ -47,7 +47,7 @@ public final class DrawPileImpl implements DrawPile {
         return this.drawPile.isEmpty();
     }
 
-    @Override //da togliere!
+    @Override
     public int size() {
         return this.drawPile.size();
     }

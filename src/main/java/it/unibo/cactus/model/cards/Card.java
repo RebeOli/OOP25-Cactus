@@ -3,12 +3,12 @@ package it.unibo.cactus.model.cards;
 import java.util.Optional;
 
 /**
- * Represents a single playing card in the "Cactus!" game.
+ * Represents a single playing card in the game.
  */
 public interface Card {
 
     /**
-     * Gets the face value of the card (e.g., 1 for Ace, 10 for King).
+     * Gets the face value of the card.
      * 
      * @return the integer face value of the card.
      */
@@ -22,10 +22,9 @@ public interface Card {
     Suit getSuit();
 
     /**
-     * Gets the penalty score of the card calculated at the end of the game.
-     * Note that this may differ from the face value (e.g., a King has a face value of 10 but a score of 0).
+     * Gets the score of the card calculated at the end of the game.
      * 
-     * @return the penalty points associated with this card.
+     * @return the points associated with this card.
      */
     int getScore();
 

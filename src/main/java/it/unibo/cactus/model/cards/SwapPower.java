@@ -14,7 +14,7 @@ public final class SwapPower implements SpecialPower {
    @Override
     public void activate(final Player activator, final PowerTarget target) {
         if (!(target instanceof SwapTarget t)) {
-            throw new IllegalArgumentException("SwapPower requires a target of type SwapTarget!");
+            throw new IllegalArgumentException("SwapPower requires a target of type SwapTarget");
         }
         final Card cardA = t.playerA().getHand().getCard(t.indexA());
         final Card cardB = t.playerB().getHand().getCard(t.indexB());

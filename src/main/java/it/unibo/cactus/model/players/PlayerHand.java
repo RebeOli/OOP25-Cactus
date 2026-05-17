@@ -3,14 +3,14 @@ package it.unibo.cactus.model.players;
 import it.unibo.cactus.model.cards.Card;
 
 /**
- * Represents the set of cards placed on the table in front of a player during the "Cactus!" game.
+ * Represents the set of cards placed on the table in front of a player during the game.
  */
 public interface PlayerHand {
 
     /**
-     * Checks whether the card at the specified position is currently face-down (hidden).
+     * Checks whether the card at the specified position is currently face-down.
      * 
-     * @param index the position of the slot to check (typically from 0 to 3).
+     * @param index the position of the slot to check.
      * 
      * @return {@code true} if the card is hidden from the players, {@code false} if it is revealed.
      */
@@ -45,9 +45,9 @@ public interface PlayerHand {
     /**
      * Reveals the card at the specified index in the player's hand, 
      * changing its state from hidden to visible.
-     * This is triggered by special powers (e.g., Peek or Reveal).
+     * This is triggered by special powers.
      *
-     * @param index the 0-based position of the card to be revealed.
+     * @param index the position of the card to be revealed
      */
     void revealCard(int index);
 
