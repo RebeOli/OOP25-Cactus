@@ -2,6 +2,7 @@ package it.unibo.cactus.model.players.strategies;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -45,5 +46,17 @@ public final class SelfBotMemory implements BotMemory {
     @Override
     public Map<Integer, Card> getAllKnownCards() {
         return Collections.unmodifiableMap(new HashMap<>(knownCards));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void removeAndShift(int index) {
+        knownCards.remove(index);
+        final List<Map.Entry<Integer, Card>> cardsWHigherIndex = knownCards.entrySet().stream()
+            .filter(e -> e.getKey() > index)
+            .toList();
+        //Faccio slittare di uno l'index di ogni carta successiva a quella scartata
+        cardsWHigherIndex.forEach(e -> knownCards.remove(e.getKey()));
+        cardsWHigherIndex.forEach(e -> knownCards.put(e.getKey() - 1, e.getValue()));
     }
 }

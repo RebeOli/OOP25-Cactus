@@ -116,4 +116,10 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
         final int unknownCount = self.getHand().size() - memory.getAllKnownCards().size();
         return memory.getKnownScore() + AVERAGE_UNKNOWN_SCORE * unknownCount;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onSimultaneousDiscardExecuted(int cardIndex) {
+        memory.removeAndShift(cardIndex);
+    }
 }

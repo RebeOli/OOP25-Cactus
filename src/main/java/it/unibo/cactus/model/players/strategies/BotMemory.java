@@ -19,4 +19,6 @@ public interface BotMemory {
     int getKnownScore();
 
     Map<Integer, Card> getAllKnownCards();
+
+    void removeAndShift(int index);
 }

@@ -133,6 +133,9 @@ public class ControllerImpl implements Controller, GameViewListener {
                 if (!botActions.isEmpty()) {
                     final SimultaneousDiscardAction chosen = botActions.get(random.nextInt(botActions.size()));
                     handleSimultaneousDiscard(chosen);
+                    if (chosen.player() instanceof final BotPlayer bot) {
+                        bot.notifySimultaneousDiscardExecuted(chosen.cardIndex());
+                    }
                     return;
                 }
             }

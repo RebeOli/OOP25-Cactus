@@ -35,15 +35,22 @@ public class MediumBotStrategy extends AbstractBotStrategy {
     private final Player self;
     private int roundsPlayed;
 
+    /**
+     * Constructs a medium bot strategy for the given player.
+     *
+     * @param self the {@link Player} controlled by this strategy
+     */
     public MediumBotStrategy(final Player self) {
         this.self = self;
         this.roundsPlayed = 0;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void performInitialPeek(final PlayerHand hand) {
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseDecision(final Round round) {
         final int drawnScore = round.getDrawnCard().orElseThrow().getScore();
@@ -68,6 +75,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
         return new DiscardAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSpecialPower(final Round round) {
         // Conto le carte coperte e memorizzo l'indice della prima
@@ -97,6 +105,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
         return new SkipPowerAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseEndTurn(final Round round) {    
         this.roundsPlayed++;    
@@ -121,6 +130,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
         return new EndTurnAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSimultaneousDiscard(final Round round) {
         final Optional<Card> topCard = round.getDiscardTopCard();   
@@ -157,5 +167,11 @@ public class MediumBotStrategy extends AbstractBotStrategy {
             self,
             hiddenIndices.get(random.nextInt(hiddenIndices.size()))
         );
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onSimultaneousDiscardExecuted(int cardIndex) {
+
     }
 }
