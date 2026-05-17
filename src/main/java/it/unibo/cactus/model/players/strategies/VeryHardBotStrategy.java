@@ -1,5 +1,6 @@
 package it.unibo.cactus.model.players.strategies;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -116,7 +117,7 @@ public class VeryHardBotStrategy extends MemoryBotStrategy {
         }
 
         // Se non ho trovato uno scambio vantaggioso, scambio due carte tra avversari a caso
-        final List<Player> opponents = opponents(round);
+        final List<Player> opponents = new ArrayList<>(opponents(round));
         Collections.shuffle(opponents, random);
         final Player opp1 = opponents.get(0);
         final Player opp2 = opponents.get(1);
