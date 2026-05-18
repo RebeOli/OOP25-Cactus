@@ -1,10 +1,16 @@
 package it.unibo.cactus.model.players.strategies;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
+import it.unibo.cactus.model.cards.PeekPower;
+import it.unibo.cactus.model.cards.RevealPower;
+import it.unibo.cactus.model.cards.SpecialPower;
+import it.unibo.cactus.model.cards.SwapPower;
 import it.unibo.cactus.model.cards.target.PeekTarget;
+import it.unibo.cactus.model.cards.target.SwapTarget;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
@@ -121,5 +127,104 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
     @Override
     public void onSimultaneousDiscardExecuted(int cardIndex) {
         memory.removeAndShift(cardIndex);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected RoundAction chooseSpecialPower(Round round) {
+        final Optional<Card> topCard = round.getDiscardTopCard();
+        if (topCard.isEmpty() || topCard.get().getSpecialPower().isEmpty()) {
+            return new SkipPowerAction();
+        }
+
+        final SpecialPower power = topCard.get().getSpecialPower().get();
+
+        if (power instanceof PeekPower) {
+            return handlePeekPower();
+        }
+        if (power instanceof RevealPower) {
+            return handleRevealPower(round);
+        }
+        if (power instanceof SwapPower) {
+            return handleSwapPower(round);
+        }
+        return new SkipPowerAction();
+    }
+
+    protected abstract RoundAction handleRevealPower(Round round);
+
+    protected RoundAction handleSwapPower(Round round) {
+                // Trovo la propria carta peggiore nota in memoria
+        int worstOwnIndex = -1;
+        int worstOwnScore = -1;
+        for (final Map.Entry<Integer, Card> entry : memory.getAllKnownCards().entrySet()) {
+            if (entry.getValue().getScore() > worstOwnScore) {
+                worstOwnScore = entry.getValue().getScore();
+                worstOwnIndex = entry.getKey();
+            }
+        }
+
+        // Scambio con una carta visibile di un avversario
+        if (worstOwnIndex >= 0) {
+            Player bestOpponent = null;
+            int bestOpponentIndex = -1;
+            int bestOpponentScore = worstOwnScore;
+            Card bestOpponentCard = null;
+
+            for (final Player p : opponents(round)) {
+                for (int i = 0; i < p.getHand().size(); i++) {
+                    if (!p.getHand().isHidden(i)) {
+                        final int score = p.getHand().getCard(i).getScore();
+                        if (score < bestOpponentScore) {
+                            bestOpponentScore = score;
+                            bestOpponent = p;
+                            bestOpponentIndex = i;
+                            bestOpponentCard = p.getHand().getCard(i);
+                        }
+                    }
+                }
+            }
+
+            if (bestOpponent != null) {
+                // Aggiorno la memoria prima dello scambio
+                memory.rememberCard(worstOwnIndex, bestOpponentCard);
+                return new ActivatePowerAction(new SwapTarget(self, worstOwnIndex, bestOpponent, bestOpponentIndex));
+            }
+        }
+
+        return handleSwapPowerFallback(round);
+    };
+
+    protected RoundAction handleSwapPowerFallback(Round round) {
+        return new SkipPowerAction();
+    }
+
+    protected List<Player> opponents(final Round round) {
+        return round.getAllPlayers().stream()
+            .filter(p -> !p.equals(self))
+            .toList();
+    }
+
+    protected int countHiddenPlayerCards(final Player p) {
+        int count = 0;
+        for (int i = 0; i < p.getHand().size(); i++) {
+            if (p.getHand().isHidden(i)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    protected int estimatedOpponentScore(final Player p) {
+        int visibleScore = 0;
+        int hiddenCount = 0;
+        for (int i = 0; i < p.getHand().size(); i++) {
+            if (p.getHand().isHidden(i)) {
+                hiddenCount++;
+            } else {
+                visibleScore += p.getHand().getCard(i).getScore();
+            }
+        }
+        return visibleScore + AVERAGE_UNKNOWN_SCORE * hiddenCount;
     }
 }
