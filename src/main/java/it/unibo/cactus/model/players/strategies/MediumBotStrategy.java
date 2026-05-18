@@ -26,7 +26,7 @@ import it.unibo.cactus.model.cards.Card;
  */
 public class MediumBotStrategy extends AbstractBotStrategy {
 
-    private static final int CACTUS_SCORE_THRESHOLD = 5;
+    private static final int CACTUS_SCORE_THRESHOLD = 12;
     private static final double CACTUS_PROBABILITY = 0.20;
     private static final int MIN_ROUNDS_BEFORE_CACTUS = 3;
     protected static final int AVERAGE_UNKNOWN_SCORE = 5;
