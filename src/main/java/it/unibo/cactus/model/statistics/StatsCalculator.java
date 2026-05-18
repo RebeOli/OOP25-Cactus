@@ -37,7 +37,7 @@ public interface StatsCalculator {
      * Computes the average number of rounds across all provided game results.
      * Uses Guava's {@link Stats} class for efficient numerical computation.
      *
-     * @param results the {@link List} of {@link GameResult} (must not be null or empty).
+     * @param results the {@link List} of {@link GameResult}; must not be null or empty.
      * @return the average number of completed rounds.
      */
     double averageRounds(List<GameResult> results);

@@ -30,6 +30,13 @@ public final class DiscardPileView extends StackPane {
         this.getStyleClass().add(CSS_CARD_SLOT_EMPTY);
     }
 
+    /**
+     * Updates the discard pile state.
+     * 
+     * @param suit the suit of pile's top card
+     * @param value the value of pile's top card
+     * @param isSimultaneousDiscardPhase whether it is currently the simultaneous discard phase
+     */
     public void update(final Suit suit, final int value, final boolean isSimultaneousDiscardPhase) {
         this.topCardView.setImage(ImageLoader.getCardImage(suit, value));
         this.topCardView.setVisible(true);

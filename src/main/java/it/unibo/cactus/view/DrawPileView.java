@@ -25,6 +25,7 @@ public final class DrawPileView extends StackPane {
         this.cardBackView.fitHeightProperty().bind(
             this.heightProperty().multiply(TOP_CARD_HEIGHT)
         );
+
         this.countLabel = new Label("40");
 
         this.countLabel.getStyleClass().add("pileCount");
@@ -32,7 +33,6 @@ public final class DrawPileView extends StackPane {
         setAlignment(this.countLabel, Pos.BOTTOM_CENTER);
 
         this.getChildren().addAll(this.cardBackView, this.countLabel);
-
     }
 
     /**
