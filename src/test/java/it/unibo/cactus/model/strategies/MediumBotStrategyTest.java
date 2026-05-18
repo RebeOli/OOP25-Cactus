@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.CardImpl;
 import it.unibo.cactus.model.cards.PeekPower;
+import it.unibo.cactus.model.cards.RevealPower;
 import it.unibo.cactus.model.cards.Suit;
+import it.unibo.cactus.model.cards.SwapPower;
 import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerFactory;
@@ -20,7 +22,6 @@ import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.TurnPhase;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
-import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.DiscardAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
@@ -33,6 +34,8 @@ public class MediumBotStrategyTest {
     private static final Card LOW_CARD  = new CardImpl(Suit.BASTONI, 1, 1, null);
     private static final Card HIGH_CARD = new CardImpl(Suit.BASTONI, 9, 9, null);
     private static final Card PEEK_CARD = new CardImpl(Suit.BASTONI, 6, 6, new PeekPower());
+    private static final Card REVEAL_CARD = new CardImpl(Suit.SPADE, 7, 7, new RevealPower());
+    private static final Card SWAP_CARD = new CardImpl(Suit.SPADE, 8, 8, new SwapPower());
 
     private static Player playerWithHand(final List<Card> cards) {
         final Player p = PlayerFactory.createBotPlayer("TestBot", BotDifficulty.MEDIUM);
@@ -75,38 +78,53 @@ public class MediumBotStrategyTest {
     }
 
     @Test
-    void testSpecialPower() {
+    void testSpecialPowerPeek() {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player);
-        final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, PEEK_CARD, null, false, 
+        final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, null, PEEK_CARD, false, 
             false, null, List.of());
         final RoundAction action = mediumBotStr.chooseAction(round); 
-        assertInstanceOf(ActivatePowerAction.class, action);
+        assertInstanceOf(SkipPowerAction.class, action);
+    }
+
+    @Test
+    void testSpecialPowerReveal() {
+        final Player self = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
+        final Player opponent = playerWithHand(List.of(HIGH_CARD, HIGH_CARD));
+        final MediumBotStrategy strategy = new MediumBotStrategy(self);
+        final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, null, REVEAL_CARD, false,
+            false, self, List.of(self, opponent));
+        assertInstanceOf(ActivatePowerAction.class, strategy.chooseAction(round));
+
+        opponent.getHand().revealCard(0);
+        opponent.getHand().revealCard(1);
+        assertInstanceOf(SkipPowerAction.class, strategy.chooseAction(round));
+    }
+
+    @Test
+    void testSpecialPowerSwap() {
+        final Player self = playerWithHand(List.of(HIGH_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
+        self.getHand().revealCard(0);
+        final Player opponent = playerWithHand(List.of(LOW_CARD));
+        opponent.getHand().revealCard(0);
+        final MediumBotStrategy strategy = new MediumBotStrategy(self);
+        final Round round = new FakeRound(TurnPhase.SPECIAL_POWER, null, SWAP_CARD, false,
+            false, self, List.of(self, opponent));
+        assertInstanceOf(ActivatePowerAction.class, strategy.chooseAction(round));
     }
 
     @Test
     void testEndTurn() {
-        final Player player1 = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
-        player1.getHand().revealCard(0);
-        player1.getHand().revealCard(1);
-        player1.getHand().revealCard(2);
-        player1.getHand().revealCard(3);
-        final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player1);
-        final Round round1 = new FakeRound(TurnPhase.END_TURN, null, null, false, 
+        final Player player = playerWithHand(List.of(HIGH_CARD, HIGH_CARD, HIGH_CARD, HIGH_CARD));
+        player.getHand().revealCard(0);
+        player.getHand().revealCard(1);
+        player.getHand().revealCard(2);
+        player.getHand().revealCard(3);
+        final MediumBotStrategy mediumBotStr = new MediumBotStrategy(player);
+        final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false, 
             false, null, List.of());
-        final RoundAction action1 = mediumBotStr.chooseAction(round1); 
-        assertInstanceOf(CallCactusAction.class, action1);
-
-        final Player player2 = playerWithHand(List.of(HIGH_CARD, HIGH_CARD, HIGH_CARD, HIGH_CARD));
-        player2.getHand().revealCard(0);
-        player2.getHand().revealCard(1);
-        player2.getHand().revealCard(2);
-        player2.getHand().revealCard(3);
-        final MediumBotStrategy mediumBotStr2 = new MediumBotStrategy(player2);
-        final Round round2 = new FakeRound(TurnPhase.END_TURN, null, null, false, 
-            false, null, List.of());
-        final RoundAction action2 = mediumBotStr2.chooseAction(round2); 
-        assertInstanceOf(EndTurnAction.class, action2);
+        final RoundAction action = mediumBotStr.chooseAction(round); 
+        assertInstanceOf(EndTurnAction.class, action);
     }
 
     @Test

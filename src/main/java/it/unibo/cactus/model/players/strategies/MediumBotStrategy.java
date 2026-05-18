@@ -8,7 +8,11 @@ import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.cards.PeekPower;
-import it.unibo.cactus.model.cards.target.PeekTarget;
+import it.unibo.cactus.model.cards.RevealPower;
+import it.unibo.cactus.model.cards.SpecialPower;
+import it.unibo.cactus.model.cards.SwapPower;
+import it.unibo.cactus.model.cards.target.RevealTarget;
+import it.unibo.cactus.model.cards.target.SwapTarget;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.actions.ActivatePowerAction;
 import it.unibo.cactus.model.rounds.actions.CallCactusAction;
@@ -78,30 +82,85 @@ public class MediumBotStrategy extends AbstractBotStrategy {
     /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSpecialPower(final Round round) {
-        // Conto le carte coperte e memorizzo l'indice della prima
-        int hiddenCount = 0;
-        int firstHiddenIndex = -1;
-        final PlayerHand hand = self.getHand();
+        final Optional<Card> topCard = round.getDiscardTopCard();
+        if (topCard.isEmpty() || topCard.get().getSpecialPower().isEmpty()) {
+            return new SkipPowerAction();
+        }
 
-        for (int i = 0; i < hand.size(); i++) {
-            if (hand.isHidden(i)) {
-                hiddenCount++;
-                if (firstHiddenIndex < 0) {
-                    firstHiddenIndex = i;
+        final SpecialPower power = topCard.get().getSpecialPower().get();
+
+        if (power instanceof PeekPower) {
+            return new SkipPowerAction();
+        }
+
+        if (power instanceof RevealPower) {
+            //Se ci sono avversari con carte coperte, rivelo la prima coperta di un avversario casuale
+            final List<Player> opponentsWithHiddenCards = new ArrayList<>();
+            for (final Player p : round.getAllPlayers()) {
+                if (p == self) {
+                    continue;
                 }
+                final PlayerHand h = p.getHand();
+                for (int i = 0; i < h.size(); i++) {
+                    if (h.isHidden(i)) {
+                        opponentsWithHiddenCards.add(p);
+                        break;
+                    }
+                }
+            }
+            if (opponentsWithHiddenCards.isEmpty()) {
+                return new SkipPowerAction();
+            }
+
+            final Player target = opponentsWithHiddenCards.get(random.nextInt(opponentsWithHiddenCards.size()));
+            final PlayerHand targetHand = target.getHand();
+            int firstHiddenIdx = -1;
+            for (int i = 0; i < targetHand.size(); i++) {
+                if (targetHand.isHidden(i)) {
+                    firstHiddenIdx = i;
+                    break;
+                }
+            }
+            return new ActivatePowerAction(new RevealTarget(target, firstHiddenIdx));
+        }
+
+        if(power instanceof SwapPower) {
+            //Cerco la carta visibile della mia mano con punteggio peggiore
+            int worstOwnScore = -1;
+            int worstOwnIndex = -1;
+            final PlayerHand ownHand = self.getHand();
+            for (int i = 0; i < ownHand.size(); i++) {
+                if (!ownHand.isHidden(i) && ownHand.getCard(i).getScore() > worstOwnScore) {
+                    worstOwnScore = ownHand.getCard(i).getScore();
+                    worstOwnIndex = i;
+                }
+            }
+
+            //Cerco tra le carte visibili degli avversari quella con punteggio migliore
+            int bestOpponentScore = Integer.MAX_VALUE;
+            int bestOpponentIndex = -1;
+            Player bestOpponent = null;
+            for (final Player p : round.getAllPlayers()) {
+                if (p == self) {
+                    continue;
+                }
+                final PlayerHand h = p.getHand();
+                for (int i = 0; i < h.size(); i++) {
+                    if (!h.isHidden(i) && h.getCard(i).getScore() < bestOpponentScore) {
+                        bestOpponentScore = h.getCard(i).getScore();
+                        bestOpponentIndex = i;
+                        bestOpponent = p;
+                    }
+                }
+            }
+
+            //Se conviene, scambio la mia carta con quella dell'avversario
+            if (bestOpponent != null && worstOwnIndex >= 0 && bestOpponentScore < worstOwnScore) {
+                return new ActivatePowerAction(new SwapTarget(self, worstOwnIndex, bestOpponent, bestOpponentIndex));
             }
         }
 
-        // Attivo il potere Peek solo se ci sono più di 2 carte ancora coperte
-        Optional<Card> drawn = round.getDrawnCard();
-        boolean isPeek = drawn.isPresent()
-            && drawn.get().getSpecialPower().isPresent()
-            && drawn.get().getSpecialPower().get() instanceof PeekPower;
-        if (hiddenCount > 2 && isPeek) {
-            return new ActivatePowerAction(new PeekTarget(firstHiddenIndex));
-        }
-
-        // Salto il potere speciale se non è conveniente usarlo
+        
         return new SkipPowerAction();
     }
 
