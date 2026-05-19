@@ -6,7 +6,7 @@ import it.unibo.cactus.model.players.Player;
 /**
  * Static factory for creating a {@link BotStrategy} based on a given {@link BotDifficulty}.
  */
-public class BotStrategyFactory {
+public final class BotStrategyFactory {
 
     private BotStrategyFactory() { }
 

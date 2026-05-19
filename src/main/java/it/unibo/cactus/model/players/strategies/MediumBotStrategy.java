@@ -97,7 +97,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
             //Se ci sono avversari con carte coperte, rivelo la prima coperta di un avversario casuale
             final List<Player> opponentsWithHiddenCards = new ArrayList<>();
             for (final Player p : round.getAllPlayers()) {
-                if (p == self) {
+                if (p.equals(self)) {
                     continue;
                 }
                 final PlayerHand h = p.getHand();
@@ -141,7 +141,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
             int bestOpponentIndex = -1;
             Player bestOpponent = null;
             for (final Player p : round.getAllPlayers()) {
-                if (p == self) {
+                if (p.equals(self)) {
                     continue;
                 }
                 final PlayerHand h = p.getHand();

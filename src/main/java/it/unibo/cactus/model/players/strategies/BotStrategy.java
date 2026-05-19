@@ -29,5 +29,5 @@ public interface BotStrategy {
      *
      * @param cardIndex the slot index of the card that was removed from the hand
      */
-    void onSimultaneousDiscardExecuted(final int cardIndex);
+    void onSimultaneousDiscardExecuted(int cardIndex);
 }

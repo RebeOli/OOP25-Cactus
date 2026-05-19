@@ -1,6 +1,7 @@
 package it.unibo.cactus.view;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import it.unibo.cactus.model.players.PlayerHand;
 import javafx.beans.binding.Bindings;
@@ -11,7 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class PeekInitialCardsView extends VBox {
+public final class PeekInitialCardsView extends VBox {
 
     private static final int HAND_SIZE = 4;
     private static final int MAX_SELECTED = 2;
@@ -39,7 +40,7 @@ public class PeekInitialCardsView extends VBox {
         confirmButton.setId("peekConfirmBtn");
         confirmButton.setDisable(true);
 
-        final HashSet<Integer> selected = new HashSet<>();
+        final Set<Integer> selected = new HashSet<>();
 
         for (int i = 0; i < HAND_SIZE; i++) {
             final int cardIndex = i;

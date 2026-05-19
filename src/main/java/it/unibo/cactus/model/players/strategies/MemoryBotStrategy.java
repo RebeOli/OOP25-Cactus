@@ -47,6 +47,7 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseDecision(final Round round) {
         final int drawnScore = round.getDrawnCard().orElseThrow().getScore();
@@ -78,6 +79,7 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
         return new DiscardAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSimultaneousDiscard(final Round round) {
         final Optional<Card> topCard = round.getDiscardTopCard();    
@@ -125,13 +127,13 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
 
     /** {@inheritDoc} */
     @Override
-    public void onSimultaneousDiscardExecuted(int cardIndex) {
+    public void onSimultaneousDiscardExecuted(final int cardIndex) {
         memory.removeAndShift(cardIndex);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected RoundAction chooseSpecialPower(Round round) {
+    protected RoundAction chooseSpecialPower(final Round round) {
         final Optional<Card> topCard = round.getDiscardTopCard();
         if (topCard.isEmpty() || topCard.get().getSpecialPower().isEmpty()) {
             return new SkipPowerAction();
@@ -153,7 +155,7 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
 
     protected abstract RoundAction handleRevealPower(Round round);
 
-    protected RoundAction handleSwapPower(Round round) {
+    protected RoundAction handleSwapPower(final Round round) {
                 // Trovo la propria carta peggiore nota in memoria
         int worstOwnIndex = -1;
         int worstOwnScore = -1;
@@ -193,9 +195,9 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
         }
 
         return handleSwapPowerFallback(round);
-    };
+    }
 
-    protected RoundAction handleSwapPowerFallback(Round round) {
+    protected RoundAction handleSwapPowerFallback(final Round round) {
         return new SkipPowerAction();
     }
 

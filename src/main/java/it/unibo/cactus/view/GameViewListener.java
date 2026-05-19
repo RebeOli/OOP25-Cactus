@@ -20,15 +20,15 @@ public interface GameViewListener {
 
     void onSwapPowerRequested(int playerAIndex, int cardAIndex, int playerBIndex, int cardBIndex);
 
-    void onSimultaneousDiscardRequested(final int cardIndex);
+    void onSimultaneousDiscardRequested(int cardIndex);
 
     void onDrawCardRequest();
 
     void onDiscardDrawnCardRequested();
 
-    void onSwapWithDrawnCardRequested(final int cardIndex);
+    void onSwapWithDrawnCardRequested(int cardIndex);
 
-    void onUpdateStats(final String playerName);
+    void onUpdateStats(String playerName);
 
     void onPauseRequested();
 

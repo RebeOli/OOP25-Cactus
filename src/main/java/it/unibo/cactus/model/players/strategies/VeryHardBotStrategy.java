@@ -24,7 +24,7 @@ public class VeryHardBotStrategy extends MemoryBotStrategy {
     }
 
     @Override
-    protected RoundAction handleRevealPower(Round round) {
+    protected RoundAction handleRevealPower(final Round round) {
         final List<Player> opponents = opponents(round);
 
         // Trovo l'avversario con più carte nascoste
@@ -51,7 +51,7 @@ public class VeryHardBotStrategy extends MemoryBotStrategy {
     }
 
     @Override
-    protected RoundAction handleSwapPowerFallback(Round round) {
+    protected RoundAction handleSwapPowerFallback(final Round round) {
         // Se non ho trovato uno scambio vantaggioso, scambio due carte tra avversari a caso
         final List<Player> opponents = new ArrayList<>(opponents(round));
         Collections.shuffle(opponents, random);
@@ -68,7 +68,7 @@ public class VeryHardBotStrategy extends MemoryBotStrategy {
     }
 
     @Override
-    protected RoundAction chooseEndTurn(Round round) {
+    protected RoundAction chooseEndTurn(final Round round) {
         if (round.isCactusCalled()) {
             return new EndTurnAction();
         }

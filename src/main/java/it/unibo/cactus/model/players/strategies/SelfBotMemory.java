@@ -50,7 +50,7 @@ public final class SelfBotMemory implements BotMemory {
 
     /** {@inheritDoc} */
     @Override
-    public void removeAndShift(int index) {
+    public void removeAndShift(final int index) {
         knownCards.remove(index);
         final List<Map.Entry<Integer, Card>> cardsWHigherIndex = knownCards.entrySet().stream()
             .filter(e -> e.getKey() > index)

@@ -16,10 +16,17 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
  */
 public class HardBotStrategy extends MemoryBotStrategy {
 
+    /**
+     * Constructs a hard bot strategy for the given player..
+     *
+     * @param self the {@link Player} controlled by this strategy
+     * @param memory the {@link BotMemory} used to store and recall card information
+     */
     public HardBotStrategy(final Player self, final BotMemory memory) {
         super(self, memory);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseEndTurn(final Round round) {
         final int estimatedScore = estimatedOwnScore();
@@ -32,8 +39,9 @@ public class HardBotStrategy extends MemoryBotStrategy {
         return new EndTurnAction();
     }
 
+    /** {@inheritDoc} */
     @Override
-    protected RoundAction handleRevealPower(Round round) {
+    protected RoundAction handleRevealPower(final Round round) {
         // Trovo l'avversario con punteggio stimato più basso
         Player targetOpponent = null;
         int minEstimatedScore = Integer.MAX_VALUE;
