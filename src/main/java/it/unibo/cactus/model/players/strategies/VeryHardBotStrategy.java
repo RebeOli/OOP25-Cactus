@@ -15,7 +15,7 @@ import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 
-public class VeryHardBotStrategy extends MemoryBotStrategy {
+public class VeryHardBotStrategy extends AbstractMemoryBotStrategy {
 
     private final Random random = new Random();
 

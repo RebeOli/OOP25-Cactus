@@ -25,7 +25,7 @@ import it.unibo.cactus.model.rounds.actions.SwapAction;
 /**
  * Abstract class for bot strategies that use {@link BotMemory} to track cards.
  */
-public abstract class MemoryBotStrategy extends AbstractBotStrategy{
+public abstract class AbstractMemoryBotStrategy extends AbstractBotStrategy {
 
     protected static final int AVERAGE_UNKNOWN_SCORE = 5;
     protected static final int CACTUS_SCORE_THRESHOLD = 8;
@@ -33,7 +33,7 @@ public abstract class MemoryBotStrategy extends AbstractBotStrategy{
     protected final Player self;
     protected final BotMemory memory;
 
-    protected MemoryBotStrategy(final Player self, final BotMemory memory) {
+    protected AbstractMemoryBotStrategy(final Player self, final BotMemory memory) {
         this.self = self;
         this.memory = memory;
     }

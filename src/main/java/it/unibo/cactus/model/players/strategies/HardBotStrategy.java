@@ -14,7 +14,7 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
  * A bot strategy that makes decisions based only on currently visible cards,
  * with memory between turns.
  */
-public class HardBotStrategy extends MemoryBotStrategy {
+public class HardBotStrategy extends AbstractMemoryBotStrategy {
 
     /**
      * Constructs a hard bot strategy for the given player..
