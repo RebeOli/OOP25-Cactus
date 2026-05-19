@@ -10,7 +10,7 @@ import it.unibo.cactus.model.statistics.PlayerStats;
 
 public interface GameView {
 
-    void updateGame(final GameUpdateData data);
+    void updateGame(GameUpdateData data);
 
     void showIntroScreen();
 
@@ -18,20 +18,20 @@ public interface GameView {
 
     void showStatsScreen();
 
-    void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name);
+    void showGameScreen(String humanName, String bot1Name, String bot2Name, String bot3Name);
 
-    void showPeekScreen(final PlayerHand hand);
+    void showPeekScreen(PlayerHand hand);
 
-    void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand);
+    void showSimultaneousDiscardWindow(Card topCard, List<Card> playerHand);
 
     void closeSimultaneousDiscardWindow();
 
-    void showEndScreen(final Map<Player, Integer> finalsScores);
+    void showEndScreen(Map<Player, Integer> finalsScores);
 
     void setActionListener(GameViewListener listener);
 
-    void updateStats(final String playerName, final PlayerStats playerStats);
+    void updateStats(String playerName, PlayerStats playerStats);
 
-    void showStatsScreen(final Runnable onBack);
+    void showStatsScreen(Runnable onBack);
 
 }

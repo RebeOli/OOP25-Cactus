@@ -79,4 +79,11 @@ public interface Round {
      * @return true if Cactus has been called, false otherwise.
      */
     boolean isCactusCalled();
+
+    /**
+     * Returns all players in the game.
+     * 
+     * @return list of {@link Player}
+     */
+    List<Player> getAllPlayers();
 }

@@ -26,26 +26,35 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
     private final Player self;
     private int roundsPlayed;
 
+    /**
+     * Constructs an easy bot strategy for the given player.
+     *
+     * @param self the {@link Player} controlled by this strategy
+     */
     public EasyBotStrategy(final Player self) {
         this.self = self;
         this.roundsPlayed = 0;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void performInitialPeek(final PlayerHand hand) {
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseDecision(final Round round) {
         final List<RoundAction> actions = round.getAvailableActions();
         return actions.get(random.nextInt(actions.size()));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSpecialPower(final Round round) {
         return new SkipPowerAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseEndTurn(final Round round) {
         roundsPlayed++;
@@ -58,16 +67,20 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
         return new EndTurnAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSimultaneousDiscard(final Round round) {
-        //TO-DO:
-        //Sostituire il magic number con una chiamata più parlante come !hand.isFull()
         if (random.nextDouble() >= SIMULTANEOUS_DISCARD_PROBABILITY 
-        || self.getHand().size() >= 6) {
+        || self.getHand().isFull()) {
             return new SkipSimultaneousDiscardAction();
         }
 
         final int handSize = self.getHand().size();
         return new SimultaneousDiscardAction(self, random.nextInt(handSize));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void onSimultaneousDiscardExecuted(int cardIndex) {
     }
 }

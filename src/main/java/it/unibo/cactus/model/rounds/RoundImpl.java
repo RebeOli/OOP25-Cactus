@@ -166,4 +166,9 @@ public final class RoundImpl implements MutableRound {
         return game != null && game.isCactusCalled();
     }
 
+    @Override
+    public List<Player> getAllPlayers() {
+        return game.getPlayers();
+    }
+
 }

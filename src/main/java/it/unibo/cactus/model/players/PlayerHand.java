@@ -65,4 +65,11 @@ public interface PlayerHand {
      * @return the card that was removed
      */
     Card removeCard(int index);
+
+    /**
+     * Checks wether the player hand has reached maximum capacity of cards.
+     * 
+     * @return {@code true} if the hand is full, {@code false} otherwise.
+     */
+    boolean isFull();
 }
