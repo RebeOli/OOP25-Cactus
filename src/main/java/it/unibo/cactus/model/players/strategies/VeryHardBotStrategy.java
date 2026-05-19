@@ -15,14 +15,26 @@ import it.unibo.cactus.model.rounds.actions.CallCactusAction;
 import it.unibo.cactus.model.rounds.actions.EndTurnAction;
 import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 
+/**
+ * Bot strategy that uses full memory and opponent-hand awareness.
+ * Handles all three special powers (Peek, Reveal, Swap) and compares
+ * its estimated score against all opponents before calling Cactus.
+ */
 public class VeryHardBotStrategy extends AbstractMemoryBotStrategy {
 
     private final Random random = new Random();
 
+    /**
+     * Constructs a very-hard bot strategy for the given player.
+     *
+     * @param self the {@link Player} controlled by this strategy
+     * @param memory the {@link BotMemory} used to store and recall card information
+     */
     public VeryHardBotStrategy(final Player self, final BotMemory memory) {
         super(self, memory);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction handleRevealPower(final Round round) {
         final List<Player> opponents = opponents(round);
@@ -50,6 +62,7 @@ public class VeryHardBotStrategy extends AbstractMemoryBotStrategy {
         return new SkipPowerAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction handleSwapPowerFallback(final Round round) {
         // Se non ho trovato uno scambio vantaggioso, scambio due carte tra avversari a caso
@@ -67,6 +80,7 @@ public class VeryHardBotStrategy extends AbstractMemoryBotStrategy {
         return new SkipPowerAction();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected RoundAction chooseEndTurn(final Round round) {
         if (round.isCactusCalled()) {
