@@ -66,7 +66,7 @@ public class HardBotStrategy extends AbstractMemoryBotStrategy {
                 break;
             }
         }
-        
+
         if (firstHiddenIdx < 0) {
             return new SkipPowerAction();
         }

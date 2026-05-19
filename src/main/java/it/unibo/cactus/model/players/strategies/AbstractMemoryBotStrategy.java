@@ -33,11 +33,18 @@ public abstract class AbstractMemoryBotStrategy extends AbstractBotStrategy {
     protected final Player self;
     protected final BotMemory memory;
 
+    /**
+     * Constructs a memory-based bot strategy for the given player.
+     *
+     * @param self the {@link Player} controlled by this strategy
+     * @param memory the {@link BotMemory} used to store and recall card information
+     */
     protected AbstractMemoryBotStrategy(final Player self, final BotMemory memory) {
         this.self = self;
         this.memory = memory;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void performInitialPeek(final PlayerHand hand) {
         for (int i = 0; i < 2; i++) {

@@ -8,6 +8,10 @@ import java.util.Optional;
 
 import it.unibo.cactus.model.cards.Card;
 
+/**
+ * Implementation of {@link BotMemory} that tracks only the cards
+ * in the bot's own hand, storing them in a HashMap keyed by hand index.
+ */
 public final class SelfBotMemory implements BotMemory {
 
     private final Map<Integer, Card> knownCards = new HashMap<>();
