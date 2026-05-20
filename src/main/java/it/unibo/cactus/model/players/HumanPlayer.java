@@ -8,6 +8,7 @@ public final class HumanPlayer extends AbstractPlayer {
 
     /**
      * Constructs a new human player with the given name.
+     * 
      * @param name the display name of the player. Must not be null
      */
     public HumanPlayer(final String name) {

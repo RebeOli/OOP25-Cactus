@@ -85,6 +85,11 @@ public final class PlayerHandImpl implements PlayerHand {
         return removedSlot.card;
     }
 
+    @Override
+    public boolean isFull() {
+        return this.slots.size() == MAX_CARDS;
+    }
+
     private static class Slot {
         private Card card;
         private boolean hidden;
@@ -93,10 +98,5 @@ public final class PlayerHandImpl implements PlayerHand {
             this.card = card;
             this.hidden = hidden;
         }
-    }
-    
-    @Override
-    public boolean isFull() {
-        return this.slots.size() == MAX_CARDS;
     }
 }

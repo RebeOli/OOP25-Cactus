@@ -30,7 +30,7 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
-public class VeryHardBotStrategyTest {
+class VeryHardBotStrategyTest {
 
     private static final Card LOW_CARD = new CardImpl(Suit.SPADE, 1, 1, null);
     private static final Card HIGH_CARD = new CardImpl(Suit.SPADE, 9, 9, null);
@@ -126,7 +126,7 @@ public class VeryHardBotStrategyTest {
         final Player self = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final SelfBotMemory memory = new SelfBotMemory();
         final VeryHardBotStrategy strategy = new VeryHardBotStrategy(self, memory);
-        final Round round =new FakeRound(TurnPhase.END_TURN, null, null, false, 
+        final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false,
                 true, self, List.of(self));
         assertInstanceOf(EndTurnAction.class, strategy.chooseAction(round));
     }
@@ -139,7 +139,7 @@ public class VeryHardBotStrategyTest {
         memory.rememberCard(1, KING_CARD);
         memory.rememberCard(2, KING_CARD);
         memory.rememberCard(3, KING_CARD);
-        VeryHardBotStrategy strategy = new VeryHardBotStrategy(self, memory);
+        final VeryHardBotStrategy strategy = new VeryHardBotStrategy(self, memory);
         final Player opponent = playerWithHand(List.of(HIGH_CARD, HIGH_CARD, HIGH_CARD, HIGH_CARD));
         for (int i = 0; i < 4; i++) {
             opponent.getHand().revealCard(i);
@@ -156,16 +156,16 @@ public class VeryHardBotStrategyTest {
         final Card discard5 = new CardImpl(Suit.COPPE, 5, 5, null);
         final Player self = playerWithHand(List.of(card5, LOW_CARD, LOW_CARD, LOW_CARD));
         final SelfBotMemory memory = new SelfBotMemory();
-        VeryHardBotStrategy strategy = new VeryHardBotStrategy(self, memory);
+        final VeryHardBotStrategy strategy = new VeryHardBotStrategy(self, memory);
         memory.rememberCard(0, card5);
         final Round round = new FakeRound(TurnPhase.SIMULTANEOUS_DISCARD, null, discard5, false, 
                 false, self, List.of(self));
         assertInstanceOf(SimultaneousDiscardAction.class, strategy.chooseAction(round));
-        
+
         final Player self2 = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final SelfBotMemory memory2 = new SelfBotMemory();
         memory2.rememberCard(0, LOW_CARD);
-        VeryHardBotStrategy strategy2 = new VeryHardBotStrategy(self2, memory2);
+        final VeryHardBotStrategy strategy2 = new VeryHardBotStrategy(self2, memory2);
         final Round round2 = new FakeRound(TurnPhase.SIMULTANEOUS_DISCARD, null, discard5, false, 
                 false, self2, List.of(self2));
         assertInstanceOf(SkipSimultaneousDiscardAction.class, strategy2.chooseAction(round2));
