@@ -94,4 +94,9 @@ public final class PlayerHandImpl implements PlayerHand {
             this.hidden = hidden;
         }
     }
+    
+    @Override
+    public boolean isFull() {
+        return this.slots.size() == MAX_CARDS;
+    }
 }

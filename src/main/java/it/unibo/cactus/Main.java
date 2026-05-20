@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
 
         final GameViewImpl view = new GameViewImpl(primaryStage);
         final ControllerImpl controller = new ControllerImpl(view,

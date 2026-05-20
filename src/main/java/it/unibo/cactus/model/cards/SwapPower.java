@@ -18,7 +18,16 @@ public final class SwapPower implements SpecialPower {
         }
         final Card cardA = t.playerA().getHand().getCard(t.indexA());
         final Card cardB = t.playerB().getHand().getCard(t.indexB());
+        final boolean revealedA = !t.playerA().getHand().isHidden(t.indexA());
+        final boolean revealedB = !t.playerB().getHand().isHidden(t.indexB());
         t.playerA().getHand().replace(t.indexA(), cardB);
         t.playerB().getHand().replace(t.indexB(), cardA);
+
+        if (revealedA) {
+            t.playerB().getHand().revealCard(t.indexB());
+        }
+        if (revealedB) {
+            t.playerA().getHand().revealCard(t.indexA());
+        }
     }
 }

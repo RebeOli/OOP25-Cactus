@@ -11,13 +11,13 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-public class ConfigScreenView extends StackPane {
+public final class ConfigScreenView extends StackPane {
 
     private static final double MAX_FIELD_WIDTH = 240.0;
     private static final double SPACING = 16.0;
     private static final double PADDING = 40.0;
 
-    public ConfigScreenView(GameViewListener listener) {
+    public ConfigScreenView(final GameViewListener listener) {
         final VBox mainContent = new VBox();
         mainContent.setAlignment(Pos.CENTER);
         mainContent.setSpacing(SPACING);
@@ -48,7 +48,7 @@ public class ConfigScreenView extends StackPane {
         difficultyCombobox.getItems().addAll(BotDifficulty.values());
         difficultyCombobox.setValue(BotDifficulty.EASY);
 
-        StringConverter<BotDifficulty> difficultyConverter = new StringConverter<>() {
+        final StringConverter<BotDifficulty> difficultyConverter = new StringConverter<>() {
             @Override
             public String toString(final BotDifficulty difficulty) {
                 if (difficulty == null) {
@@ -58,6 +58,7 @@ public class ConfigScreenView extends StackPane {
                     case EASY -> "Easy";
                     case MEDIUM -> "Medium";
                     case HARD -> "Hard";
+                    case VERY_HARD -> "Very Hard";
                 };
             }
 

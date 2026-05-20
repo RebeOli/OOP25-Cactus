@@ -158,7 +158,7 @@ public class GameViewImpl implements GameView {
     }
 
     @Override
-    public void updateStats(String playerName, PlayerStats playerStats) {
+    public void updateStats(final String playerName, final PlayerStats playerStats) {
         statsView.showStats(playerName, playerStats);
     }
 
