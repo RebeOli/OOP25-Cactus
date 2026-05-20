@@ -3,6 +3,7 @@ package it.unibo.cactus.model.players;
 import java.util.ArrayList;
 import java.util.List;
 import it.unibo.cactus.model.cards.Card;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of the {@link PlayerHand} interface.
@@ -22,13 +23,14 @@ public final class PlayerHandImpl implements PlayerHand {
         if (initialCards == null) {
             throw new IllegalArgumentException("Initial cards list cannot be null");
         }
-        this.slots = new ArrayList<>();
-        for (final Card c : initialCards) {
-            if (c == null) {
-                throw new IllegalArgumentException("Cannot add a null card to the player's hand");
-            }
-            this.slots.add(new Slot(c, true)); 
-        }
+        this.slots = initialCards.stream()
+            .map(c -> {
+                if (c == null) {
+                    throw new IllegalArgumentException("Cannot add a null card to the player's hand");
+                }
+                return new Slot(c, true);
+            })
+            .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
@@ -81,6 +83,11 @@ public final class PlayerHandImpl implements PlayerHand {
         }
         final Slot removedSlot = this.slots.remove(index);
         return removedSlot.card;
+    }
+
+    @Override
+    public boolean isFull() {
+        return this.slots.size() == MAX_CARDS;
     }
 
     private static class Slot {

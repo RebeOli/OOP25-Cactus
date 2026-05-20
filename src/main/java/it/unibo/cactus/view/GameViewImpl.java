@@ -19,6 +19,9 @@ import javafx.stage.Stage;
  */
 public class GameViewImpl implements GameView {
 
+    private static final int MIN_WIDTH = 800;
+    private static final int MIN_HEIGHT = 600;
+
     private static final List<String> STYLE_RESOURCES = List.of(
         "/style.css",
         "/configStyle.css",
@@ -45,12 +48,14 @@ public class GameViewImpl implements GameView {
         this.primaryStage = primaryStage;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showIntroScreen() {
         final IntroScreenView introView = new IntroScreenView(this::showConfigScreen);
         switchScreen(introView);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void updateGame(final GameUpdateData data) {
         if (gameScreen != null) {
@@ -58,12 +63,14 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showConfigScreen() {
         final ConfigScreenView configView = new ConfigScreenView(this.listener);
         switchScreen(configView);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showGameScreen(final String humanName, final String bot1Name, final String bot2Name, final String bot3Name) {
         this.humanPlayerName = humanName;
@@ -73,12 +80,14 @@ public class GameViewImpl implements GameView {
         switchScreen(gameScreen);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showPeekScreen(final PlayerHand hand) {
         final PeekInitialCardsView peekView = new PeekInitialCardsView(hand, this.listener);
         switchScreen(peekView);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showSimultaneousDiscardWindow(final Card topCard, final List<Card> playerHand) {
         if (gameScreen != null) {
@@ -86,6 +95,7 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void closeSimultaneousDiscardWindow() {
         if (gameScreen != null) {
@@ -93,6 +103,7 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showEndScreen(final Map<Player, Integer> finalsScores) {
         final EndScreenView endGameScreen = new EndScreenView();
@@ -100,14 +111,15 @@ public class GameViewImpl implements GameView {
         endGameScreen.setOnPlayAgainRequested(this::showConfigScreen);
         endGameScreen.setOnCloseRequested(primaryStage::close);
         endGameScreen.setOnFinalStatsRequested(() -> {
-            showStatsScreen(() -> switchScreen(endGameScreen));
+            showStatsScreenOnBack(() -> switchScreen(endGameScreen));
         });
         switchScreen(endGameScreen);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public void setActionListener(final GameViewListener listener) {
-        this.listener = listener;
+    public void setActionListener(final GameViewListener gameListener) {
+        this.listener = gameListener;
     }
 
     /**
@@ -122,8 +134,8 @@ public class GameViewImpl implements GameView {
             final Scene scene = new Scene(view, SCENE_WIDTH, SCENE_HEIGHT);
             applyStylesheet(scene);
             primaryStage.setScene(scene);
-            primaryStage.setMinWidth(800); 
-            primaryStage.setMinHeight(600);
+            primaryStage.setMinWidth(MIN_WIDTH); 
+            primaryStage.setMinHeight(MIN_HEIGHT);
         }
     }
 
@@ -141,14 +153,15 @@ public class GameViewImpl implements GameView {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showStatsScreen() {
-        showStatsScreen(() -> switchScreen(gameScreen));
+        showStatsScreenOnBack(() -> switchScreen(gameScreen));
     }
 
-    //metodo per decidere dove tornare con showstats
+    /** {@inheritDoc} */
     @Override
-    public void showStatsScreen(final Runnable onBack) {
+    public void showStatsScreenOnBack(final Runnable onBack) {
         statsView = new StatsView(playersNames, onBack);
         statsView.setOnPlayerSelected(selectedName -> {
             listener.onUpdateStats(selectedName);
@@ -157,8 +170,9 @@ public class GameViewImpl implements GameView {
         listener.onUpdateStats(humanPlayerName);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public void updateStats(String playerName, PlayerStats playerStats) {
+    public void updateStats(final String playerName, final PlayerStats playerStats) {
         statsView.showStats(playerName, playerStats);
     }
 

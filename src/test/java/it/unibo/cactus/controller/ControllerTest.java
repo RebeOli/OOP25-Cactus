@@ -123,7 +123,7 @@ public final class ControllerTest {
         public void showStatsScreen() { }
 
         @Override
-        public void showStatsScreen(final Runnable onBack) { }
+        public void showStatsScreenOnBack(final Runnable onBack) { }
 
         @Override
         public void showIntroScreen() { }

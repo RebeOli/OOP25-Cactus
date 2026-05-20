@@ -1,12 +1,30 @@
 package it.unibo.cactus.model.players;
 
-public class PlayerFactory {
+/**
+ * Static factory for creating {@link Player} instances.
+ */
+public final class PlayerFactory {
 
-    public static Player createHumanPlayer(final String playerName){
+    private PlayerFactory() { }
+
+    /**
+     * Creates a new human-controlled player with the given name.
+     *
+     * @param playerName the display name of the player
+     * @return a new {@link Player}
+     */
+    public static Player createHumanPlayer(final String playerName) {
         return new HumanPlayer(playerName);
     }
 
-    public static Player createBotPlayer(final String playerName, final BotDifficulty difficulty){
+    /**
+     * Creates a new bot-controlled player with the given name and difficulty.
+     *
+     * @param playerName the display name of the player
+     * @param difficulty the {@link BotDifficulty} level that determines the strategy
+     * @return a new {@link Player}
+     */
+    public static Player createBotPlayer(final String playerName, final BotDifficulty difficulty) {
         return new BotPlayer(playerName, difficulty);
     }
 }

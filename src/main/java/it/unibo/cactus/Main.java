@@ -14,10 +14,13 @@ import javafx.stage.Stage;
  * Entry point of the Cactus application.
  */
 
-public class Main extends Application {
+public final class Main extends Application {
+
+    private static final int MIN_WIDTH = 1024;
+    private static final int MIN_HEIGHT = 768;
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
 
         final GameViewImpl view = new GameViewImpl(primaryStage);
         final ControllerImpl controller = new ControllerImpl(view,
@@ -35,13 +38,19 @@ public class Main extends Application {
         };
         loop.start();
 
-        primaryStage.setMinWidth(1024);
-        primaryStage.setMinHeight(768);
+        primaryStage.setMinWidth(MIN_WIDTH);
+        primaryStage.setMinHeight(MIN_HEIGHT);
         view.showIntroScreen();
         primaryStage.setMaximized(true);
+        primaryStage.setOnCloseRequest(e -> loop.stop());
         primaryStage.show();
     }
 
+    /**
+     * Application entry point.
+     *
+     * @param args command-line arguments
+     */
     public static void main(final String[] args) {
         launch(args);
     }

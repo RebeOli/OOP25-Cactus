@@ -17,5 +17,17 @@ public interface BotStrategy {
      */
     RoundAction chooseAction(Round round);
 
+    /**
+     * Lets the bot peek at 2 of its own initial hidden cards before the first turn.
+     *
+     * @param hand the bot's hand
+     */
     void performInitialPeek(PlayerHand hand);
+
+    /**
+     * Notifies that the simultaneous discard action was confirmed and executed.
+     *
+     * @param cardIndex the slot index of the card that was removed from the hand
+     */
+    void onSimultaneousDiscardExecuted(int cardIndex);
 }

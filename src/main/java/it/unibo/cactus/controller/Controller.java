@@ -12,17 +12,17 @@ import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 public interface Controller extends GameObserver {
 
     /**
-     * Initializes and starts a new game.
+     * Initialises and starts a new game with the given player configuration.
      *
-     * @param playerName the name of the human player
-     * @param difficulty the difficulty level of the bot
+     * @param playerName the name chosen by the human player
+     * @param difficulty the difficulty level applied to all three bots
      */
     void startGame(String playerName, BotDifficulty difficulty);
 
     /**
-     * Execute a game action.
-     * 
-     * @param action the round action to be processed by the model.
+     * Executes a game action triggered by the human player through the view.
+     *
+     * @param action the action to execute on the current round
      */
     void handleAction(RoundAction action);
 
@@ -34,7 +34,7 @@ public interface Controller extends GameObserver {
     void tick(); 
 
     /**
-     * Executes a simultaneous discard action.
+     * Handle a simultaneous discard action.
      * 
      * @param action the discard action to execute.
      */

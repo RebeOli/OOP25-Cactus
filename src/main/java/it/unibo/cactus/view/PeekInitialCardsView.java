@@ -1,6 +1,7 @@
 package it.unibo.cactus.view;
 
 import java.util.HashSet;
+import java.util.Set;
 
 import it.unibo.cactus.model.players.PlayerHand;
 import javafx.beans.binding.Bindings;
@@ -11,7 +12,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class PeekInitialCardsView extends VBox {
+/**
+ * The initial peek screen shown before the first turn.
+ * Displays the player's four face-down cards and lets them select exactly to reveal.
+ */
+public final class PeekInitialCardsView extends VBox {
 
     private static final int HAND_SIZE = 4;
     private static final int MAX_SELECTED = 2;
@@ -20,6 +25,12 @@ public class PeekInitialCardsView extends VBox {
     private static final double PADDING = 40.0;
     private static final double CARD_HEIGHT = 120.0;
 
+    /**
+     * Constructs the peek screen for the given hand.
+     *
+     * @param hand the player's initial {@link PlayerHand}
+     * @param listener the {@link GameViewListener} to notify once the player confirms their selection
+     */
     public PeekInitialCardsView(final PlayerHand hand, final GameViewListener listener) {
 
         this.setAlignment(Pos.CENTER);
@@ -39,14 +50,14 @@ public class PeekInitialCardsView extends VBox {
         confirmButton.setId("peekConfirmBtn");
         confirmButton.setDisable(true);
 
-        final HashSet<Integer> selected = new HashSet<>();
+        final Set<Integer> selected = new HashSet<>();
 
         for (int i = 0; i < HAND_SIZE; i++) {
             final int cardIndex = i;
             final CardView cardView = new CardView();
             cardView.bindHeight(Bindings.createDoubleBinding(() -> CARD_HEIGHT));
             cardView.setCardData(hand.getCard(cardIndex));
-            cardView.setFaceUp(false);  
+            cardView.setFaceUp(false);
 
             cardView.setOnCardClicked(() -> {
                 if (!selected.contains(cardIndex) && selected.size() < MAX_SELECTED) {
