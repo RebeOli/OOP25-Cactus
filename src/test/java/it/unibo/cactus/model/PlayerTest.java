@@ -55,7 +55,7 @@ class PlayerTest {
 
     @Test
     void humanGetHandBeforeSet() {
-        assertThrows(IllegalStateException.class, () -> human.getHand());
+        assertThrows(IllegalStateException.class, human::getHand);
     }
 
     @Test
@@ -69,7 +69,7 @@ class PlayerTest {
     
     @Test
     void botGetHandBeforeSet() {
-        assertThrows(IllegalStateException.class, () -> bot.getHand());
+        assertThrows(IllegalStateException.class, bot::getHand);
     }
 
 }
