@@ -28,7 +28,7 @@ import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 class EasyBotStrategyTest {
 
-    private static final Card LOW_CARD  = new CardImpl(Suit.SPADE, 1, 1, null);
+    private static final Card LOW_CARD = new CardImpl(Suit.SPADE, 1, 1, null);
     private static final Card HIGH_CARD = new CardImpl(Suit.SPADE, 9, 9, null);
 
     private static Player playerWithHand(final List<Card> cards) {
@@ -42,7 +42,7 @@ class EasyBotStrategyTest {
         final Player player = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final FakeRound round = new FakeRound(TurnPhase.DRAW, null, null, 
-            false, false, null, List.of());        
+            false, false, null, List.of());
         final RoundAction action = easyBotStr.chooseAction(round);
         assertInstanceOf(DrawAction.class, action);
     }
@@ -63,7 +63,7 @@ class EasyBotStrategyTest {
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final FakeRound round = new FakeRound(TurnPhase.SPECIAL_POWER, null, null, 
             false, false, null, List.of()); 
-        final RoundAction action = easyBotStr.chooseAction(round);   
+        final RoundAction action = easyBotStr.chooseAction(round);
         assertInstanceOf(SkipPowerAction.class, action);
     }
 
@@ -73,7 +73,7 @@ class EasyBotStrategyTest {
         final EasyBotStrategy easyBotStr = new EasyBotStrategy(player);
         final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false, 
             false, null, List.of());
-        final RoundAction action = easyBotStr.chooseAction(round);  
+        final RoundAction action = easyBotStr.chooseAction(round);
         assertInstanceOf(EndTurnAction.class, action);
     }
 

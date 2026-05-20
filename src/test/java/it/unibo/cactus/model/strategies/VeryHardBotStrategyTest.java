@@ -126,7 +126,7 @@ class VeryHardBotStrategyTest {
         final Player self = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final SelfBotMemory memory = new SelfBotMemory();
         final VeryHardBotStrategy strategy = new VeryHardBotStrategy(self, memory);
-        final Round round =new FakeRound(TurnPhase.END_TURN, null, null, false, 
+        final Round round = new FakeRound(TurnPhase.END_TURN, null, null, false,
                 true, self, List.of(self));
         assertInstanceOf(EndTurnAction.class, strategy.chooseAction(round));
     }
@@ -161,7 +161,7 @@ class VeryHardBotStrategyTest {
         final Round round = new FakeRound(TurnPhase.SIMULTANEOUS_DISCARD, null, discard5, false, 
                 false, self, List.of(self));
         assertInstanceOf(SimultaneousDiscardAction.class, strategy.chooseAction(round));
-        
+
         final Player self2 = playerWithHand(List.of(LOW_CARD, LOW_CARD, LOW_CARD, LOW_CARD));
         final SelfBotMemory memory2 = new SelfBotMemory();
         memory2.rememberCard(0, LOW_CARD);

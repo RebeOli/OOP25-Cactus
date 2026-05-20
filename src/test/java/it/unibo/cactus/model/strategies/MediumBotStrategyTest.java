@@ -31,7 +31,7 @@ import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 class MediumBotStrategyTest {
 
-    private static final Card LOW_CARD  = new CardImpl(Suit.BASTONI, 1, 1, null);
+    private static final Card LOW_CARD = new CardImpl(Suit.BASTONI, 1, 1, null);
     private static final Card HIGH_CARD = new CardImpl(Suit.BASTONI, 9, 9, null);
     private static final Card PEEK_CARD = new CardImpl(Suit.BASTONI, 6, 6, new PeekPower());
     private static final Card REVEAL_CARD = new CardImpl(Suit.SPADE, 7, 7, new RevealPower());

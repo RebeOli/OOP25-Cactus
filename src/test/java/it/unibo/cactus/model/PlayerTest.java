@@ -66,7 +66,7 @@ class PlayerTest {
         bot.setHand(hand);
         assertEquals(hand, bot.getHand());
     }
-    
+
     @Test
     void botGetHandBeforeSet() {
         assertThrows(IllegalStateException.class, bot::getHand);

@@ -19,7 +19,10 @@ import it.unibo.cactus.model.rounds.actions.SkipPowerAction;
 import it.unibo.cactus.model.rounds.actions.SkipSimultaneousDiscardAction;
 import it.unibo.cactus.model.rounds.actions.SwapAction;
 
-public class FakeRound implements Round {
+/**
+ * Test-only implementation of {@link Round}. Used in unit tests for bot strategies.
+ */
+public final class FakeRound implements Round {
 
     private final TurnPhase phase;
     private final Optional<Card> drawnCard;
@@ -30,7 +33,8 @@ public class FakeRound implements Round {
     private final List<Player> allPlayers;
 
     FakeRound(final TurnPhase phase, final Card drawnCard, final Card discardTopCard,
-              final boolean isLastRound, final boolean isCactusCalled, final Player currentPlayer, final List<Player> allPlayers) {
+              final boolean isLastRound, final boolean isCactusCalled, 
+              final Player currentPlayer, final List<Player> allPlayers) {
         this.phase = phase;
         this.drawnCard = Optional.ofNullable(drawnCard);
         this.discardTopCard = Optional.ofNullable(discardTopCard);
@@ -39,7 +43,6 @@ public class FakeRound implements Round {
         this.currentPlayer = currentPlayer;
         this.allPlayers = allPlayers;
     }
-
 
     @Override
     public List<RoundAction> getAvailableActions() {
@@ -80,9 +83,7 @@ public class FakeRound implements Round {
     }
 
     @Override
-    public void execute(RoundAction action) {
-        
-    }
+    public void execute(final RoundAction action) { }
 
     @Override
     public TurnPhase getPhase() {
@@ -109,11 +110,8 @@ public class FakeRound implements Round {
         return this.cactusCalled;
     }
 
-
     @Override
     public List<Player> getAllPlayers() {
         return this.allPlayers;
     }
-
-
 }
