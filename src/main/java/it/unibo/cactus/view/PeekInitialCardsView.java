@@ -12,6 +12,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+/**
+ * The initial peek screen shown before the first turn.
+ * Displays the player's four face-down cards and lets them select exactly to reveal.
+ */
 public final class PeekInitialCardsView extends VBox {
 
     private static final int HAND_SIZE = 4;
@@ -21,6 +25,12 @@ public final class PeekInitialCardsView extends VBox {
     private static final double PADDING = 40.0;
     private static final double CARD_HEIGHT = 120.0;
 
+    /**
+     * Constructs the peek screen for the given hand.
+     *
+     * @param hand the player's initial {@link PlayerHand}
+     * @param listener the {@link GameViewListener} to notify once the player confirms their selection
+     */
     public PeekInitialCardsView(final PlayerHand hand, final GameViewListener listener) {
 
         this.setAlignment(Pos.CENTER);
@@ -47,7 +57,7 @@ public final class PeekInitialCardsView extends VBox {
             final CardView cardView = new CardView();
             cardView.bindHeight(Bindings.createDoubleBinding(() -> CARD_HEIGHT));
             cardView.setCardData(hand.getCard(cardIndex));
-            cardView.setFaceUp(false);  
+            cardView.setFaceUp(false);
 
             cardView.setOnCardClicked(() -> {
                 if (!selected.contains(cardIndex) && selected.size() < MAX_SELECTED) {
