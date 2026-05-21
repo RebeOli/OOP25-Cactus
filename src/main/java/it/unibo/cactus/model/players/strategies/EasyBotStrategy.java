@@ -63,7 +63,7 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
                 && random.nextDouble() < CACTUS_PROBABILITY) {
             return new CallCactusAction();
         }
-        
+
         return new EndTurnAction();
     }
 
@@ -81,6 +81,6 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
 
     /** {@inheritDoc} */
     @Override
-    public void onSimultaneousDiscardExecuted(int cardIndex) {
+    public void onSimultaneousDiscardExecuted(final int cardIndex) {
     }
 }

@@ -17,6 +17,7 @@ public abstract class AbstractPlayer implements Player {
     /**
      * Constructs a new player with the given name.
      * The hand must be set later via {@link #setHand(PlayerHand)}.
+     * 
      * @param name the display name of the player; must not be null
      */
     protected AbstractPlayer(final String name) {

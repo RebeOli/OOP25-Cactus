@@ -13,7 +13,7 @@ public final class PlayerFactory {
      * @param playerName the display name of the player
      * @return a new {@link Player}
      */
-    public static Player createHumanPlayer(final String playerName){
+    public static Player createHumanPlayer(final String playerName) {
         return new HumanPlayer(playerName);
     }
 
@@ -24,7 +24,7 @@ public final class PlayerFactory {
      * @param difficulty the {@link BotDifficulty} level that determines the strategy
      * @return a new {@link Player}
      */
-    public static Player createBotPlayer(final String playerName, final BotDifficulty difficulty){
+    public static Player createBotPlayer(final String playerName, final BotDifficulty difficulty) {
         return new BotPlayer(playerName, difficulty);
     }
 }

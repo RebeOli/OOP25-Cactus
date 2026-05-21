@@ -33,7 +33,7 @@ import it.unibo.cactus.model.rounds.actions.SwapAction;
 
 class HardBotStrategyTest {
 
-    private static final Card LOW_CARD  = new CardImpl(Suit.SPADE, 1, 1, null);
+    private static final Card LOW_CARD = new CardImpl(Suit.SPADE, 1, 1, null);
     private static final Card HIGH_CARD = new CardImpl(Suit.SPADE, 9, 9, null);
     private static final Card PEEK_CARD = new CardImpl(Suit.SPADE, 6, 6, new PeekPower());
     private static final Card KING_CARD = new CardImpl(Suit.SPADE, 10, 0, null);
@@ -67,7 +67,7 @@ class HardBotStrategyTest {
         memory.rememberCard(0, HIGH_CARD);
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(SwapAction.class, action);
-        assertEquals(0, ((SwapAction)action).cardIndex());
+        assertEquals(0, ((SwapAction) action).cardIndex());
     }
 
     @Test
@@ -80,7 +80,7 @@ class HardBotStrategyTest {
             false, false, null, List.of());
         final RoundAction action = hardBotStr.chooseAction(round);
         assertInstanceOf(DiscardAction.class, action);
-        
+
         final FakeRound round2 = new FakeRound(TurnPhase.DECISION, HIGH_CARD, null, 
             false, false, null, List.of());
         memory.rememberCard(0, LOW_CARD);
@@ -115,7 +115,7 @@ class HardBotStrategyTest {
                 false, false, self, List.of(self, opponent));
         assertInstanceOf(ActivatePowerAction.class, strategy.chooseAction(round));
     }
-    
+
     @Test
     void testSpecialPowerReveal() {
         final Player self = playerWithHand(List.of(LOW_CARD, LOW_CARD));

@@ -33,7 +33,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
     private static final int CACTUS_SCORE_THRESHOLD = 12;
     private static final double CACTUS_PROBABILITY = 0.20;
     private static final int MIN_ROUNDS_BEFORE_CACTUS = 3;
-    protected static final int AVERAGE_UNKNOWN_SCORE = 5;
+    private static final int AVERAGE_UNKNOWN_SCORE = 5;
 
     private final Random random = new Random();
     private final Player self;
@@ -61,7 +61,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
         int maxVisibleScore = -1;
         int maxVisibleIndex = -1;
         final PlayerHand hand = self.getHand();
-        
+
         // Cerco la carta visibile in mano con il punteggio più alto
         for (int i = 0; i < hand.size(); i++) {
             if (!hand.isHidden(i) && hand.getCard(i).getScore() > maxVisibleScore) {
@@ -124,7 +124,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
             return new ActivatePowerAction(new RevealTarget(target, firstHiddenIdx));
         }
 
-        if(power instanceof SwapPower) {
+        if (power instanceof SwapPower) {
             //Cerco la carta visibile della mia mano con punteggio peggiore
             int worstOwnScore = -1;
             int worstOwnIndex = -1;
@@ -160,14 +160,13 @@ public class MediumBotStrategy extends AbstractBotStrategy {
             }
         }
 
-        
         return new SkipPowerAction();
     }
 
     /** {@inheritDoc} */
     @Override
-    protected RoundAction chooseEndTurn(final Round round) {    
-        this.roundsPlayed++;    
+    protected RoundAction chooseEndTurn(final Round round) { 
+        this.roundsPlayed++;
         final PlayerHand hand = self.getHand();
 
         int estimatedScore = 0;
@@ -192,7 +191,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
     /** {@inheritDoc} */
     @Override
     protected RoundAction chooseSimultaneousDiscard(final Round round) {
-        final Optional<Card> topCard = round.getDiscardTopCard();   
+        final Optional<Card> topCard = round.getDiscardTopCard();
 
         if (topCard.isEmpty()) {
             return new SkipSimultaneousDiscardAction();
@@ -215,7 +214,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
             }
         }
 
-        // Salto lo scarto se tutte le carte sono scoperte o randomicamente o la mano è piena        
+        // Salto lo scarto se tutte le carte sono scoperte o randomicamente o la mano è piena
         if (hiddenIndices.isEmpty() || random.nextBoolean()
         || self.getHand().isFull()) {
             return new SkipSimultaneousDiscardAction();
@@ -230,7 +229,7 @@ public class MediumBotStrategy extends AbstractBotStrategy {
 
     /** {@inheritDoc} */
     @Override
-    public void onSimultaneousDiscardExecuted(int cardIndex) {
+    public void onSimultaneousDiscardExecuted(final int cardIndex) {
 
     }
 }
