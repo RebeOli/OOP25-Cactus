@@ -37,7 +37,9 @@ public final class JSonHistoryRepository implements HistoryRepository {
         try (
             BufferedWriter w = new BufferedWriter(
                 new OutputStreamWriter(
-                    new FileOutputStream(this.history, true), StandardCharsets.UTF_8))) {
+                    new FileOutputStream(this.history, true), StandardCharsets.UTF_8)
+                )
+        ) {
             w.write(this.gson.toJson(result));
             w.newLine();
         }
@@ -49,7 +51,8 @@ public final class JSonHistoryRepository implements HistoryRepository {
         try (
             BufferedReader r = new BufferedReader(
                 new InputStreamReader(
-                    new FileInputStream(this.history), StandardCharsets.UTF_8));
+                    new FileInputStream(this.history), StandardCharsets.UTF_8)
+                )
         ) {
             String line = r.readLine();
             while (line != null) {

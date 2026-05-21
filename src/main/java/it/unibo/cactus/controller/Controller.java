@@ -6,8 +6,8 @@ import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
 
 /**
- * Entry point of the controller layer. Reacts to user input from the View 
- * and to game events from {@link GameObserver}.
+ * Represents the main controller in the MVC architecture.
+ * Extends {@link GameObserver} to listen for model updates.
  */
 public interface Controller extends GameObserver {
 
@@ -27,14 +27,16 @@ public interface Controller extends GameObserver {
     void handleAction(RoundAction action);
 
     /**
-     * Advances the game loop by one tick.
+     * Updates the game logic on each tick.
+     * It handles pauses, checks for game over, and manages the timers for the 
+     * simultaneous discard phases.
      */
     void tick(); 
 
     /**
-     * Handles a simultaneous-discard attempt by the human player.
-     *
-     * @param action the simultaneous discard action containing the player and card index
+     * Handle a simultaneous discard action.
+     * 
+     * @param action the discard action to execute.
      */
     void handleSimultaneousDiscard(SimultaneousDiscardAction action);
 }
