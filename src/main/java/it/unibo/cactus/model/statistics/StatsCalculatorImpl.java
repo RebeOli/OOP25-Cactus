@@ -15,7 +15,7 @@ public final class StatsCalculatorImpl implements StatsCalculator {
     @Override
     public int countWins(final List<GameResult> results, final String playerName) {
         return (int) results.stream()
-            .filter(r -> r.winner().equals(playerName))
+            .filter(r -> playerName.equals(r.winner()))
             .count();
     }
 
