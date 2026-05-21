@@ -29,7 +29,7 @@ import it.unibo.cactus.view.GameViewListener;
  * Unit tests for the {@link Controller} implementation.
  * It uses fake objects for the view and the repository to isolate the controller logic.
  */
-public final class ControllerTest {
+final class ControllerTest {
     private static final String PLAYER_NAME = "Giulio";
     private Controller controller;
     private FakeView fakeView;
@@ -67,7 +67,7 @@ public final class ControllerTest {
 
     private static final class FakeHistoryRepository implements HistoryRepository {
         private boolean save;
-        private List<GameResult> memory = new ArrayList<>();
+        private final List<GameResult> memory = new ArrayList<>();
 
         @Override
         public void save(final GameResult result) throws IOException {
