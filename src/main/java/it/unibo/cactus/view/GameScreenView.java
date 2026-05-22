@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
@@ -60,6 +61,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
      * @param onRestart action to run on restart
      * @param onStats action to run on stats
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "JavaFX UI components like TableView must be shared by reference to allow UI updates."
+    )
     public GameScreenView(final GameViewListener listener, final TableView tableView,
                           final Runnable onRestart, final Runnable onStats) {
 

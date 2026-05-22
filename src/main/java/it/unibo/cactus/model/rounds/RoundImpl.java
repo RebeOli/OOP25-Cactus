@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.game.Game;
 import it.unibo.cactus.model.pile.DiscardPile;
@@ -41,6 +42,10 @@ public final class RoundImpl implements MutableRound {
      * @param drawPile      the draw pile of the game
      * @param currentPlayer the player whose turn it is
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Game and Player are intentionally shared by design"
+    )
     public RoundImpl(final Game game, final DiscardPile discardPile, final DrawPile drawPile, final Player currentPlayer) {
         this.game = game;
         this.phase = TurnPhase.DRAW;
@@ -108,6 +113,10 @@ public final class RoundImpl implements MutableRound {
         return discardPile;
     }
 
+    @SuppressFBWarnings(
+        value = "EI",
+        justification = "Returning the real object instead of a copy is required by the game logic."
+    )
     @Override
     public Player getCurrentPlayer() {
         return currentPlayer;

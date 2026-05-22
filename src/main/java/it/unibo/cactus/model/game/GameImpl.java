@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.pile.DiscardPile;
 import it.unibo.cactus.model.pile.DrawPile;
 import it.unibo.cactus.model.players.Player;
@@ -49,7 +50,7 @@ public final class GameImpl implements Game {
         if (players.size() != 4) {
             throw new IllegalArgumentException("there must be exactly 4 players");
         }
-        this.players = players;
+        this.players = List.copyOf(players);
         this.drawPile = drawPile;
         this.discardPile = discardPile;
         this.observers = new ArrayList<>();
@@ -74,6 +75,10 @@ public final class GameImpl implements Game {
         return discardPile;
     }
 
+    @SuppressFBWarnings(
+        value = "EI",
+        justification = "The architecture requires exposing the current round to allow the game controller to execute actions on it."
+    )
     @Override
     public Round getCurrentRound() {
         if (currentRound == null) {
