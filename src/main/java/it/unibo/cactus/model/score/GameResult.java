@@ -12,4 +12,11 @@ import java.util.Map;
  */
 public record GameResult(Map<String, Integer> scores, int completedRounds, String winner) {
 
+    /**
+     * Ensures immutability by making a defensive copy of the scores map.
+     */
+    public GameResult {
+        scores = Map.copyOf(scores);
+    }
+
 }
