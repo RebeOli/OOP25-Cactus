@@ -77,7 +77,7 @@ public final class GameImpl implements Game {
 
     @SuppressFBWarnings(
         value = "EI",
-        justification = "The architecture requires exposing the current round to allow the game controller to execute actions on it."
+        justification = "Exposing current round is required to execute actions on it."
     )
     @Override
     public Round getCurrentRound() {

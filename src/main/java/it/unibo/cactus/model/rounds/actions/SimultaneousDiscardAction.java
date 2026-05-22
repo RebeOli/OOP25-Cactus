@@ -15,7 +15,7 @@ import it.unibo.cactus.model.rounds.RoundAction;
  */
 @SuppressFBWarnings(
     value = {"EI", "EI2"},
-    justification = "The action must act directly on the real player instance to modify its state. A defensive copy would have no effect on the game state."
+    justification = "Player must be shared directly to modify its state during the action."
 )
 public record SimultaneousDiscardAction(Player player, int cardIndex) implements RoundAction {
 
