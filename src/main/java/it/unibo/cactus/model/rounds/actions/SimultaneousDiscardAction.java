@@ -14,7 +14,7 @@ import it.unibo.cactus.model.rounds.RoundAction;
  * @param cardIndex the index of the card in the player's hand
  */
 @SuppressFBWarnings(
-    value = {"EI", "EI2"},
+    value = "EI",
     justification = "Player must be shared directly to modify its state during the action."
 )
 public record SimultaneousDiscardAction(Player player, int cardIndex) implements RoundAction {
