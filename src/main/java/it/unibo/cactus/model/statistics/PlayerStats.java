@@ -13,4 +13,11 @@ import java.util.Map;
  */
 public record PlayerStats(int wins, Map<String, Integer> generalRanking, double averageRounds) {
 
+    /**
+     * Ensures immutability by making a defensive copy of the general ranking map.
+     */
+    public PlayerStats {
+        generalRanking = Map.copyOf(generalRanking);
+    }
+
 }
