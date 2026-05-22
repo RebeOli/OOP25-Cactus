@@ -173,7 +173,9 @@ public class GameViewImpl implements GameView {
     /** {@inheritDoc} */
     @Override
     public void updateStats(final String playerName, final PlayerStats playerStats) {
-        statsView.showStats(playerName, playerStats);
+        if (statsView != null) {
+            statsView.showStats(playerName, playerStats);
+        }
     }
 
 }
