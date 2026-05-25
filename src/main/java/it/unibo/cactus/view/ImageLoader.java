@@ -8,6 +8,8 @@ import it.unibo.cactus.model.cards.Suit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Class for loading and caching card images.
  */
@@ -67,6 +69,10 @@ public final class ImageLoader {
      *
      * @return the Image of the card back
      */
+    @SuppressFBWarnings(
+        value = "MS",
+        justification = "JavaFX Image objects are immutable, so caching and returning a static instance is safe."
+    )
     public static Image getCardBack() {
         if (!loaded) {
             loadAll();

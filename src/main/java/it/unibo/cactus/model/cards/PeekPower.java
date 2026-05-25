@@ -12,9 +12,8 @@ public final class PeekPower implements SpecialPower {
 
     @Override
     public void activate(final Player activator, final PowerTarget target) {
-        if (!(target instanceof PeekTarget t)) {
+        if (!(target instanceof PeekTarget)) {
             throw new IllegalArgumentException("PeekPower requires a target of type PeekTarget");
         }
-        activator.getHand().getCard(t.index());
     }
 }

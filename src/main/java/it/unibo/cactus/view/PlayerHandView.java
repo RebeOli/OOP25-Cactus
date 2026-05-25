@@ -45,11 +45,13 @@ public class PlayerHandView extends VBox {
         nameLabel.setStyle("-fx-font-size: " + (isHumanPlayer ? "18px" : "12px") + ";");
 
         if (isSide) {
-            this.cardsContainer = new VBox(STANDARD_SPACING);
-            ((VBox) cardsContainer).setAlignment(Pos.CENTER);
+            final VBox sideBox = new VBox(STANDARD_SPACING);
+            sideBox.setAlignment(Pos.CENTER);
+            this.cardsContainer = sideBox;
         } else {
-            this.cardsContainer = new HBox(STANDARD_SPACING);
-            ((HBox) cardsContainer).setAlignment(Pos.CENTER);
+            final HBox topBottomBox = new HBox(STANDARD_SPACING);
+            topBottomBox.setAlignment(Pos.CENTER);
+            this.cardsContainer = topBottomBox;
         }
 
         this.slots = new CardView[MAX_CARDS];

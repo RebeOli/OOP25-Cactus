@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.PlayerHand;
 import javafx.beans.binding.DoubleBinding;
@@ -16,6 +17,10 @@ import javafx.scene.layout.VBox;
 /**
  * Represents the view of the game table.
  */
+@SuppressFBWarnings(
+    value = "EI", 
+    justification = "JavaFX components must be exposed by reference to update the UI."
+)
 public final class TableView extends BorderPane {
 
     private static final int PADDING_STANDARD = 10;

@@ -48,6 +48,11 @@ public final class JSonHistoryRepository implements HistoryRepository {
     @Override
     public List<GameResult> loadAll() throws IOException {
         final List<GameResult> results = new ArrayList<>();
+
+        if (!history.exists()) {
+            return new ArrayList<>();
+        }
+
         try (
             BufferedReader r = new BufferedReader(
                 new InputStreamReader(
