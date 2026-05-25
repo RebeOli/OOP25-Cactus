@@ -2,6 +2,7 @@ package it.unibo.cactus.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
@@ -19,7 +20,7 @@ import it.unibo.cactus.model.players.PlayerHandImpl;
  * and boundary/error handling for invalid indices.
  */
 class PlayerHandTest {
-    private static final int MINUSONE = 1;
+    private static final int MINUSONE = -1;
     private static final int ONE = 1;
     private static final int TWO = 2;
     private static final int THREE = 3;
@@ -60,9 +61,9 @@ class PlayerHandTest {
     void testIndexOutOfBoundsExceptions() {
         final Card c1 = new CardImpl(Suit.COPPE, ONE, ONE, null);
         final PlayerHand hand = new PlayerHandImpl(Arrays.asList(c1));
-        assertThrows(IndexOutOfBoundsException.class, () -> hand.getCard(ONE),
+        assertThrows(IndexOutOfBoundsException.class, () -> assertNotNull(hand.getCard(ONE)),
             "Should throw exception for index >= size");
-        assertThrows(IndexOutOfBoundsException.class, () -> hand.getCard(MINUSONE),
+        assertThrows(IndexOutOfBoundsException.class, () -> assertNotNull(hand.getCard(MINUSONE)),
             "Should throw exception for negative index");
         assertThrows(IndexOutOfBoundsException.class, () -> hand.revealCard(FIVE),
             "Should throw exception for invalid index when revealing");
