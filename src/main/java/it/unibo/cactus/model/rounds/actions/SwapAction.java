@@ -9,8 +9,7 @@ import it.unibo.cactus.model.rounds.MutableRound;
 
 /**
  * Action that swaps the drawn card with a card in the player's hand.
- * The replaced card is discarded and temporarily set as the drawn card
- * so that the phase advance can check for a special power.
+ * The replaced card is discarded. 
  *
  * @param cardIndex the index of the card in the player's hand to swap
  */

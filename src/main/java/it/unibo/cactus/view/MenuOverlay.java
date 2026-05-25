@@ -15,7 +15,6 @@ public final class MenuOverlay extends StackPane {
     private static final int SPACING = 20;
     private final Button btnRules;
     private final Button btnContinue = new Button("Continue Game");
-    //da rivedere perchè non si espande bene
 
     /**
      * Creates the menu overlay with the given actions for each button.
@@ -34,7 +33,6 @@ public final class MenuOverlay extends StackPane {
         btnRestart.setOnAction(e -> onRestart.run());
         btnStats.setOnAction(e -> onStats.run());
 
-        // box centrale con i pulsanti
         final VBox buttonBox = new VBox(btnContinue, btnRestart, btnStats, btnRules);
         buttonBox.getStyleClass().add("menuBox");
         buttonBox.setAlignment(Pos.CENTER);
@@ -45,7 +43,7 @@ public final class MenuOverlay extends StackPane {
 
         for (final Button button : new Button[]{btnContinue, btnRestart, btnStats, btnRules}) {
             button.getStyleClass().add("btnMenu");
-            button.setMaxWidth(Double.MAX_VALUE); // I bottoni occupano tutta la larghezza del menuBox
+            button.setMaxWidth(Double.MAX_VALUE);
         }
 
         super.getChildren().addAll(buttonBox);

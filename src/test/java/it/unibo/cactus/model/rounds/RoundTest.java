@@ -82,8 +82,6 @@ final class RoundTest {
         assertTrue(round.getDrawnCard().isEmpty());
     }
 
-    //getAvailableAction()
-
     @Test 
     void testAvailableActionsInDrawPhase() {
         final var actions = round.getAvailableActions();
@@ -93,7 +91,7 @@ final class RoundTest {
 
     @Test 
     void testAvailableActionsInDecisionPhase() {
-        round.execute(new DrawAction()); // DRAW -> DECISION
+        round.execute(new DrawAction());
         final var actions = round.getAvailableActions();
         assertEquals(HAND_SIZE + 1, actions.size());
         assertTrue(actions.stream().anyMatch(a -> a instanceof DiscardAction));
@@ -103,16 +101,16 @@ final class RoundTest {
     @Test
     void testAvailableActionsInSpecialPowerPhase() {
         final var powerRound = new RoundImpl(null, discardPile, new DrawPileImpl(List.of(POWER_CARD)), player);
-        powerRound.execute(new DrawAction());    // DRAW -> DECISION
-        powerRound.execute(new DiscardAction()); // DECISION -> SPECIAL_POWER
+        powerRound.execute(new DrawAction());
+        powerRound.execute(new DiscardAction());
         assertEquals(TurnPhase.SPECIAL_POWER, powerRound.getPhase());
         assertEquals(2, powerRound.getAvailableActions().size());
     }
 
     @Test 
     void testAvailableActionsInEndTurnPhase() {
-        round.execute(new DrawAction()); // DRAW -> DECISION
-        round.execute(new DiscardAction()); // DECISION -> END_TURN
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
         assertEquals(TurnPhase.END_TURN, round.getPhase());
         assertEquals(2, round.getAvailableActions().size());
         assertTrue(round.getAvailableActions().stream().anyMatch(a -> a instanceof CallCactusAction));
@@ -121,9 +119,9 @@ final class RoundTest {
 
     @Test 
     void testAvailableActionsInEndedPhase() {
-        round.execute(new DrawAction());    // DRAW -> DECISION
-        round.execute(new DiscardAction()); // DECISION -> END_TURN
-        round.execute(new EndTurnAction()); // END_TURN -> ENDED
+        round.execute(new DrawAction());
+        round.execute(new DiscardAction());
+        round.execute(new EndTurnAction());
         round.execute(new SimultaneousDiscardAction(player, 0));
         round.advancePhase();
         assertEquals(TurnPhase.ENDED, round.getPhase());
@@ -202,18 +200,6 @@ final class RoundTest {
         assertEquals(TurnPhase.SIMULTANEOUS_DISCARD, round.getPhase());
         assertFalse(round.getAvailableActions().isEmpty());
     }
-
-    /*@Test 
-    void testRemoveCard() {
-        player.setHand(new PlayerHandImpl(List.of(
-            new CardImpl(Suit.COPPE, 1, 1, null),
-            new CardImpl(Suit.BASTONI, 2, 2, null),
-            new CardImpl(Suit.DENARI, 3, 3, null),
-            new CardImpl(Suit.SPADE, 4, 4, null)
-        )));
-        player.getHand().removeCard(0);
-        assertEquals(3, player.getHand().size());
-    }*/
 
     @Test 
     void testSimultaneousDiscardSuccess() {

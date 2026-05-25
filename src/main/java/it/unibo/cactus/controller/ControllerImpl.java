@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
@@ -70,6 +72,10 @@ public final class ControllerImpl implements Controller, GameViewListener {
      * @param view           the view interface to update
      * @param historyManager the manager for saving and loading game history
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "GameView must be shared directly to allow UI updates."
+    )
     public ControllerImpl(final GameView view, final HistoryManager historyManager) {
         this.view = view;
         this.botStartTime = 0;
@@ -197,14 +203,6 @@ public final class ControllerImpl implements Controller, GameViewListener {
             historyManager.save(result);
         } catch (final IOException e) {
             LOGGER.log(Level.SEVERE, "Impossible saving game result's on JSON", e);
-        }
-        final Map<Player, PlayerStats> stats = new HashMap<>();
-        for (final Player player : game.getPlayers()) {
-            try {
-                stats.put(player, historyManager.getStats(player.getName()));
-            } catch (final IOException e) {
-                LOGGER.log(Level.SEVERE, "Impossible load game results's from JSON", e);
-            }
         }
         view.showEndScreen(scores);
         view.updateGame(buildUpdateData());

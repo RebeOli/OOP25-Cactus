@@ -1,5 +1,6 @@
 package it.unibo.cactus.model.rounds.actions;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.MutableRound;
@@ -12,6 +13,10 @@ import it.unibo.cactus.model.rounds.RoundAction;
  * @param player the player attempting the discard
  * @param cardIndex the index of the card in the player's hand
  */
+@SuppressFBWarnings(
+    value = "EI",
+    justification = "Player must be shared directly to modify its state during the action."
+)
 public record SimultaneousDiscardAction(Player player, int cardIndex) implements RoundAction {
 
     @Override

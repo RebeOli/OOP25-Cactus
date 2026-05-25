@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.PeekPower;
 import it.unibo.cactus.model.cards.RevealPower;
@@ -49,7 +50,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     private int firstSwapCardIdx;
     private boolean simultaneousAnswered;
     private List<RoundAction> currentAvailableActions;
-    //private boolean powerActivated = false;
 
     private enum SwapPhase { NO_SELECTION, FIRST_SELECTED }
 
@@ -61,6 +61,10 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
      * @param onRestart action to run on restart
      * @param onStats action to run on stats
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "JavaFX UI components like TableView must be shared by reference to allow UI updates."
+    )
     public GameScreenView(final GameViewListener listener, final TableView tableView,
                           final Runnable onRestart, final Runnable onStats) {
 
@@ -86,12 +90,11 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
                 handlePowerTarget(playerIndex, cardIndex);
             }
         });
-        //tableView.getHumanHand().setOnSwapAction(() -> listener.onSwapWithDrawnCardRequested(0));
 
         this.getStylesheets().add(getClass().getResource("/gameScreenStyle.css").toExternalForm());
 
         overlay = new SimultaneousDiscardOverlay(cardIndex -> { 
-            this.simultaneousAnswered = true; // <-- Ci segniamo che hai risposto!
+            this.simultaneousAnswered = true;
             listener.onSimultaneousDiscardRequested(cardIndex);
          });
         menuOverlay = new MenuOverlay(onRestart, onStats);
@@ -103,13 +106,11 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         final RulesOverlay rulesOverlay = new RulesOverlay();
         menuOverlay.setOnRulesRequested(rulesOverlay::show);
 
-        // layout interno con borderpane
         final BorderPane gameLayout = new BorderPane();
         gameLayout.setMinSize(0, 0);
         gameLayout.prefWidthProperty().bind(this.widthProperty());
         gameLayout.prefHeightProperty().bind(this.heightProperty());
 
-        //con titolo in alto. 
         final Button btnMenu = new Button("Menu");
         btnMenu.getStyleClass().add("btnMenu");
         btnMenu.setOnAction(e -> {
@@ -130,10 +131,9 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         topBar.setPadding(new Insets(TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING, TOP_BAR_PADDING, TOP_BAR_SIDE_PADDING));
         setAlignment(titleLabel, Pos.CENTER);
         setAlignment(rightBox, Pos.CENTER_RIGHT);
-        setAlignment(leftBox, Pos.CENTER_LEFT); //  setAlignment(turnLabel, Pos.CENTER_LEFT);
+        setAlignment(leftBox, Pos.CENTER_LEFT);
         gameLayout.setTop(topBar);
 
-        // bottom
         actionPanel = new ActionPanelView(this);
         message = new Label("Draw a card from the pile");
         message.getStyleClass().add("statusLabel");
@@ -144,10 +144,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         bottomPanel.setAlignment(Pos.CENTER);
         gameLayout.setBottom(bottomPanel);
 
-        // center
         gameLayout.setCenter(tableView);
 
-        // stack tutto insieme
         super.getChildren().addAll(gameLayout, overlay, menuOverlay, rulesOverlay);
     }
 
@@ -165,25 +163,20 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
         if (!data.allHands().isEmpty()) {
             tableView.updateAllHands(data.allHands());
         }
-        //tableView.getDrawPile().update(data.remainingCards(), data.isHumanTurn());
         final boolean canDraw = data.isHumanTurn() && data.availableActions().stream()
             .anyMatch(a -> a instanceof DrawAction);
         tableView.getDrawPile().update(data.remainingCards(), canDraw);
 
-        // --- MODIFICA VISUALIZZAZIONE SCARTI E PESCATE ---
         if (data.drawnCard() != null) {
             if (!data.isHumanTurn()) {
-                tableView.hideDrawnCard(); //disattivo la visualizzazione della carta pescata nel turno dei bot
+                tableView.hideDrawnCard();
             } else {
-                // 1. Se stiamo pescando, mostra la carta pescata
                 tableView.showDrawnCard(data.drawnCard());
             }
         } else if (data.topCard() != null) {
-            // 2. Altrimenti, mostra lo scarto in cima (utile per lo scarto simultaneo dei bot!)
             tableView.getDiscardPile().update(data.topCard().getSuit(), data.topCard().getValue(), data.isSimultaneous());
             tableView.hideDrawnCard();
         } else {
-            // 3. Nascondi se non c'è nulla da mostrare
             tableView.hideDrawnCard();
         }
         message.setText(data.completeMessage());
@@ -236,7 +229,6 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
     }
 
     private void handlePowerTarget(final int playerIndex, final int cardIndex) {
-        //aggiunto io 
         final boolean powerStillAvailable = currentAvailableActions.stream()
             .anyMatch(a -> a instanceof SkipPowerAction);
         if (!powerStillAvailable) {
