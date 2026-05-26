@@ -195,6 +195,8 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
             this.simultaneousAnswered = false;
             hideSimultaneousDiscardWindow();
         }
+        
+        data.botSwapHighlight().ifPresent(tableView::highlightSwap);
     }
 
     @Override

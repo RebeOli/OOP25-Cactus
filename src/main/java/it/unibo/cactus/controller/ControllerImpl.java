@@ -44,6 +44,7 @@ import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
 import it.unibo.cactus.view.GameViewListener;
+import it.unibo.cactus.view.SwapHighlight;
 
 /**
  * Implementation of the Controller interface.
@@ -65,6 +66,7 @@ public final class ControllerImpl implements Controller, GameViewListener {
     private long pauseStartTime;
     private boolean gameEndHandled;
     private boolean isGameOver;
+    private Optional<SwapHighlight> pendingSwapHighlight = Optional.empty();
 
     /**
      * Constructs a new ControllerImpl.
@@ -92,6 +94,7 @@ public final class ControllerImpl implements Controller, GameViewListener {
         this.simultaneousDiscardStartTime = 0;
         this.humanWindowExpired = false;
         this.isPaused = false;
+        this.pendingSwapHighlight = Optional.empty();
         this.game = GameFactory.createGame(playerName, difficulty);
         game.addObserver(this);
         view.showPeekScreen(getHumanPlayer().getHand());
@@ -157,6 +160,12 @@ public final class ControllerImpl implements Controller, GameViewListener {
             }
             if (System.currentTimeMillis() - botStartTime >= BOT_DELAY) {
                 final RoundAction action = currentBotPlayer.chooseAction(game.getCurrentRound());
+                if (action instanceof ActivatePowerAction ap && ap.target() instanceof SwapTarget st) {
+                    final List<Player> players = game.getPlayers();
+                    final int idxA = players.indexOf(st.playerA());
+                    final int idxB = players.indexOf(st.playerB());
+                    pendingSwapHighlight = Optional.of(new SwapHighlight(idxA, st.indexA(), idxB, st.indexB()));
+                }
                 game.performAction(action);
                 botStartTime = 0;
             }
@@ -302,9 +311,11 @@ public final class ControllerImpl implements Controller, GameViewListener {
         final boolean cactusCalled = game.getCurrentRound().isLastRound();
         final boolean isHumanTurn = !isGameOver && game.getCurrentPlayer().isHuman();
         final boolean isSimultaneous = !isGameOver && round.isSimultaneousDiscardPhase();
+        final Optional<SwapHighlight> swapHighlight = pendingSwapHighlight;
+        pendingSwapHighlight = Optional.empty();
         return new GameUpdateData(round.getAvailableActions(), isHumanTurn, getRoundMessage(round), currSpecialPower, 
             discardTopCard, isSimultaneous, cards, humanPlayer, allHands, game.getDrawPile().size(), 
-            drawnCard, game.getCurrentPlayer().getName(), cactusCalled);
+            drawnCard, game.getCurrentPlayer().getName(), cactusCalled, swapHighlight);
     }
 
     private Player getHumanPlayer() {

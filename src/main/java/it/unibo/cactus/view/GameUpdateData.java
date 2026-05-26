@@ -26,6 +26,7 @@ import it.unibo.cactus.model.rounds.RoundAction;
  * @param drawnCard the card the current player just drew
  * @param currentPlayerName the name of the player whose turn it currently is
  * @param cactusCalled {@code true} if a player has called "Cactus!" and the last round is in progress
+ * @param botSwapHighlight the two cards swapped by a bot Swap power to highlight in the view
  */
 @SuppressFBWarnings(
     value = "EI_EXPOSE_REP",
@@ -44,7 +45,8 @@ public record GameUpdateData(
     int remainingCards,
     Card drawnCard,
     String currentPlayerName,
-    boolean cactusCalled
+    boolean cactusCalled,
+    Optional<SwapHighlight> botSwapHighlight
 ) {
     /**
      * GameUpdateData constructor with list defensive copies.
