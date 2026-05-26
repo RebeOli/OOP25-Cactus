@@ -3,6 +3,7 @@ package it.unibo.cactus.model.players.strategies;
 import java.util.List;
 import java.util.Random;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
 import it.unibo.cactus.model.rounds.Round;
@@ -31,6 +32,10 @@ public final class EasyBotStrategy extends AbstractBotStrategy {
      *
      * @param self the {@link Player} controlled by this strategy
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Strategy must hold a reference to the Player to query its current hand state each turn"
+    )
     public EasyBotStrategy(final Player self) {
         this.self = self;
         this.roundsPlayed = 0;

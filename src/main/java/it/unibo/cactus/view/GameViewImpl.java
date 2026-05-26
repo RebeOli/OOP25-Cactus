@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.players.PlayerHand;
@@ -33,6 +34,10 @@ public class GameViewImpl implements GameView {
     private static final double SCENE_HEIGHT = 768.0;
 
     private final Stage primaryStage;
+    @SuppressFBWarnings(
+        value = "UWF_FIELD_NOT_INITIALIZED_IN_CONSTRUCTOR",
+        justification = "listener is set via setActionListener() before any screen that uses it is shown"
+    )
     private GameViewListener listener;
     private GameScreenView gameScreen;
     private StatsView statsView;
@@ -44,6 +49,10 @@ public class GameViewImpl implements GameView {
      *
      * @param primaryStage the primary stage of the application
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Stage is a JavaFX singleton owned by the platform"
+    )
     public GameViewImpl(final Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
@@ -146,7 +155,7 @@ public class GameViewImpl implements GameView {
      */
     private void applyStylesheet(final Scene scene) {
         for (final String path : STYLE_RESOURCES) {
-            final URL resource = getClass().getResource(path);
+            final URL resource = GameViewImpl.class.getResource(path);
             if (resource != null) {
                 scene.getStylesheets().add(resource.toExternalForm());
             }

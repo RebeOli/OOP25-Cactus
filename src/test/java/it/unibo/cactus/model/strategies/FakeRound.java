@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
@@ -90,6 +91,10 @@ public final class FakeRound implements Round {
         return this.phase;
     }
 
+    @SuppressFBWarnings(
+        value = "EI",
+        justification = "Returning the real object instead of a copy is required by the game logic."
+    )
     @Override
     public Player getCurrentPlayer() {
         return this.currentPlayer;
@@ -112,6 +117,6 @@ public final class FakeRound implements Round {
 
     @Override
     public List<Player> getAllPlayers() {
-        return this.allPlayers;
+        return List.copyOf(this.allPlayers);
     }
 }
