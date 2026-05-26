@@ -3,6 +3,7 @@ package it.unibo.cactus.view;
 import java.util.List;
 import java.util.Optional;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.cards.Card;
 import it.unibo.cactus.model.cards.SpecialPower;
 import it.unibo.cactus.model.players.Player;
@@ -26,6 +27,10 @@ import it.unibo.cactus.model.rounds.RoundAction;
  * @param currentPlayerName the name of the player whose turn it currently is
  * @param cactusCalled {@code true} if a player has called "Cactus!" and the last round is in progress
  */
+@SuppressFBWarnings(
+    value = "EI_EXPOSE_REP",
+    justification = "Player is a live object shared by design;"
+)
 public record GameUpdateData(
     List<RoundAction> availableActions, 
     boolean isHumanTurn, 
@@ -40,4 +45,13 @@ public record GameUpdateData(
     Card drawnCard,
     String currentPlayerName,
     boolean cactusCalled
-) { }
+) {
+    /**
+     * GameUpdateData constructor with list defensive copies.
+     */
+    public GameUpdateData {
+        availableActions = List.copyOf(availableActions);
+        playerHand = List.copyOf(playerHand);
+        allHands = List.copyOf(allHands);
+    }
+}

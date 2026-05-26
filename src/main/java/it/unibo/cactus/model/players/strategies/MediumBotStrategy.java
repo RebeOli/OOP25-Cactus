@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import it.unibo.cactus.model.players.Player;
 import it.unibo.cactus.model.rounds.Round;
 import it.unibo.cactus.model.rounds.RoundAction;
@@ -44,6 +46,10 @@ public class MediumBotStrategy extends AbstractBotStrategy {
      *
      * @param self the {@link Player} controlled by this strategy
      */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "Strategy must hold a reference to the Player to query its current hand state each turn"
+    )
     public MediumBotStrategy(final Player self) {
         this.self = self;
         this.roundsPlayed = 0;

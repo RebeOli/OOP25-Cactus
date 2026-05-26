@@ -2,6 +2,8 @@ package it.unibo.cactus.model.players;
 
 import java.util.Objects;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * Abstract base implementation of {@link Player}.
  * Provides the common state and behaviour shared by all player types (human and bot). 
@@ -31,6 +33,10 @@ public abstract class AbstractPlayer implements Player {
     }
 
     /** {@inheritDoc} */
+    @SuppressFBWarnings(
+        value = "EI",
+        justification = "Returning the live PlayerHand is required"
+    )
     @Override
     public PlayerHand getHand() {
         if (hand == null) {
@@ -40,6 +46,10 @@ public abstract class AbstractPlayer implements Player {
     }
 
     /** {@inheritDoc} */
+    @SuppressFBWarnings(
+        value = "EI2",
+        justification = "PlayerHand are intentionally shared by design"
+    )
     @Override
     public void setHand(final PlayerHand hand) {
         Objects.requireNonNull(hand, "PlayerHand must not be null!");
