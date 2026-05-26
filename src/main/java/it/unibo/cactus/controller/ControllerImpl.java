@@ -193,7 +193,6 @@ public final class ControllerImpl implements Controller, GameViewListener {
         final var scores = calculator.calculateScores(game.getPlayers());
         final var winner = calculator.getWinner(scores);
 
-        // nuova mappa per il salvataggio
         final Map<String, Integer> saveScores = new HashMap<>();
         for (final var entry : scores.entrySet()) {
             saveScores.put(entry.getKey().getName(), entry.getValue());
