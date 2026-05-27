@@ -34,6 +34,7 @@ public final class TableView extends BorderPane {
     private static final double SIDE_CARD_HEIGHT_RATIO = 0.11;
     private static final double MAX_HEIGHT_RATIO = 0.75;
     private static final int MAX_CARDS = 6;
+    private static final double HIGHLIGHT_SWAP_PAUSE_SEC = 3.0;
     private final PlayerHandView humanHand;
     private final PlayerHandView bot1Hand;
     private final PlayerHandView bot2Hand;
@@ -308,5 +309,34 @@ public final class TableView extends BorderPane {
                 playerhand.getSlot(cardIndex).setFaceUp(true);
             }
         }
+    }
+
+    /**
+     * Highlights the two cards involved in a bot Swap power for N seconds.
+     *
+     * @param highlight the indices of the two cards to highlight
+     */
+    public void highlightSwap(final SwapHighlight highlight) {
+        final CardView cardA = hands.get(highlight.playerAIdx()).getSlot(highlight.cardAIdx());
+        final CardView cardB = hands.get(highlight.playerBIdx()).getSlot(highlight.cardBIdx());
+        if (cardA != null) {
+            cardA.setHighlight(true);
+        }
+        if (cardB != null) {
+            cardB.setHighlight(true);
+        }
+
+        final javafx.animation.PauseTransition pause = 
+            new javafx.animation.PauseTransition(javafx.util.Duration.seconds(HIGHLIGHT_SWAP_PAUSE_SEC));
+        pause.setOnFinished(e -> {
+            if (cardA != null) {
+                cardA.setHighlight(false);
+            }
+            if (cardB != null) {
+                cardB.setHighlight(false);
+            }
+        });
+
+        pause.play();
     }
 }
