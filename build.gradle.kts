@@ -19,6 +19,11 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType<Test> {
+    //Enables JUnit 5 Jupiter module
+    useJUnitPlatform()
+}
+
 java {
     toolchain {
         // Java version used to compile and run the project
