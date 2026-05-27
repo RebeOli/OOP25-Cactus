@@ -1,6 +1,4 @@
-package it.unibo.cactus.view;
-
-import it.unibo.cactus.Main;
+package it.unibo.cactus;
 
 /**
  * Launcher class to start the game.

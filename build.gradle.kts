@@ -19,11 +19,6 @@ repositories {
     mavenCentral()
 }
 
-tasks.withType<Test> {
-    //Enables JUnit 5 Jupiter module
-    useJUnitPlatform()
-}
-
 java {
     toolchain {
         // Java version used to compile and run the project
@@ -31,25 +26,17 @@ java {
     }
 }
 
-// Detecting os
-val osName = System.getProperty("os.name").lowercase()
-val osArch = System.getProperty("os.arch").lowercase()
-
-// Correct classifier for JavaFX
-val javafxPlatform = when {
-    osName.contains("win") -> "win"
-    osName.contains("mac") -> if (osArch == "aarch64") "mac-aarch64" else "mac"
-    osName.contains("nux") || osName.contains("nix") -> if (osArch == "aarch64") "linux-aarch64" else "linux"
-    else -> "linux" // Fallback
-}
-
 val javaFXModules = listOf("base", "controls", "fxml", "swing", "graphics", "media")
-val javaFxVersion = "23.0.2"
+
+val supportedPlatforms = listOf("linux", "mac", "win") // All required for OOP
 
 dependencies {
     // Suppressions for SpotBugs
     compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
     testCompileOnly("com.github.spotbugs:spotbugs-annotations:4.9.8")
+
+    // Example library: Guava. Add what you need (and use the latest version where appropriate).
+    // implementation("com.google.guava:guava:28.1-jre")
 
     // Source: https://mvnrepository.com/artifact/com.google.guava/guava
     implementation("com.google.guava:guava:33.5.0-jre") 
@@ -59,10 +46,13 @@ dependencies {
     // YAML parser
     implementation("org.yaml:snakeyaml:2.2")
 
-    
-    // Loads jars for desired platform. no "package not found" errors this way.
-    for (module in javaFXModules) {
-        implementation("org.openjfx:javafx-$module:$javaFxVersion:$javafxPlatform")
+    // JavaFX: comment out if you do not need them
+    val javaFxVersion = "23.0.2"
+    implementation("org.openjfx:javafx:$javaFxVersion")
+    for (platform in supportedPlatforms) {
+        for (module in javaFXModules) {
+            implementation("org.openjfx:javafx-$module:$javaFxVersion:$platform")
+        }
     }
 
     // The BOM (Bill of Materials) synchronizes all the versions of Junit coherently.
@@ -71,7 +61,11 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     // The engine that must be available at runtime to run the tests.
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
 
+tasks.withType<Test> {
+    // Enables JUnit 5 Jupiter module
+    useJUnitPlatform()
 }
 
 val main: String by project
@@ -79,15 +73,4 @@ val main: String by project
 application {
     // Define the main class for the application
     mainClass.set(main)
-}
-
-tasks.named<JavaExec>("run") {
-    doFirst {
-        val javafxJars = classpath.filter { it.name.contains("javafx") }
-        jvmArgs(
-            "--module-path", javafxJars.asPath,
-            "--add-modules", javaFXModules.joinToString(",") { "javafx.$it" }
-        )
-        classpath = classpath.filter { !it.name.contains("javafx") }
-    }
 }
