@@ -35,12 +35,15 @@ public final class ImageLoader {
             return;
         }
         try {
-            cardBack = new Image(Objects.requireNonNull(ImageLoader.class.getResourceAsStream("/images/back.png")));
+            final String cardBackUrl = Objects.requireNonNull(
+                ImageLoader.class.getResource("/images/back.png")).toExternalForm();
+            cardBack = new Image(cardBackUrl, true);
             for (final Suit suit : Suit.values()) {
                 for (int value = 1; value <= 10; value++) {
                     final String nameFile = suit + "_" + value + ".png";
-                    final Image img = new Image(Objects.requireNonNull(
-                        ImageLoader.class.getResourceAsStream("/images/" + nameFile)));
+                    final String cardUrl = Objects.requireNonNull(
+                        ImageLoader.class.getResource("/images/" + nameFile)).toExternalForm();
+                    final Image img = new Image(cardUrl, true);
                     IMAGES_CACHE.put(suit + SEPARATOR + value, img);
                 }
             }
