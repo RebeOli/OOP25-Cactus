@@ -86,7 +86,7 @@ public final class GameScreenView extends StackPane implements ActionPanelListen
 
             if (playerIndex == 0 && canSwap) {
                 final CardView slot = tableView.getHumanHand().getSlot(cardIndex);
-                if(slot != null && !slot.isEmpty()) {
+                if (slot != null && !slot.isEmpty()) {
                     listener.onSwapWithDrawnCardRequested(cardIndex);
                 }
             } else if (isSpecialPowerPhase) {
