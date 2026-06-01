@@ -211,4 +211,13 @@ public final class CardView extends StackPane {
     public boolean isFaceUp() {
         return this.isFaceUp;
     }
+
+    /**
+     * Checks whether this slot is empty (no card assigned).
+     *
+     * @return true if the slot is empty, false otherwise
+     */
+    public boolean isEmpty() {
+        return this.frontImage == null;
+    }
 }
