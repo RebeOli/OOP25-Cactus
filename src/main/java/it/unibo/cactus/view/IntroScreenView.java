@@ -12,9 +12,9 @@ import javafx.util.Duration;
 public final class IntroScreenView extends StackPane {
 
     /**
-     * Costruisce la schermata di introduzione usando l'immagine custom del logo.
+     * Constructs the introduction screen using the custom logo image.
      *
-     * @param onIntroFinished l'azione da eseguire quando l'animazione termina
+     * @param onIntroFinished the action to execute when the animation finishes
      */
     public IntroScreenView(final Runnable onIntroFinished) {
         this.getStyleClass().add("gameTable"); 
