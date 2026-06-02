@@ -1,42 +1,49 @@
 package it.unibo.cactus.view;
 
+import javafx.animation.FadeTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
 import javafx.geometry.Pos;
-import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaException;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
+import javafx.util.Duration;
 
-/**
- * Intro Screen.
- */
-public final class IntroScreenView extends VBox {
-
-    private static final int VIDEO_WIDTH = 800;
+public final class IntroScreenView extends StackPane {
 
     /**
-     * Constructs the Intro Screen View and plays the intro video.
+     * Costruisce la schermata di introduzione usando l'immagine custom del logo.
      *
-     * @param onPlayClicked the action to execute when the video ends or if it fails to load
+     * @param onIntroFinished l'azione da eseguire quando l'animazione termina
      */
-    public IntroScreenView(final Runnable onPlayClicked) {
-        this.setAlignment(Pos.CENTER);
+    public IntroScreenView(final Runnable onIntroFinished) {
         this.getStyleClass().add("gameTable"); 
+        this.setAlignment(Pos.CENTER);
+        final Image customLogo = new Image(getClass().getResourceAsStream("/images/intro.png"));
+        final ImageView logoView = new ImageView(customLogo);
 
-        final MediaView mediaView = new MediaView();
-        try {
-            final String videoPath = getClass().getResource("/video/cactus_intro_finale.mp4").toExternalForm();
-            final Media media = new Media(videoPath);
-            final MediaPlayer mediaPlayer = new MediaPlayer(media);
-            mediaView.setMediaPlayer(mediaPlayer);
-            mediaView.setFitWidth(VIDEO_WIDTH);
-            mediaView.setPreserveRatio(true);
-            mediaPlayer.setCycleCount(1);
-            mediaPlayer.setOnEndOfMedia(onPlayClicked::run);
-            mediaPlayer.play();
-        } catch (final MediaException e) {
-            onPlayClicked.run(); 
-        }
-        super.getChildren().add(mediaView);
+        logoView.setFitWidth(500);
+        logoView.setPreserveRatio(true);
+        logoView.setOpacity(0.0);
+        this.getChildren().add(logoView);
+
+        final FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.5), logoView);
+        fadeIn.setFromValue(0.0);
+        fadeIn.setToValue(1.0);
+        final ScaleTransition zoomIn = new ScaleTransition(Duration.seconds(2.0), logoView);
+        zoomIn.setFromX(1.0);
+        zoomIn.setFromY(1.0);
+        zoomIn.setToX(1.1);
+        zoomIn.setToY(1.1);
+        final FadeTransition fadeOut = new FadeTransition(Duration.seconds(1.0), logoView);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        final SequentialTransition sequence = new SequentialTransition(fadeIn, zoomIn, fadeOut);
+        sequence.setOnFinished(e -> {
+            if (onIntroFinished != null) {
+                onIntroFinished.run();
+            }
+        });
+        sequence.play();
     }
 }
