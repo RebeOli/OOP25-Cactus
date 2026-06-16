@@ -4,12 +4,14 @@ import it.unibo.cactus.model.game.GameObserver;
 import it.unibo.cactus.model.players.BotDifficulty;
 import it.unibo.cactus.model.rounds.RoundAction;
 import it.unibo.cactus.model.rounds.actions.SimultaneousDiscardAction;
+import it.unibo.cactus.view.GameViewListener;
 
 /**
  * Represents the main controller in the MVC architecture.
  * Extends {@link GameObserver} to listen for model updates.
+ * Extends {@link GameViewListener} to listen for view updates.
  */
-public interface Controller extends GameObserver {
+public interface Controller extends GameObserver, GameViewListener {
 
     /**
      * Initialises and starts a new game with the given player configuration.

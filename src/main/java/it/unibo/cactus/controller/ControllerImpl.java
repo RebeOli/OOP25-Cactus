@@ -43,14 +43,12 @@ import it.unibo.cactus.model.statistics.HistoryManager;
 import it.unibo.cactus.model.statistics.PlayerStats;
 import it.unibo.cactus.view.GameUpdateData;
 import it.unibo.cactus.view.GameView;
-import it.unibo.cactus.view.GameViewListener;
 import it.unibo.cactus.view.SwapHighlight;
 
 /**
  * Implementation of the Controller interface.
- * Connects the Model (Game) with the View (GameView) and handles the game loop.
  */
-public final class ControllerImpl implements Controller, GameViewListener {
+public final class ControllerImpl implements Controller {
     private static final int BOT_DELAY = 1500;
     private static final int SIMULTANEOUS_DISCARD_TIME = 4000;
     private static final int MAX_CARDS = 6;
