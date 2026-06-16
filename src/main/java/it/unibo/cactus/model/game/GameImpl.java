@@ -24,7 +24,6 @@ import it.unibo.cactus.model.cards.DeckFactory;
  * Implementation of {@link Game}.
  */
 public final class GameImpl implements Game {
-    //gli attributi vengono passati dal controller quando configura game 
     private final List<Player> players;
     private final DrawPile drawPile;
     private final DiscardPile discardPile;

@@ -24,7 +24,7 @@ public record SwapAction(int cardIndex) implements RoundAction {
         }
         final Card replacedCard = hand.replace(cardIndex, card);
         round.getDiscardPile().discard(replacedCard);
-        round.setDrawnCard(Optional.of(replacedCard)); // solo per il controllo del potere in advancePhase()
+        round.setDrawnCard(Optional.of(replacedCard));
         round.advancePhase();
         round.setDrawnCard(Optional.empty());
     }
