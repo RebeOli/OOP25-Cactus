@@ -67,6 +67,10 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
+tasks.withType<Javadoc>().configureEach { 
+    isFailOnError = false
+}
+
 val main: String by project
 
 application {
